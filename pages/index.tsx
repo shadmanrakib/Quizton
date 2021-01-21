@@ -9,6 +9,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <div className="mt-4 p-4 w-1/4 rounded bg-blue-300 text-center">
+        <p className="text-blue-600">If this is blue, then Tailwind works. Yay!</p>
+      </div>
+
       <main className={styles.main}>
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
