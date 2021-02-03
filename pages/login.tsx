@@ -1,7 +1,7 @@
 import Link from "next/link";
 import LoginForm from "../components/LoginForm";
 
-const SignUpPage: React.FC = () => {
+const LoginPage: React.FC = () => {
   return (
     <div className="min-h-screen flex bg-gray-200">
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -26,4 +26,4 @@ const SignUpPage: React.FC = () => {
   );
 };
 
-export default SignUpPage;
+export default LoginPage;

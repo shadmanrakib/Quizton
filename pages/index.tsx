@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useUser } from "../hooks/useUser";
-import { auth } from '../config/firebase';
+import { auth } from "../config/firebase";
 
 export default function Home() {
   const user = useUser();
@@ -8,14 +8,15 @@ export default function Home() {
   const handleSignOut = async () => {
     try {
       return await auth.signOut();
-    } catch(err) {
-        return err;
+    } catch (err) {
+      return err;
     }
-  }
+  };
 
   return (
     <div>
       {user && <h1>You are logged in with {user.email}</h1>}
+
       <ul className="ml-8 list-disc">
         <li>
           <Link href="/login">
@@ -43,10 +44,12 @@ export default function Home() {
           </Link>
         </li>
       </ul>
-      { user && 
-      <button onClick={ handleSignOut } className="mt-3 p-2 bg-gray-300">
-        Sign Out
-      </button> }
+
+      {user && (
+        <button onClick={handleSignOut} className="mt-3 p-2 bg-gray-300">
+          Sign Out
+        </button>
+      )}
     </div>
   );
 }

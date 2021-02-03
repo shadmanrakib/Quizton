@@ -1,5 +1,10 @@
 import { useForm } from "react-hook-form";
 import { auth } from "../config/firebase";
+import { useEffect } from "react";
+import GoogleSignInButton from "./GoogleSignInButton";
+import { useUser } from "../hooks/useUser";
+import { useRouter } from "next/router";
+import { route } from "next/dist/next-server/server/router";
 
 interface SignUpData {
   name: string;
@@ -9,6 +14,10 @@ interface SignUpData {
 
 const SignUpForm: React.FC = () => {
   const { register, handleSubmit, errors } = useForm<SignUpData>();
+  const user = useUser();
+  const router = useRouter();
+
+  if (user) router.push("/");
 
   const SignUp = async ({ name, email, password }) => {
     try {
@@ -72,6 +81,9 @@ const SignUpForm: React.FC = () => {
         {errors.password && (
           <p className="text-red-500">{errors.password.message}</p>
         )}
+      </div>
+      <div className="pt-2">
+        <GoogleSignInButton />
       </div>
       <button type="submit" className="mt-3 p-2 bg-gray-300">
         Submit

@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
 import { auth } from "../config/firebase";
 
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
+import { useUser } from "../hooks/useUser";
 
 interface LoginData {
   name: string;
@@ -11,8 +12,10 @@ interface LoginData {
 
 const LoginForm: React.FC = () => {
   const { register, handleSubmit, errors } = useForm<LoginData>();
-
+  const user = useUser();
   const router = useRouter();
+  if (user) router.push("/");
+
   const login = async ({ email, password }) => {
     try {
       return await auth.signInWithEmailAndPassword(email, password);
@@ -23,7 +26,6 @@ const LoginForm: React.FC = () => {
 
   const onSubmit = (data: LoginData) => {
     login(data);
-    router.push('/');
     console.log(data);
   };
 
