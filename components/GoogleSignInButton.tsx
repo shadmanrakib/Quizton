@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import firebase from "firebase";
+import { auth } from '../config/firebase';
 
 function GoogleSignInButton() {
   return (
@@ -9,7 +10,7 @@ function GoogleSignInButton() {
         className="google-button"
         onClick={() => {
           let provider = new firebase.auth.GoogleAuthProvider();
-          firebase.auth().signInWithPopup(provider);
+          auth.signInWithPopup(provider);
         }}
       >
         <span className="google-button__icon">
