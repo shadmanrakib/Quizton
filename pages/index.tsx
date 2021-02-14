@@ -29,11 +29,6 @@ export default function Home() {
           </Link>
         </li>
         <li>
-          <Link href="/register">
-            <a>Register</a>
-          </Link>
-        </li>
-        <li>
           <Link href="/search">
             <a>Search</a>
           </Link>

@@ -2,17 +2,18 @@ import React, { useRef } from "react";
 import firebase from "firebase";
 import { auth } from '../config/firebase';
 
-function GoogleSignInButton() {
+function GoogleSignInButton(props) {
   return (
     <div>
       <button
         type="button"
-        className="google-button"
+        className="google-button w-full ring-2 ring-primary rounded-full p-1 hover:bg-blueGray-50"
         onClick={() => {
           let provider = new firebase.auth.GoogleAuthProvider();
           auth.signInWithPopup(provider);
         }}
       >
+        
         <span className="google-button__icon">
           <svg viewBox="0 0 366 372" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -36,63 +37,21 @@ function GoogleSignInButton() {
             />
           </svg>
         </span>
-        <span className="google-button__text">Sign in with Google</span>
+        <span className="text-md font-medium ml-2 text-primary">{props.text}</span>
+        
       </button>
 
       <style jsx>{`
-        .google-button {
-          height: 40px;
-          border-width: 0;
-          background: white;
-          color: #737373;
-          border-radius: 5px;
-          white-space: nowrap;
-          box-shadow: 1px 1px 0px 1px rgba(0, 0, 0, 0.05);
-          transition-property: background-color, box-shadow;
-          transition-duration: 150ms;
-          transition-timing-function: ease-in-out;
-          padding: 0;
-        }
-        .google-button:focus,
-        .google-button:hover {
-          box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.1);
-        }
-        .google-button:active {
-          background-color: #e5e5e5;
-          box-shadow: none;
-          transition-duration: 10ms;
-        }
         .google-button__icon {
           display: inline-block;
           vertical-align: middle;
           margin: 8px 0 8px 8px;
-          width: 18px;
-          height: 18px;
+          width: 27px;
+          height: auto;
           box-sizing: border-box;
         }
         .google-button__icon--plus {
           width: 27px;
-        }
-        .google-button__text {
-          display: inline-block;
-          vertical-align: middle;
-          padding: 0 24px;
-          font-size: 14px;
-          font-weight: bold;
-          font-family: "Roboto", arial, sans-serif;
-        }
-        html,
-        body {
-          height: 100%;
-        }
-        body {
-          background-color: #f0f0f0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        button ~ button {
-          margin-left: 20px;
         }
       `}</style>
     </div>

@@ -36,7 +36,7 @@ const LoginForm: React.FC = () => {
         <input
           type="email"
           name="email"
-          className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+          className="appearance-none block w-full px-3 py-2 border-b-2 border-blueGray-500 rounded bg-blueGray-100 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-primary transition duration-150 ease-in-out sm:text-sm sm:leading-5"
           ref={register({
             required: {
               value: true,
@@ -46,12 +46,12 @@ const LoginForm: React.FC = () => {
         />
         {errors.email && <p className="text-red-500">{errors.email.message}</p>}
       </div>
-      <div>
+      <div className="mt-6">
         <label htmlFor="password">Password</label>
         <input
           type="password"
           name="password"
-          className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+          className="appearance-none block w-full px-3 py-2 border-b-2 border-blueGray-500 rounded bg-blueGray-100 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-primary transition duration-150 ease-in-out sm:text-sm sm:leading-5"
           ref={register({
             required: true,
             minLength: {
@@ -64,8 +64,8 @@ const LoginForm: React.FC = () => {
           <p className="text-red-500">{errors.password.message}</p>
         )}
       </div>
-      <button type="submit" className="mt-3 p-2 bg-gray-300">
-        Submit
+      <button type="submit" className="mt-8 p-3 w-full rounded-full bg-gradient-to-r from-primary to-purple-600 hover:from-blue-600 hover:to-purple-900 text-white font-bold">
+        Log In
       </button>
     </form>
   );

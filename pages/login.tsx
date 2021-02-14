@@ -1,26 +1,30 @@
 import Link from "next/link";
 import LoginForm from "../components/LoginForm";
+import GoogleSignInButton from "../components/GoogleSignInButton";
 
 const LoginPage: React.FC = () => {
   return (
-    <div className="min-h-screen flex bg-gray-200">
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="min-h-screen flex mx-0 w-screen bg-blueGray-50">
+      <div className="mt-3 mx-auto">
         <div className="text-center mt-24">
-          <h2 className="mt-6 text-center text-3xl leading-9 font-   extrabold text-gray-900">
-            Log In
+          <h2 className="mt-6 text-center text-6xl leading-9 font-bold text-black">
+            Login
           </h2>
-          <p className="mt-2 text-center text-md text-gray-600">
-            don't have an account?{" "}
+          <p className="mt-8 text-center text-md text-black">
+            Don't have an account?{" "}
             <Link href="/signup">
-              <a href="#" className="text-blue-500">
+              <a href="#" className="text-primary font-bold underline">
                 Sign Up
               </a>
             </Link>
           </p>
         </div>
-        <div className="mt-8 bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="mt-10 w-screen sm:w-96 p-8 border-1 bg-white shadow-xl rounded-3xl">
+          <GoogleSignInButton text="Sign in with Google"/>
+          <br/>
           <LoginForm />
         </div>
+        <br/>
       </div>
     </div>
   );
