@@ -1,7 +1,7 @@
 import firebase from "firebase";
+import "firebase/firestore";
 import "firebase/auth";
-// import 'firebase/firestore'
-// import 'firebase/storage';
+import "firebase/storage";
 
 // TEMP CONFIG
 // Todo: make environment variables
@@ -22,6 +22,7 @@ if (!firebase.apps.length) {
 console.log("Firebase initialized");
 
 const app = firebase.app();
+const db = firebase.firestore();
 const auth = firebase.auth();
 
-export { auth };
+export { auth, db };
