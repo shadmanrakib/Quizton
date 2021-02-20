@@ -69,12 +69,13 @@ const CreateMCForm: React.FC = () => {
     };
 
     db.collection("questions").add({
-        author: finalData.author,
-        question: finalData.question,
-        answer: finalData.answer,
-        explanation: finalData.explanation,
-        choices: finalData.choices,
-        tags: finalData.tags
+      type: "multipleChoice",
+      author: finalData.author,
+      question: finalData.question,
+      answer: finalData.answer,
+      explanation: finalData.explanation,
+      choices: finalData.choices,
+      tags: finalData.tags
 
     });
   };
