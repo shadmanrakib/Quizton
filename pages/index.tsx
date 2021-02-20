@@ -34,7 +34,7 @@ export default function Home() {
           </Link>
         </li>
         <li>
-          <Link href="/createQuiz">
+          <Link href="/create">
             <a>Create Quiz</a>
           </Link>
         </li>

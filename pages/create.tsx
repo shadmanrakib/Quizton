@@ -1,10 +1,12 @@
 import React from 'react'
-import { CreateMCForm } from '../components/CreateMCForm'
+import CreateMCForm  from '../components/CreateMCForm'
 
-export const create = () => {
+const Create: React.FC = () => {
     return (
         <div>
             <CreateMCForm />
         </div>
     )
 }
+
+export default Create;
