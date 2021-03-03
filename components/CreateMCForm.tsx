@@ -24,7 +24,9 @@ interface Inputs {
 
 interface FinalData extends Inputs {
   author: AuthorInfo;
-  date?: any;
+  date?: any
+  upvote?: number,
+  downvote?: number
 }
 
 const CreateMCForm: React.FC = () => {
@@ -76,7 +78,8 @@ const CreateMCForm: React.FC = () => {
       explanation: finalData.explanation,
       choices: finalData.choices,
       tags: finalData.tags
-
+      upvote: 0,
+      downvote: 0
     });
   };
 
