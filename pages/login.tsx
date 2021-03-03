@@ -1,7 +1,7 @@
 import Link from "next/link";
 import GoogleSignInButton from "../components/GoogleSignInButton";
 import { useForm } from "react-hook-form";
-import { auth } from "../config/firebase";
+import { auth } from "../config/firebaseClient";
 import { useRouter } from "next/router";
 import { useUser } from "../hooks/useUser";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";

@@ -3,8 +3,8 @@ import "firebase/firestore";
 import "firebase/auth";
 import "firebase/storage";
 
-// TEMP CONFIG
-// Todo: make environment variables
+//TEMP CONFIG
+//TODO: make environment variables
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyDXiX9uYNHVvecgq2gUbV4KLUgqQg7EHaA",
   authDomain: "quesdom-5bf6a.firebaseapp.com",

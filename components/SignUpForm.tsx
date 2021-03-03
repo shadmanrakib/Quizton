@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { auth } from "../config/firebase";
+import { auth } from "../config/firebaseClient";
 import { useEffect } from "react";
 import { useUser } from "../hooks/useUser";
 import { useRouter } from "next/router";

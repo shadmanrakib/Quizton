@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { db } from "../config/firebase";
+import { db } from "../config/firebaseClient";
 import { useUser } from "../hooks/useUser";
 
 interface AuthorInfo {

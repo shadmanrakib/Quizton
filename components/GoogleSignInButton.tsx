@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import firebase from "firebase";
-import { auth } from "../config/firebase";
+import { auth } from "../config/firebaseClient";
 
 function GoogleSignInButton(props) {
   return (

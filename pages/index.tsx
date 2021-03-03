@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useUser } from "../hooks/useUser";
-import { auth } from "../config/firebase";
+import { auth } from "../config/firebaseClient";
 
 export default function Home() {
   const user = useUser();

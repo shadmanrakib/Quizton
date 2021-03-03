@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "../config/firebase";
+import { auth } from "../config/firebaseClient";
 
 // Use UserContext so user can be accessed from children
 const UserContext = createContext(null);
