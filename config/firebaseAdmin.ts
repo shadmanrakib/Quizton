@@ -17,6 +17,10 @@ const params = {
 if (!firebaseAdmin.apps.length) {
     firebaseAdmin.initializeApp({
         credential: firebaseAdmin.credential.cert(params),
-        databaseURL: 'https://YOUR_PROJECT_ID.firebaseio.com',
+        databaseURL: "https://quesdom-5bf6a-default-rtdb.firebaseio.com/"
     });
 }
+
+const adminDB = firebaseAdmin.firestore();
+
+export { firebaseAdmin, adminDB }

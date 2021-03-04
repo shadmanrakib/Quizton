@@ -77,7 +77,8 @@ const CreateMCForm: React.FC = () => {
       answer: finalData.answer,
       explanation: finalData.explanation,
       choices: finalData.choices,
-      tags: finalData.tags
+      tags: finalData.tags,
+      vote: 0,
       upvote: 0,
       downvote: 0
     });

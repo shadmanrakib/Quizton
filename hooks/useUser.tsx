@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../config/firebaseClient";
+import nookies from "nookies";
 
 // Use UserContext so user can be accessed from children
 const UserContext = createContext(null);
@@ -15,9 +16,27 @@ export const UserProvider: React.FC = ({ children }) => {
 
   // Set value of UserContext to user when user is changed
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      setUser(user);
+    return auth.onIdTokenChanged(async (user) => {
+      if (!user) {
+        setUser(null);
+        nookies.set(undefined, "token", "", { path: "/" });
+      } else {
+        const token = await user.getIdToken();
+        setUser(user);
+        nookies.set(undefined, "token", token, { path: "/" });
+      }
     });
+  }, []);
+
+  // force refresh the token every 10 minutes
+  useEffect(() => {
+    const handle = setInterval(async () => {
+      const user = auth.currentUser;
+      if (user) await user.getIdToken(true);
+    }, 10 * 60 * 1000);
+
+    // clean up setInterval
+    return () => clearInterval(handle);
   }, []);
 
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
