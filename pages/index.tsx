@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useUser } from "../hooks/useUser";
 import { auth } from "../config/firebaseClient";
+import App from "../components/Editor";
 
 export default function Home() {
   const user = useUser();
@@ -45,6 +46,8 @@ export default function Home() {
           Sign Out
         </button>
       )}
+
+      {typeof window !== 'undefined' && <App />}
     </div>
   );
 }
