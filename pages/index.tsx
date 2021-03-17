@@ -2,9 +2,8 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useUser } from "../hooks/useUser";
 import { auth } from "../config/firebaseClient";
-//import App from "../components/TestEditor";
 
-const Editor = dynamic(() => import('../components/TestEditor').catch(() => console.log("Failed to dynamically load editor")), {ssr: false})
+const Editor = dynamic(() => import('../components/Editor').catch(() => console.log("Failed to dynamically load editor")), {ssr: false})
 
 export default function Home() {
   const user = useUser();
@@ -17,6 +16,9 @@ export default function Home() {
     }
   };
 
+  const onChange = (value) => {
+    console.log(value);
+  }
   return (
     <div>
       {user && <h1>You are logged in with {user.email}</h1>}
@@ -50,7 +52,7 @@ export default function Home() {
         </button>
       )}
 
-      <Editor />
+      
     </div>
    
   );

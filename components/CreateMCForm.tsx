@@ -1,7 +1,8 @@
 import React from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { db } from "../config/firebaseClient";
 import { useUser } from "../hooks/useUser";
+import Editor from "./Editor";
 
 interface AuthorInfo {
   uid: string;
@@ -24,9 +25,9 @@ interface Inputs {
 
 interface FinalData extends Inputs {
   author: AuthorInfo;
-  date?: any
-  upvote?: number,
-  downvote?: number
+  date?: any;
+  upvote?: number;
+  downvote?: number;
 }
 
 const CreateMCForm: React.FC = () => {
@@ -54,34 +55,34 @@ const CreateMCForm: React.FC = () => {
 
   const onSubmit = (data) => {
     const { question, answer, explanation, choices, tags } = data;
-    
-    console.log(user);
-    let finalData: FinalData = {
-      author: {
-        uid: user.uid,
-        name: user.displayName,
-        //profilePicture
-      },
-      question: question,
-      answer: parseInt(answer),
-      explanation: explanation,
-      choices: choices,
-      //date: 
-      tags: tags,
-    };
 
-    db.collection("questions").add({
-      type: "multipleChoice",
-      author: finalData.author,
-      question: finalData.question,
-      answer: finalData.answer,
-      explanation: finalData.explanation,
-      choices: finalData.choices,
-      tags: finalData.tags,
-      vote: 0,
-      upvote: 0,
-      downvote: 0
-    });
+    console.log(data);
+    // let finalData: FinalData = {
+    //   author: {
+    //     uid: user.uid,
+    //     name: user.displayName,
+    //     //profilePicture
+    //   },
+    //   question: question,
+    //   answer: parseInt(answer),
+    //   explanation: explanation,
+    //   choices: choices,
+    //   //date:
+    //   tags: tags,
+    // };
+
+    // db.collection("questions").add({
+    //   type: "multipleChoice",
+    //   author: finalData.author,
+    //   question: finalData.question,
+    //   answer: finalData.answer,
+    //   explanation: finalData.explanation,
+    //   choices: finalData.choices,
+    //   tags: finalData.tags,
+    //   vote: 0,
+    //   upvote: 0,
+    //   downvote: 0,
+    // });
   };
 
   return (
@@ -90,12 +91,14 @@ const CreateMCForm: React.FC = () => {
         <label className="mt-6" htmlFor="question">
           Question
         </label>
-        <input
+        <Controller
+          control={control}
           name="question"
-          className="border-b-2 border-blueGray-600 bg-blueGray-100 p-2 shadow"
-          placeholder="Question"
-          defaultValue=""
+          defaultValue={null}
           ref={register({ required: true })}
+          render={({ onChange, onBlur, value }) => (
+            <Editor onChange={onChange} theme={"snow"} />
+          )}
         />
         {errors.question && (
           <div className="text-red-500">This field is required</div>
@@ -106,18 +109,32 @@ const CreateMCForm: React.FC = () => {
 
         {choicesField.fields.map((field, index) => (
           <div className="border" key={field.id}>
+            <div className="flex">
             <input
               type="radio"
               name="answer"
               value={index}
+              className="my-auto"
               ref={register}
             ></input>
-            <input
+            <div className="flex-auto">
+              <Controller
+                control={control}
+                name={`choices[${index}].value`}
+                ref={register()}
+                defaultValue={field.value}
+                render={({ onChange, onBlur, value }) => (
+                  <Editor onChange={onChange} theme={"bubble"} />
+                )}
+              />
+            </div>
+            </div>
+            {/* <input
               className="border p-2 bg-blueGray-100"
               name={`choices[${index}].value`}
               ref={register()} // register() when there is no validation rules
               defaultValue={field.value} // make sure to include defaultValue
-            />
+            /> */}
             <button
               type="button"
               className="bg-red-500 text-white p-2"
@@ -138,12 +155,14 @@ const CreateMCForm: React.FC = () => {
         <label className="mt-6" htmlFor="explanation">
           Explanation
         </label>
-        <textarea
+        <Controller
+          control={control}
           name="explanation"
-          className="border-b-2 border-blueGray-600 bg-blueGray-100 p-2 shadow"
-          placeholder="Explanation"
-          defaultValue=""
+          defaultValue={null}
           ref={register({ required: true })}
+          render={({ onChange, onBlur, value }) => (
+            <Editor onChange={onChange} theme={"snow"} />
+          )}
         />
         {errors.explanation && (
           <div className="text-red-500">This field is required</div>
@@ -152,6 +171,7 @@ const CreateMCForm: React.FC = () => {
         <div className="mt-6">Tags</div>
         {tagsField.fields.map((field, index) => (
           <div className="border" key={field.id}>
+            
             <input
               className="border p-2 bg-blueGray-100"
               name={`tags[${index}].value`}
