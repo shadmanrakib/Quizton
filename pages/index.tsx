@@ -46,8 +46,8 @@ export default function Home() {
           Sign Out
         </button>
       )}
-
-      {typeof window !== 'undefined' && <App />}
+       <App />
     </div>
+   
   );
 }

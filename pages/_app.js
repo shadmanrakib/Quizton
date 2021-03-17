@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+
 import { UserProvider } from "../hooks/useUser";
 
 function MyApp({ Component, pageProps }) {
