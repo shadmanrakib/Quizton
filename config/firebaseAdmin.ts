@@ -1,5 +1,4 @@
 import * as firebaseAdmin from 'firebase-admin';
-import * as serviceAccount from '../serviceAccountKey.json'
 
 const params = {
     type: process.env.FIREBASE_TYPE,

@@ -1,7 +1,10 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useUser } from "../hooks/useUser";
 import { auth } from "../config/firebaseClient";
-import App from "../components/Editor";
+//import App from "../components/TestEditor";
+
+const Editor = dynamic(() => import('../components/TestEditor').catch(() => console.log("Failed to dynamically load editor")), {ssr: false})
 
 export default function Home() {
   const user = useUser();
@@ -46,7 +49,8 @@ export default function Home() {
           Sign Out
         </button>
       )}
-       <App />
+
+      <Editor />
     </div>
    
   );
