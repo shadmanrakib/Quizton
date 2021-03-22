@@ -21,7 +21,7 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx", "pages/_app.js", "components/Editor.js"
+    "**/*.tsx", "pages/_app.js", "components/Editor.js", "pages/question/[qid].js"
   ],
   "exclude": [
     "node_modules"

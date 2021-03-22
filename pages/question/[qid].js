@@ -3,23 +3,23 @@ import { useState, useEffect } from "react";
 import { db } from "../../config/firebaseClient";
 import { useForm, useFieldArray } from "react-hook-form";
 
-interface AuthorInfo {
-  uid: string;
-  name: string;
-  profilePicture?: string;
-}
+// interface AuthorInfo {
+//   uid: string;
+//   name: string;
+//   profilePicture?: string;
+// }
 
-interface Data {
-  question: string;
-  explanation: string;
-  choices: Array<string>;
-  tags: Array<string>;
-  answer: number;
-  author: AuthorInfo;
-  date?: any;
-}
+// interface Data {
+//   question: string;
+//   explanation: string;
+//   choices: Array<string>;
+//   tags: Array<string>;
+//   answer: number;
+//   author: AuthorInfo;
+//   date?: any;
+// }
 
-const Question: React.FC = (props) => {
+const Question = (props) => {
   const router = useRouter();
   const { qid } = router.query;
 
