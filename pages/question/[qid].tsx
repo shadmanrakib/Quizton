@@ -19,6 +19,7 @@ interface Data {
   date?: any;
 }
 
+
 const Question: React.FC = (props) => {
   const router = useRouter();
   const { qid } = router.query;
@@ -27,7 +28,20 @@ const Question: React.FC = (props) => {
 
   const [voteCount, setVoteCount] = useState(props.data.upvote - props.data.downvote) 
 
-  const onSubmit = (data) => { console.log(data)};
+  const onSubmit = (data) => { 
+    console.log(props.data);
+    fetch("/api/answerQuestion", {
+      method: 'post',
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify({
+        qid: props.qid,
+        userAnswer: data.answer,
+        correctAnswer: props.data.answer,
+        isCorrect: data.answer == props.data.answer
+      })
+    })
+    console.log(data)
+  };
 
   return (
     <div>
@@ -37,7 +51,7 @@ const Question: React.FC = (props) => {
       <div className="my-3">
         Tags:
         {props.data.tags.map((tag, index) => (
-          <span className="px-3 py-2 m-2 border rounded-md bg-light-blue-300">
+          <span key={ index } className="px-3 py-2 m-2 border rounded-md bg-light-blue-300">
             {tag.value}
           </span>
         ))}
@@ -45,7 +59,7 @@ const Question: React.FC = (props) => {
       <div>Question: {props.data.question}</div>
       <form className="my-3" onSubmit={handleSubmit(onSubmit)}>
         {props.data.choices.map((choice, index) => (
-          <div>
+          <div key={ index }>
             <input
               type="radio"
               id={"choice" + index}
@@ -74,7 +88,7 @@ export async function getServerSideProps(context) {
   }
 
   return {
-    props: { exists: doc.exists, data: doc.data() },
+    props: { exists: doc.exists, data: doc.data(), qid: context.params.qid },
   };
 }
 
