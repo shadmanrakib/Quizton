@@ -14,10 +14,13 @@ const params = {
 };
 
 if (!firebaseAdmin.apps.length) {
+  console.log(params);
   firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.cert(params),
     databaseURL: "https://quesdom-5bf6a-default-rtdb.firebaseio.com/",
   });
+  console.log("Firebase initialized");
+  console.log(firebaseAdmin);
 }
 
 const adminDB = firebaseAdmin.firestore();
