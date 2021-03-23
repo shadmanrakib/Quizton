@@ -3,7 +3,7 @@ import { auth } from "../config/firebaseClient";
 import nookies from "nookies";
 
 // Use UserContext so user can be accessed from children
-const UserContext = createContext(null);
+const UserContext = createContext<firebase.default.User | null>(null);
 
 // Hook to access UserContext value
 export const useUser = () => {

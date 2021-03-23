@@ -1,33 +1,14 @@
 import React from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { db } from "../config/firebaseClient";
 import { useUser } from "../hooks/useUser";
 import Editor from "./Editor";
 
-interface AuthorInfo {
-  uid: string;
-  name: string;
-  profilePicture?: string;
-}
-
-interface Timestamp {
-  seconds: number;
-  nanoseconds: number;
-}
-
 interface Inputs {
-  question: string;
-  explanation: string;
-  choices: Array<string>;
-  tags: Array<string>;
+  question: { ops: any[] };
+  explanation: { ops: any[] };
   answer: number;
-}
-
-interface FinalData extends Inputs {
-  author: AuthorInfo;
-  date?: any;
-  upvote?: number;
-  downvote?: number;
+  choices: any[];
+  tags: { value: string }[];
 }
 
 const CreateMCForm: React.FC = () => {
@@ -47,42 +28,33 @@ const CreateMCForm: React.FC = () => {
     control,
     name: "tags",
   });
-
   const choicesField = useFieldArray({
     control,
     name: "choices",
   });
 
-  const onSubmit = (data) => {
-    const { question, answer, explanation, choices, tags } = data;
-
+  const onSubmit = (data: Inputs) => {
     console.log(data);
-    // let finalData: FinalData = {
-    //   author: {
-    //     uid: user.uid,
-    //     name: user.displayName,
-    //     //profilePicture
-    //   },
-    //   question: question,
-    //   answer: parseInt(answer),
-    //   explanation: explanation,
-    //   choices: choices,
-    //   //date:
-    //   tags: tags,
-    // };
-
-    // db.collection("questions").add({
-    //   type: "multipleChoice",
-    //   author: finalData.author,
-    //   question: finalData.question,
-    //   answer: finalData.answer,
-    //   explanation: finalData.explanation,
-    //   choices: finalData.choices,
-    //   tags: finalData.tags,
-    //   vote: 0,
-    //   upvote: 0,
-    //   downvote: 0,
-    // });
+    async function postData(url = "", data = {}) {
+      // Default options are marked with *
+      const response = await fetch(url, {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        mode: "no-cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "include", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: "follow", // manual, *follow, error
+        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data), // body data type must match "Content-Type" header
+      });
+      return response.json(); // parses JSON response into native JavaScript objects
+    }
+    postData("/api/createQuestion", data).then((response) => {
+      console.log(response);
+    });
   };
 
   return (
@@ -110,24 +82,24 @@ const CreateMCForm: React.FC = () => {
         {choicesField.fields.map((field, index) => (
           <div className="border" key={field.id}>
             <div className="flex">
-            <input
-              type="radio"
-              name="answer"
-              value={index}
-              className="my-auto"
-              ref={register}
-            ></input>
-            <div className="flex-auto">
-              <Controller
-                control={control}
-                name={`choices[${index}].value`}
-                ref={register()}
-                defaultValue={field.value}
-                render={({ onChange, onBlur, value }) => (
-                  <Editor onChange={onChange} theme={"bubble"} />
-                )}
-              />
-            </div>
+              <input
+                type="radio"
+                name="answer"
+                value={index}
+                className="my-auto"
+                ref={register}
+              ></input>
+              <div className="flex-auto">
+                <Controller
+                  control={control}
+                  name={`choices[${index}].value`}
+                  ref={register()}
+                  defaultValue={field.value}
+                  render={({ onChange, onBlur, value }) => (
+                    <Editor onChange={onChange} theme={"bubble"} />
+                  )}
+                />
+              </div>
             </div>
             {/* <input
               className="border p-2 bg-blueGray-100"
@@ -171,7 +143,6 @@ const CreateMCForm: React.FC = () => {
         <div className="mt-6">Tags</div>
         {tagsField.fields.map((field, index) => (
           <div className="border" key={field.id}>
-            
             <input
               className="border p-2 bg-blueGray-100"
               name={`tags[${index}].value`}

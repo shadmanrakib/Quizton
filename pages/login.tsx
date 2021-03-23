@@ -66,6 +66,7 @@ const LoginPage: React.FC = () => {
                   name="email"
                   className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blueGray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
                   placeholder="Email Address"
+                  autoComplete="off"
                   ref={register({
                     required: {
                       value: true,
