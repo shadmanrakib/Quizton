@@ -1,11 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { useForm, useFieldArray } from "react-hook-form";
+import katex from 'katex';
 
 import { db } from "../../config/firebaseClient";
 import { useUser } from '../../hooks/useUser';
-import 'katex/dist/katex.min.css';
-// import renderMathInElement from "https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.mjs";
+
+import 'katex/dist/katex.min.css'
+// import renderMathInElement from 'katex/dist/contrib/auto-render';
+import { InlineMath, BlockMath } from 'react-katex';
+
 
 
 // interface AuthorInfo {
@@ -29,17 +33,25 @@ const Question = (props) => {
   const router = useRouter();
   const { qid } = router.query;
   const user = useUser();
+  const ref = useRef();
 
   const { register, handleSubmit, errors, control } = useForm();
 
   const [voteCount, setVoteCount] = useState(props.data.upvote - props.data.downvote) 
   const [ isCorrect, setIsCorrect ] = useState<boolean | null>(null);
 
+  useEffect(() => {
+    const mathElem = document.getElementsByClassName("ql-formula");
+    for (let i = 0; i < mathElem.length; i++) {
+      mathElem[i].innerHTML = katex.renderToString(mathElem[i].textContent, {
+        throwOnError: false
+    });
+    }
+  }, []);
 
   useEffect(() => {
     if (user) {
       const uid = user.uid;
-      console.log(qid);
       const questionAnsweredRef = db
       .collection("users")
       .doc(uid)
