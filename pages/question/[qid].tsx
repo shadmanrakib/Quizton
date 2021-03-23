@@ -1,7 +1,12 @@
-import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { db } from "../../config/firebaseClient";
+import { useRouter } from "next/router";
 import { useForm, useFieldArray } from "react-hook-form";
+
+import { db } from "../../config/firebaseClient";
+import { useUser } from '../../hooks/useUser';
+import 'katex/dist/katex.min.css';
+// import renderMathInElement from "https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.mjs";
+
 
 // interface AuthorInfo {
 //   uid: string;
@@ -23,21 +28,48 @@ import { useForm, useFieldArray } from "react-hook-form";
 const Question = (props) => {
   const router = useRouter();
   const { qid } = router.query;
+  const user = useUser();
 
   const { register, handleSubmit, errors, control } = useForm();
 
   const [voteCount, setVoteCount] = useState(props.data.upvote - props.data.downvote) 
+  const [ isCorrect, setIsCorrect ] = useState<boolean | null>(null);
+
+
+  useEffect(() => {
+    if (user) {
+      const uid = user.uid;
+      console.log(qid);
+      const questionAnsweredRef = db
+      .collection("users")
+      .doc(uid)
+      .collection('questionsAnswered')
+      .doc(qid);
+    
+      questionAnsweredRef.get()
+        .then(doc => {
+          if (doc.exists) {
+            const data = doc.data();
+            setIsCorrect(data.isCorrect);
+          }
+        })
+    }
+    
+
+  }, [user])
+
 
   const onSubmit = (data) => { 
-    console.log(props.data);
+    const isCorrect = data.answer == props.data.correctAnswer;
+    setIsCorrect(isCorrect);
     fetch("/api/answerQuestion", {
       method: 'post',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({
-        qid: props.qid,
+        qid,
         userAnswer: data.answer,
-        correctAnswer: props.data.answer,
-        isCorrect: data.answer == props.data.answer
+        correctAnswer: props.data.correctAnswer,
+        isCorrect
       })
     })
     console.log(data)
@@ -45,20 +77,25 @@ const Question = (props) => {
 
   return (
     <div>
-      <div>{voteCount}</div>
+
+      {/* <div>{voteCount}</div>
       <button onClick={() => setVoteCount(voteCount + 1)}>Upvote</button>
-      <button onClick={() => setVoteCount(voteCount - 1)}>Downvote</button>
+      <button onClick={() => setVoteCount(voteCount - 1)}>Downvote</button> */}
+      {isCorrect !== null && <> { isCorrect ? <div className="p-3 bg-green-500">Correct</div> : <div className="p-3 bg-red-500">Incorrect</div>} </> }
       <div className="my-3">
         Tags:
-        {props.data.tags.map((tag, index) => (
+        {props.data.tag.map((tag, index) => (
           <span key={ index } className="px-3 py-2 m-2 border rounded-md bg-light-blue-300">
-            {tag.value}
+            { tag }
           </span>
         ))}
       </div>
-      <div>Question: {props.data.question}</div>
+      <div>
+        <p>Question</p>
+        <div dangerouslySetInnerHTML={{ __html: props.data.question }}></div>
+      </div>
       <form className="my-3" onSubmit={handleSubmit(onSubmit)}>
-        {props.data.choices.map((choice, index) => (
+        {props.data.answerChoices.map((choice, index) => (
           <div key={ index }>
             <input
               type="radio"
@@ -67,7 +104,7 @@ const Question = (props) => {
               ref={register}
               value={index}
             ></input>
-            <label htmlFor={"choice" + index}>{choice.value}</label>
+            <label htmlFor={"choice" + index} dangerouslySetInnerHTML={{__html: choice}}></label>
           </div>
         ))}
         <button className="my-3 p-3 bg-primary text-white" type="submit">Check Answer</button>
