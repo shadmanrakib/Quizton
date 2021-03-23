@@ -3,8 +3,6 @@ import dynamic from "next/dynamic";
 import { useUser } from "../hooks/useUser";
 import { auth } from "../config/firebaseClient";
 
-const Editor = dynamic(() => import('../components/Editor').catch(() => console.log("Failed to dynamically load editor")), {ssr: false})
-
 export default function Home() {
   const user = useUser();
 
