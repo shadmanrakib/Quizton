@@ -3,23 +3,6 @@ import { useState, useEffect } from "react";
 import { db } from "../../config/firebaseClient";
 import { useForm, useFieldArray } from "react-hook-form";
 
-// interface AuthorInfo {
-//   uid: string;
-//   name: string;
-//   profilePicture?: string;
-// }
-
-// interface Data {
-//   question: string;
-//   explanation: string;
-//   choices: Array<string>;
-//   tags: Array<string>;
-//   answer: number;
-//   author: AuthorInfo;
-//   date?: any;
-// }
-
-
 const Question = (props) => {
   const router = useRouter();
   const { qid } = router.query;
@@ -77,6 +60,7 @@ const Question = (props) => {
 };
 
 export async function getServerSideProps(context) {
+  const qid : string = Array.isArray(context.params.qid) ? context.params.qid[0] : context.params.qid;
   const docRef = db.collection("questions").doc(context.params.qid);
 
   const doc = await docRef.get();
@@ -88,7 +72,7 @@ export async function getServerSideProps(context) {
   }
 
   return {
-    props: { exists: doc.exists, data: doc.data(), qid: context.params.qid },
+    props: { exists: doc.exists, data: doc.data(), qid: qid},
   };
 }
 
