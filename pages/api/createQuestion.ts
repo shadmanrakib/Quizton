@@ -59,6 +59,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const result = undefined;
     return res
       .status(200)
-      .send({ success: false, message: `err` });
+      .send({ success: false, message: err });
   }
 };
