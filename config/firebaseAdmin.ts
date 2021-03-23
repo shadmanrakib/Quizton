@@ -4,7 +4,7 @@ const params = {
   type: process.env.FIREBASE_TYPE.replace(/\\n/gm, '\n'),
   projectId: process.env.FIREBASE_PROJECT_ID.replace(/\\n/gm, '\n'),
   privateKeyId: process.env.FIREBASE_PRIVATE_KEY_ID.replace(/\\n/gm, '\n'),
-  privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n").replace(/\\n/gm, '\n'),
+  privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
   clientEmail: process.env.FIREBASE_CLIENT_EMAIL.replace(/\\n/gm, '\n'),
   clientId: process.env.FIREBASE_CLIENT_ID.replace(/\\n/gm, '\n'),
   authUri: process.env.FIREBASE_AUTH_URI.replace(/\\n/gm, '\n'),
