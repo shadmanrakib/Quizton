@@ -42,6 +42,11 @@ export default function Home() {
             <a>Create Quiz</a>
           </Link>
         </li>
+        <li>
+          <Link href="/uiplayground">
+            <a>UI test</a>
+          </Link>
+        </li>
       </ul>
 
       {user && (
