@@ -5,24 +5,16 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 import * as quesdom from "../../types/quesdom";
 
-type Delta = {
-  ops: any[];
-};
-interface Inputs {
-  question: Delta;
-  explanation: Delta;
-  answer: number;
-  choices: { value: Delta }[];
-  tags: { value: string }[];
-}
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const parsedCookies = parseCookies({ req });
-  const inputs: Inputs = JSON.parse(req.body);
+  const inputs = JSON.parse(req.body);
+  
   console.log(
-    new QuillDeltaToHtmlConverter(inputs.question.ops).convert(),
-    new QuillDeltaToHtmlConverter(inputs.explanation.ops).convert()
+    inputs.question,
+    inputs.explanation
   );
+
   if (!parsedCookies["token"])
     return res.status(200).send({ success: false, message: `No User Token` });
   try {
@@ -34,16 +26,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const multipleChoiceQuestion: quesdom.multipleChoice = {
       kind: "multipleChoice",
       answerChoices: inputs.choices.map((value) => {
-        return new QuillDeltaToHtmlConverter(value.value.ops).convert();
+        return value.value;
       }),
       correctAnswer: inputs.answer,
-      question: new QuillDeltaToHtmlConverter(inputs.question.ops).convert(),
+      question: inputs.question,
       tag: inputs.tags.map((value) => {
         return value.value;
       }),
-      explanation: new QuillDeltaToHtmlConverter(
-        inputs.explanation.ops
-      ).convert(),
+      explanation: inputs.explanation
     };
     await adminDB.collection("questions").add(multipleChoiceQuestion);
 

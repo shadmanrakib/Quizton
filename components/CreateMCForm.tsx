@@ -3,14 +3,6 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useUser } from "../hooks/useUser";
 import Editor from "./Editor";
 
-interface Inputs {
-  question: { ops: any[] };
-  explanation: { ops: any[] };
-  answer: number;
-  choices: any[];
-  tags: { value: string }[];
-}
-
 const CreateMCForm: React.FC = () => {
   const user = useUser();
   const {
@@ -22,7 +14,7 @@ const CreateMCForm: React.FC = () => {
     reset,
     trigger,
     setError,
-  } = useForm<Inputs>();
+  } = useForm();
 
   const tagsField = useFieldArray({
     control,
@@ -33,7 +25,7 @@ const CreateMCForm: React.FC = () => {
     name: "choices",
   });
 
-  const onSubmit = (data: Inputs) => {
+  const onSubmit = (data) => {
     console.log(data);
     async function postData(url = "", data = {}) {
       // Default options are marked with *

@@ -27,7 +27,7 @@ export default function App(props) {
 
   const onChange = (val) => {
     setValue(val);
-    if (props.onChange) {props.onChange(quillRef.current.editor.getContents());}
+    if (props.onChange) {props.onChange(val);}
   }
 
   useEffect(async () => {

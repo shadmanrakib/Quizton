@@ -20,7 +20,7 @@
     "**/*.tsx",
     "pages/_app.js",
     "components/Editor.js",
-    "pages/question/[qid].js"
+    "pages/question/[qid].tsx"
   ],
   "exclude": ["node_modules"]
 }
