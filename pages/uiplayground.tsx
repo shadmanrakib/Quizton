@@ -7,7 +7,7 @@ const UiPlayground: React.FC = () => {
             <Modal title="test">
                 <p>Hello</p>
             </Modal>
-            <Button text="Click me!" />
+            <Button text="Click me!" onClick={() => {}}/>
         </div>
     )
 }
