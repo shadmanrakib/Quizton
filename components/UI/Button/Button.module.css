@@ -1,0 +1,37 @@
+@keyframes rippleEffect {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(100);
+    opacity: 0;
+  }
+}
+
+.rippleButton {
+  background: #1976d2;
+  color: #fff;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.ripple {
+  background: rgba(255, 255, 255, 0.411);
+  /* border-radius: 1000px; */
+  clip-path: circle(150%);
+  opacity: 1;
+  animation: rippleEffect 0.3s ease;
+}
+
+.hovered {
+  background: black;
+  opacity: 0.15;
+  clip-path: circle(0% at 0% 50%);
+  transition: all 200ms;
+}
+
+.button:hover .hovered {
+  clip-path: circle(150% at 0% 0%);
+}

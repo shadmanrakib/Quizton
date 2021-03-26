@@ -2,7 +2,9 @@ import React from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useUser } from "../hooks/useUser";
 import Editor from "./Editor";
+
 import * as quesdom from "../types/quesdom";
+
 
 const CreateMCForm: React.FC = () => {
   const user = useUser();
@@ -15,7 +17,9 @@ const CreateMCForm: React.FC = () => {
     reset,
     trigger,
     setError,
+
   } = useForm<quesdom.ClientMCInputs>();
+
 
   const tagsField = useFieldArray({
     control,
@@ -26,7 +30,9 @@ const CreateMCForm: React.FC = () => {
     name: "choices",
   });
 
+
   const onSubmit = (data: quesdom.ClientMCInputs) => {
+
     console.log(data);
     async function postData(url = "", data = {}) {
       // Default options are marked with *
