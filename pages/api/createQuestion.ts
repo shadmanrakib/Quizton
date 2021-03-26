@@ -5,20 +5,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 import * as quesdom from "../../types/quesdom";
 
-type Delta = {
-  ops: any[];
-};
-interface Inputs {
-  question: Delta;
-  explanation: Delta;
-  answer: number;
-  choices: { value: Delta }[];
-  tags: { value: string }[];
-}
-
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const parsedCookies = parseCookies({ req });
-  const inputs: Inputs = JSON.parse(req.body);
+  const inputs: quesdom.ClientMCInputs = JSON.parse(req.body);
   console.log(
     new QuillDeltaToHtmlConverter(inputs.question.ops).convert(),
     new QuillDeltaToHtmlConverter(inputs.explanation.ops).convert()
@@ -57,8 +46,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // Return undefined if there is no user. You may also send a different status or handle the error in any way that you wish.
     console.log(err);
     const result = undefined;
-    return res
-      .status(200)
-      .send({ success: false, message: err });
+    return res.status(200).send({ success: false, message: err });
   }
 };

@@ -22,3 +22,15 @@ export type Quiz = {
   questions: Question[];
   date: Date;
 };
+
+export interface Delta {
+  ops: any[];
+}
+
+export interface ClientMCInputs {
+  question: Delta;
+  explanation: Delta;
+  answer: number;
+  choices: { value: Delta }[];
+  tags: { value: string }[];
+}

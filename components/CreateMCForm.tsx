@@ -2,14 +2,7 @@ import React from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useUser } from "../hooks/useUser";
 import Editor from "./Editor";
-
-interface Inputs {
-  question: { ops: any[] };
-  explanation: { ops: any[] };
-  answer: number;
-  choices: any[];
-  tags: { value: string }[];
-}
+import * as quesdom from "../types/quesdom";
 
 const CreateMCForm: React.FC = () => {
   const user = useUser();
@@ -22,7 +15,7 @@ const CreateMCForm: React.FC = () => {
     reset,
     trigger,
     setError,
-  } = useForm<Inputs>();
+  } = useForm<quesdom.ClientMCInputs>();
 
   const tagsField = useFieldArray({
     control,
@@ -33,7 +26,7 @@ const CreateMCForm: React.FC = () => {
     name: "choices",
   });
 
-  const onSubmit = (data: Inputs) => {
+  const onSubmit = (data: quesdom.ClientMCInputs) => {
     console.log(data);
     async function postData(url = "", data = {}) {
       // Default options are marked with *
@@ -67,7 +60,7 @@ const CreateMCForm: React.FC = () => {
           control={control}
           name="question"
           defaultValue={null}
-          ref={register({ required: true })}
+          rules={{ required: true }}
           render={({ onChange, onBlur, value }) => (
             <Editor onChange={onChange} theme={"snow"} />
           )}
@@ -93,7 +86,7 @@ const CreateMCForm: React.FC = () => {
                 <Controller
                   control={control}
                   name={`choices[${index}].value`}
-                  ref={register()}
+                  rules={{ required: true }}
                   defaultValue={field.value}
                   render={({ onChange, onBlur, value }) => (
                     <Editor onChange={onChange} theme={"bubble"} />
@@ -131,7 +124,7 @@ const CreateMCForm: React.FC = () => {
           control={control}
           name="explanation"
           defaultValue={null}
-          ref={register({ required: true })}
+          rules={{ required: true }}
           render={({ onChange, onBlur, value }) => (
             <Editor onChange={onChange} theme={"snow"} />
           )}
