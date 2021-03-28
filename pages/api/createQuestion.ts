@@ -2,7 +2,13 @@
 import { firebaseAdmin, adminDB } from "../../config/firebaseAdmin";
 import { parseCookies, setCookie, destroyCookie } from "nookies";
 import type { NextApiRequest, NextApiResponse } from "next";
+import sanitizeHtml from 'sanitize-html';
 import * as quesdom from "../../types/quesdom";
+
+function sanitize(html: string) {
+  //Separate function in case we want to do more processing or use extra features 
+  return sanitizeHtml(html);
+}
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const parsedCookies = parseCookies({ req });
@@ -23,14 +29,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const multipleChoiceQuestion: quesdom.multipleChoice = {
       kind: "multipleChoice",
       answerChoices: inputs.choices.map((value) => {
-        return value.value;
+        return sanitize(value.value);
       }),
-      correctAnswer: inputs.answer,
-      question: inputs.question,
+      correctAnswer: sanitize(inputs.answer),
+      question: sanitize(inputs.question),
       tag: inputs.tags.map((value) => {
         return value.value;
       }),
-      explanation: inputs.explanation,
+      explanation: sanitize(inputs.explanation),
       date: firebaseAdmin.firestore.FieldValue.serverTimestamp(),
       author: {
         uid: uid,

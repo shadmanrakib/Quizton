@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
-import Head from "next/head";
-import React, { useState, useRef, useEffect } from "react";
+import React, {useState, useRef, useEffect} from "react";
 import "../node_modules/quill/dist/quill.snow.css"
 import "../node_modules/quill/dist/quill.bubble.css"
 
@@ -21,7 +20,7 @@ const ReactQuill = dynamic(
 const Quill = dynamic(() => import("react-quill").then((mod) => mod.Quill),
   { ssr: false })
 
-export default function App(props) {
+export default function Editor(props) {
   const [value, setValue] = useState("");
   const quillRef = useRef();
 
