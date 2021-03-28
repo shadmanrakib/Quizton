@@ -59,7 +59,7 @@ const CreateMCForm: React.FC = () => {
           control={control}
           name="question"
           defaultValue={null}
-          ref={register({ required: true })}
+          rules={{ required: true }}
           render={({ onChange, onBlur, value }) => (
             <Editor onChange={onChange} theme={"snow"} />
           )}
@@ -85,7 +85,6 @@ const CreateMCForm: React.FC = () => {
                 <Controller
                   control={control}
                   name={`choices[${index}].value`}
-                  ref={register()}
                   defaultValue={field.value}
                   render={({ onChange, onBlur, value }) => (
                     <Editor onChange={onChange} theme={"bubble"} />
@@ -123,7 +122,7 @@ const CreateMCForm: React.FC = () => {
           control={control}
           name="explanation"
           defaultValue={null}
-          ref={register({ required: true })}
+          rules={{ required: true }}
           render={({ onChange, onBlur, value }) => (
             <Editor onChange={onChange} theme={"snow"} />
           )}
