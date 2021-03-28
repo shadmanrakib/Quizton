@@ -23,7 +23,7 @@ const Button: React.FC<P> = ({ children, style, onClick }) => {
     if (!isRippling) setCoords({ x: -1, y: -1 });
   }, [isRippling]);
 
-  const buttonStyle = `relative overflow-hidden ${styles.button} ${(!style ? "p-3 rounded-md bg-gradient-to-r from-light-blue-500 to-green-500 focus:outline-none text-white": style)}`;
+  const buttonStyle = `relative overflow-hidden ${styles.button} ${(!style ? "p-3 rounded-md bg-light-blue-500 focus:outline-none text-white": style)}`;
 
   return (
     <button
@@ -41,10 +41,10 @@ const Button: React.FC<P> = ({ children, style, onClick }) => {
     >
       {isRippling ? (
         <span
-          className={`w-1 h-1 absolute ${styles.ripple}`}
+          className={`absolute ${styles.ripple}`}
           style={{
-            left: coords.x,
-            top: coords.y,
+            left: coords.x - 5,
+            top: coords.y - 5,
           }}
         />
       ) : (

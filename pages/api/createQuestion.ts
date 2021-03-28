@@ -2,9 +2,7 @@
 import { firebaseAdmin, adminDB } from "../../config/firebaseAdmin";
 import { parseCookies, setCookie, destroyCookie } from "nookies";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 import * as quesdom from "../../types/quesdom";
-
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const parsedCookies = parseCookies({ req });
@@ -23,6 +21,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       .verifyIdToken(parsedCookies["token"]);
     // the user is authenticated!
     const { uid, email } = token;
+    const userDoc = await adminDB.collection('users').doc(uid).get();
+    const userData = userDoc.data();
     const multipleChoiceQuestion: quesdom.multipleChoice = {
       kind: "multipleChoice",
       answerChoices: inputs.choices.map((value) => {
@@ -33,7 +33,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       tag: inputs.tags.map((value) => {
         return value.value;
       }),
-      explanation: inputs.explanation
+      explanation: inputs.explanation,
+      date: firebaseAdmin.firestore.FieldValue.serverTimestamp();
+      author: {
+        uid: uid,
+        username: userData.username,
+        hasProfilePicture: userData.hasProfilePicture
+      }
     };
     await adminDB.collection("questions").add(multipleChoiceQuestion);
 

@@ -9,13 +9,15 @@ module.exports = {
       colors: {
         'primary': "#2F80ED",
         'light-blue': colors.lightBlue,
-        cyan: colors.cyan,
-        orange: colors.orange,
-        blueGray: colors.blueGray,
+        'light-': colors.lightBlue,
+        green: colors.green,
+        emerald: colors.emerald,
+        "cool-gray": colors.coolGray,
+        "blue-gray": colors.blueGray,
       },
-      fontFamily: {
-        sans: ['Poppins', ...defaultTheme.fontFamily.sans],
-      },
+      // fontFamily: {
+      //   sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+      // },
     },
   },
   variants: {},

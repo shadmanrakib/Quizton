@@ -1,7 +1,15 @@
+interface authorMetaData {
+  uid: string;
+  username: string;
+  hasProfilePicture: boolean;
+}
+
 export interface questionMetaData {
   kind: string;
   question: string; //HTML
   tag: string[];
+  date: any; // TODO: Change to firebase timestamp type
+  author: authorMetaData;
   explanation: string;
 }
 

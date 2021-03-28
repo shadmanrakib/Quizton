@@ -33,9 +33,9 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-light-blue-500 to-light-blue-600">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <div className="flex flex-col sm:my-6 bg-white shadow-xl px-6 sm:px-10 py-10 sm:rounded-lg w-full max-w-md">
-        <div className="font-bold self-center text-xl sm:text-2xl uppercase text-coolGray-800">
+        <div className="font-bold self-center text-xl sm:text-2xl uppercase text-cool-gray-800">
           Login To Your Account
         </div>
         <GoogleSignInButton text="Login with Google" />
@@ -64,7 +64,7 @@ const LoginPage: React.FC = () => {
                   id="email"
                   type="email"
                   name="email"
-                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blueGray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
+                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
                   placeholder="Email Address"
                   autoComplete="off"
                   ref={register({
@@ -95,7 +95,7 @@ const LoginPage: React.FC = () => {
                   id="password"
                   type="password"
                   name="password"
-                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blueGray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
+                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
                   placeholder="Password"
                   ref={register({
                     required: true,

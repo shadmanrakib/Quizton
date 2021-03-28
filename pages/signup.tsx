@@ -9,9 +9,10 @@ import { route } from "next/dist/next-server/server/router";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import LockIcon from "@material-ui/icons/Lock";
 import PersonIcon from "@material-ui/icons/Person";
+import nookies from "nookies";
 
 interface SignUpData {
-  name: string;
+  username: string;
   email: string;
   password: string;
 }
@@ -21,14 +22,13 @@ const SignUpPage: React.FC = () => {
   const user = useUser();
   const router = useRouter();
 
-  if (user) router.push("/");
 
-  const SignUp = async ({ name, email, password }) => {
-    try {
-      return await auth.createUserWithEmailAndPassword(email, password);
-    } catch (err) {
-      return err;
-    }
+  if (user) {
+    
+  }
+
+  const SignUp = ({ username, email, password }) => {
+    return auth.createUserWithEmailAndPassword(email, password);
   };
 
   const onSubmit = (data: SignUpData) => {
@@ -37,9 +37,9 @@ const SignUpPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-light-blue-400 to-light-blue-500">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <div className="flex flex-col sm:my-6 bg-white shadow-xl px-6 sm:px-10 py-10 sm:rounded-lg w-full max-w-md">
-        <div className="font-bold self-center text-xl sm:text-2xl uppercase text-coolGray-800">
+        <div className="font-bold self-center text-xl sm:text-2xl uppercase text-cool-gray-800">
           Create an Account
         </div>
         <GoogleSignInButton text="Sign Up with Google" />
@@ -52,36 +52,6 @@ const SignUpPage: React.FC = () => {
         </div>
         <div className="mt-12">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col mb-6">
-              <label
-                htmlFor="name"
-                className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600"
-              >
-                Name:
-              </label>
-              <div className="relative">
-                <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
-                  <PersonIcon />
-                </div>
-
-                <input
-                  id="name"
-                  type="text"
-                  name="name"
-                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blueGray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
-                  placeholder="Name"
-                  ref={register({
-                    required: {
-                      value: true,
-                      message: "Please enter a name",
-                    },
-                  })}
-                />
-              </div>
-              {errors.email && (
-                <p className="text-red-500 mt-1">{errors.email.message}</p>
-              )}
-            </div>
             <div className="flex flex-col mb-6">
               <label
                 htmlFor="email"
@@ -98,7 +68,7 @@ const SignUpPage: React.FC = () => {
                   id="email"
                   type="email"
                   name="email"
-                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blueGray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
+                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
                   placeholder="Email Address"
                   ref={register({
                     required: {
@@ -130,7 +100,7 @@ const SignUpPage: React.FC = () => {
                   id="password"
                   type="password"
                   name="password"
-                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blueGray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
+                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
                   placeholder="Password"
                   ref={register({
                     required: true,
@@ -173,8 +143,8 @@ const SignUpPage: React.FC = () => {
         <div className="flex justify-center items-center mt-6">
           <Link href="/login">
             <a className="inline-flex items-center font-bold text-primary hover:text-blue-700 text-xs text-center">
-              <span>
-                {/* <svg
+              {/* <span>
+                <svg
                   className="h-6 w-6"
                   fill="none"
                   strokeLinecap="round"
@@ -184,8 +154,8 @@ const SignUpPage: React.FC = () => {
                   stroke="currentColor"
                 >
                   <path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                </svg>  */}
-              </span>
+                </svg>
+              </span> */}
               <span className="ml-2">Have an account?</span>
             </a>
           </Link>
