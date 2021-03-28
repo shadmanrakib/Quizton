@@ -1,6 +1,7 @@
 import Link from "next/link";
 import GoogleSignInButton from "../components/GoogleSignInButton";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 import { auth } from "../config/firebaseClient";
 import { useRouter } from "next/router";
 import { useUser } from "../hooks/useUser";
@@ -10,18 +11,20 @@ const GetStartedPage: React.FC = () => {
   const { register, handleSubmit, errors, setError, clearErrors } = useForm();
   const user = useUser();
   const router = useRouter();
-  if (user) {
-    user.getIdTokenResult(true).then((idTokenResult) => {
-        console.log(idTokenResult.claims)
-      if (idTokenResult.claims.registered) {
-        router.push("/");
-        return <div></div>;
-      }
-    });
-  } else {
-    router.push("/signup");
-    return <div></div>;
-  }
+
+  useEffect(() => {
+    if (user) {
+      user.getIdTokenResult(true).then((idTokenResult) => {
+        console.log(idTokenResult.claims);
+        if (idTokenResult.claims.registered) {
+          router.push("/");        
+        }
+      });
+    } else {
+      router.push("/signup");
+    }
+  }, [])
+  
 
   const onSubmit = (data) => {
     async function postData(url = "", data = {}) {
@@ -50,7 +53,7 @@ const GetStartedPage: React.FC = () => {
           router.push("/");
         });
       } else {
-        setError("serverError", { message: message, type: "required" });
+        setError("serverError", { message: message, type: "validate" });
       }
     });
   };
@@ -78,7 +81,7 @@ const GetStartedPage: React.FC = () => {
                   className="text-sm sm:text-base placeholder-gray-600 pl-4 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
                   placeholder="Username"
                   autoComplete="off"
-                  onChange={() => clearErrors("username")}
+                  onChange={() => clearErrors("serverError")}
                   ref={register({
                     required: {
                       value: true,

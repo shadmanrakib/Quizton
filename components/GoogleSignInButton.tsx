@@ -1,10 +1,13 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import firebase from "firebase";
 import { auth, db } from "../config/firebaseClient";
 import { useRouter } from "next/router";
+import { useUser } from "../hooks/useUser";
 
 function GoogleSignInButton(props) {
   const router = useRouter();
+  const user = useUser();
+
   return (
     <div className="mt-8 flex w-full">
       <button
@@ -12,6 +15,7 @@ function GoogleSignInButton(props) {
         className="flex items-center justify-center focus:outline-none border rounded-lg py-3 text-gray-800 shadow-sm hover:bg-gray-200 w-full transition duration-150 ease-in"
         onClick={() => {
           let provider = new firebase.auth.GoogleAuthProvider();
+
           auth.signInWithPopup(provider);
         }}
       >

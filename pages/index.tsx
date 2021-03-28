@@ -3,19 +3,22 @@ import dynamic from "next/dynamic";
 import { useUser } from "../hooks/useUser";
 import { auth } from "../config/firebaseClient";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+
 
 export default function Home() {
   const user = useUser();
   const router = useRouter();
 
-  if (user) {
-    user.getIdTokenResult(true).then((idTokenResult) => {
-      if (!idTokenResult.claims.registered) {
-        router.push("/getstarted");
-        return <div></div>;
-      }
-    })
-  }
+  useEffect(() => {
+    if (user) {
+      user.getIdTokenResult(true).then((idTokenResult) => {
+        if (!idTokenResult.claims.registered) {
+          router.push("/getstarted");
+        }
+      })
+    }
+  }, [])
 
   const handleSignOut = async () => {
     try {
@@ -28,6 +31,7 @@ export default function Home() {
   const onChange = (value) => {
     console.log(value);
   }
+
   return (
     <div>
       {user && <h1>You are logged in with {user.email}</h1>}

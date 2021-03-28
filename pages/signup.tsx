@@ -5,11 +5,8 @@ import { auth } from "../config/firebaseClient";
 import { useEffect, useState } from "react";
 import { useUser } from "../hooks/useUser";
 import { useRouter } from "next/router";
-import { route } from "next/dist/next-server/server/router";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import LockIcon from "@material-ui/icons/Lock";
-import PersonIcon from "@material-ui/icons/Person";
-import nookies from "nookies";
 
 interface SignUpData {
   email: string;
@@ -22,36 +19,38 @@ const SignUpPage: React.FC = () => {
   const router = useRouter();
   const [firebaseError, setFirebaseError] = useState<null | string>(null);
 
-  if (user) {
-    user.getIdTokenResult(true).then((idTokenResult) => {
-      if (idTokenResult.claims.registered) {
-        router.push("/");
-      } else {
-        router.push("/getstarted");
-      }
-    });
-    return <div></div>;
-  }
-
-  const SignUp = ({ email, password }) => {
-    return auth.createUserWithEmailAndPassword(email, password);
-  };
+  useEffect(() => {
+    if (user) {
+      user.getIdTokenResult(true).then((idTokenResult) => {
+        if (idTokenResult.claims.registered) {
+          router.push("/");
+        } else {
+          router.push("/getstarted");
+        }
+      });
+    }
+  }, [])
 
   const onSubmit = (data: SignUpData) => {
-    SignUp(data);
+    auth
+      .createUserWithEmailAndPassword(data.email, data.password)
+      .then(() => {
+        setFirebaseError(null);
+        router.push("/getstarted");
+      })
+      .catch((err) => {
+        setFirebaseError(err.message);
+      });
     console.log(data);
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <div className="flex flex-col sm:my-6 bg-white shadow-xl px-6 sm:px-10 py-10 sm:rounded-lg w-full max-w-md">
-        {firebaseError && (
-          <p className="text-red-500 mt-1">{firebaseError}</p>
-        )}
         <div className="font-bold self-center text-xl sm:text-2xl uppercase text-cool-gray-800">
           Create an Account
         </div>
-        <GoogleSignInButton text="Sign Up with Google" />
+        <GoogleSignInButton text="Sign Up with Google" action="signup" />
         <div className="relative mt-12 h-px bg-gray-300">
           <div className="absolute left-0 top-0 flex justify-center w-full -mt-2">
             <span className="bg-white px-4 text-xs text-gray-500 uppercase">
@@ -60,6 +59,9 @@ const SignUpPage: React.FC = () => {
           </div>
         </div>
         <div className="mt-12">
+          {firebaseError && (
+            <p className="text-red-500 mt-1">{firebaseError}</p>
+          )}
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col mb-6">
               <label
