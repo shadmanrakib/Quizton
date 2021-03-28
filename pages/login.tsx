@@ -16,7 +16,16 @@ const LoginPage: React.FC = () => {
   const { register, handleSubmit, errors } = useForm<LoginData>();
   const user = useUser();
   const router = useRouter();
-  if (user) router.push("/");
+  
+  if (user) {
+    user.getIdTokenResult().then((idTokenResult) => {
+      if (idTokenResult.claims.registered) {
+        router.push("/");
+      } else {
+        router.push("/getStarted");
+      }
+    })
+  }
 
   const login = async ({ email, password }) => {
     try {

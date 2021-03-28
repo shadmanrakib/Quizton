@@ -23,7 +23,13 @@ const SignUpPage: React.FC = () => {
 
 
   if (user) {
-    
+    user.getIdTokenResult().then((idTokenResult) => {
+      if (idTokenResult.claims.registered) {
+        router.push("/");
+      } else {
+        router.push("/getStarted");
+      }
+    })
   }
 
   const SignUp = ({email, password }) => {
