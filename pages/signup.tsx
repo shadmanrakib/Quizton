@@ -12,7 +12,6 @@ import PersonIcon from "@material-ui/icons/Person";
 import nookies from "nookies";
 
 interface SignUpData {
-  username: string;
   email: string;
   password: string;
 }
@@ -27,7 +26,7 @@ const SignUpPage: React.FC = () => {
     
   }
 
-  const SignUp = ({ username, email, password }) => {
+  const SignUp = ({email, password }) => {
     return auth.createUserWithEmailAndPassword(email, password);
   };
 
