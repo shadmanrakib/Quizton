@@ -1,5 +1,5 @@
 import React from 'react'
-import * as quesdom from "../../types/quesdom";
+import * as quesdom from "../types/quesdom";
 
 interface QuestionComponentProps {
     onSubmit?: (any) => any,
