@@ -12,16 +12,44 @@ const GetStartedPage: React.FC = () => {
 
   if (user) {
     user.getIdTokenResult().then((idTokenResult) => {
+        console.log(idTokenResult.claims)
       if (idTokenResult.claims.registered) {
         router.push("/");
-      } else {
-        router.push("/getStarted");
       }
     });
   }
 
-  const onSubmit = (data) => {
-    console.log(data);
+  async function postData(url = "", data = {}) {
+    // Default options are marked with *
+    const response = await fetch(url, {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: "no-cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "include", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: "follow", // manual, *follow, error
+      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      body: JSON.stringify(data), // body data type must match "Content-Type" header
+    });
+    return response.json(); // parses JSON response into native JavaScript objects
+  }
+
+  const onSubmit = (input) => {
+    console.log(input);
+    const resJSON = postData("/api/getstarted", { username: input.username });
+    resJSON.then((data) => {
+      console.log(data);
+      user.getIdTokenResult(true).then((idTokenResult) => {
+        user.getIdToken(true)
+        console.log(idTokenResult.claims);
+        if (idTokenResult.claims.registered) {
+          router.push("/");
+        }
+      });
+    });
   };
 
   return (
@@ -44,7 +72,7 @@ const GetStartedPage: React.FC = () => {
                   id="username"
                   type="username"
                   name="username"
-                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
+                  className="text-sm sm:text-base placeholder-gray-600 pl-4 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
                   placeholder="Username"
                   autoComplete="off"
                   ref={register({
@@ -56,7 +84,7 @@ const GetStartedPage: React.FC = () => {
                 />
               </div>
               {errors.username && (
-                <p className="text-red-500 mt-1">{errors.email.message}</p>
+                <p className="text-red-500 mt-1">{errors.username.message}</p>
               )}
             </div>
             <div className="flex w-full">

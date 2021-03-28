@@ -21,7 +21,7 @@ export const UserProvider: React.FC = ({ children }) => {
         setUser(null);
         nookies.set(undefined, "token", "", { path: "/" });
       } else {
-        const token = await user.getIdToken();
+        const token = await user.getIdToken(true);
         setUser(user);
         nookies.set(undefined, "token", token, { path: "/" });
       }

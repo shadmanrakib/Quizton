@@ -2,9 +2,21 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useUser } from "../hooks/useUser";
 import { auth } from "../config/firebaseClient";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const user = useUser();
+  const router = useRouter();
+
+  // if (user) {
+  //   user.getIdTokenResult().then((idTokenResult) => {
+  //     if (idTokenResult.claims.registered) {
+  //       router.push("/");
+  //     } else {
+  //       router.push("/getstarted");
+  //     }
+  //   })
+  // }
 
   const handleSignOut = async () => {
     try {

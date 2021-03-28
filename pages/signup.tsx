@@ -22,15 +22,15 @@ const SignUpPage: React.FC = () => {
   const router = useRouter();
 
 
-  if (user) {
-    user.getIdTokenResult().then((idTokenResult) => {
-      if (idTokenResult.claims.registered) {
-        router.push("/");
-      } else {
-        router.push("/getStarted");
-      }
-    })
-  }
+  // if (user) {
+  //   user.getIdTokenResult().then((idTokenResult) => {
+  //     if (idTokenResult.claims.registered) {
+  //       router.push("/");
+  //     } else {
+  //       router.push("/getstarted");
+  //     }
+  //   })
+  // }
 
   const SignUp = ({email, password }) => {
     return auth.createUserWithEmailAndPassword(email, password);
