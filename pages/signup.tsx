@@ -19,17 +19,7 @@ const SignUpPage: React.FC = () => {
   const router = useRouter();
   const [firebaseError, setFirebaseError] = useState<null | string>(null);
 
-  useEffect(() => {
-    if (user) {
-      user.getIdTokenResult(true).then((idTokenResult) => {
-        if (idTokenResult.claims.registered) {
-          router.push("/");
-        } else {
-          router.push("/getstarted");
-        }
-      });
-    }
-  }, [])
+  if (user) router.push("/");
 
   const onSubmit = (data: SignUpData) => {
     auth
@@ -50,7 +40,7 @@ const SignUpPage: React.FC = () => {
         <div className="font-bold self-center text-xl sm:text-2xl uppercase text-cool-gray-800">
           Create an Account
         </div>
-        <GoogleSignInButton text="Sign Up with Google" action="signup" />
+        <GoogleSignInButton text="Sign Up with Google" />
         <div className="relative mt-12 h-px bg-gray-300">
           <div className="absolute left-0 top-0 flex justify-center w-full -mt-2">
             <span className="bg-white px-4 text-xs text-gray-500 uppercase">

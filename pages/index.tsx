@@ -10,15 +10,14 @@ export default function Home() {
   const user = useUser();
   const router = useRouter();
 
-  useEffect(() => {
-    if (user) {
-      user.getIdTokenResult(true).then((idTokenResult) => {
-        if (!idTokenResult.claims.registered) {
-          router.push("/getstarted");
-        }
-      })
-    }
-  }, [])
+  if (user) {
+    user.getIdTokenResult(true).then((idTokenResult) => {
+      if (!idTokenResult.claims.registered) {
+        router.push("/getstarted");
+      }
+    })
+  }
+
 
   const handleSignOut = async () => {
     try {
