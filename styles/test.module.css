@@ -1,0 +1,19 @@
+.meow {
+  box-sizing: content-box;
+  width: auto;
+  height: 500px;
+  color: antiquewhite;
+  background-color: red;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+
+.child {
+  box-sizing: content-box;
+  color: black;
+  background-color: greenyellow;
+  width: 100px;
+  height: 50px;
+}

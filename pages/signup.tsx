@@ -21,7 +21,6 @@ const SignUpPage: React.FC = () => {
   const user = useUser();
   const router = useRouter();
 
-
   if (user) {
     user.getIdTokenResult().then((idTokenResult) => {
       if (idTokenResult.claims.registered) {
@@ -29,10 +28,11 @@ const SignUpPage: React.FC = () => {
       } else {
         router.push("/getStarted");
       }
-    })
+    });
+    return <div></div>;
   }
 
-  const SignUp = ({email, password }) => {
+  const SignUp = ({ email, password }) => {
     return auth.createUserWithEmailAndPassword(email, password);
   };
 
