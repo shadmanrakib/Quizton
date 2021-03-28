@@ -8,7 +8,6 @@ import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import LockIcon from "@material-ui/icons/Lock";
 
 interface LoginData {
-  name: string;
   email: string;
   password: string;
 }
