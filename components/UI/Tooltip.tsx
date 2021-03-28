@@ -9,7 +9,7 @@ const Tooltip: React.FC = ({ children }) => {
                 onMouseOver={() => { setOpened(true) }} 
                 onMouseOut={() => { setOpened(false) }}
             >i</div>
-            <div className={`absolute -top-5 left-8 transition duration-200 p-5 ${ opened ? 'opacity-100' : 'opacity-0' } z-50 border border-gray-500 rounded-md bg-white`}>
+            <div className={`absolute -top-5 left-8 transition duration-200 p-5 ${ opened ? 'opacity-100' : 'opacity-0 pointer-events-none' } z-50 border border-gray-500 rounded-md bg-white`}>
                 { children }
             </div>
         </div>
