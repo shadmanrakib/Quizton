@@ -6,6 +6,13 @@ import sanitizeHtml from 'sanitize-html';
 import * as quesdom from "../../types/quesdom";
 
 function sanitize(html: string) {
+  const options = {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'math', 'maction', 'maligngroup', 'malignmark', 'menclose', 'merror', 'mfenced', 'mfrac', 'mi', 'mlongdiv', 'mmultiscripts', 'mn', 'mo', 'mover', 'mpadded', 'mphantom', 'mroot', 'mrow', 'ms', 'mscarries', 'mscarry', 'msgroup', 'msline', 'mspace', 'msqrt', 'msrow', 'mstack', 'mstyle', 'msub', 'msup', 'msubsup', 'mtable', 'mtd', 'mtext', 'mtr', 'munder', 'munderover', 'semantics', 'annotation', 'annotation-xml' ]),
+    allowedAttributes: {
+      'span': [ 'class', 'contentEditable' ]
+    },
+    allowedIframeHostnames: ['www.youtube.com']
+  }
   //Separate function in case we want to do more processing or use extra features 
   return sanitizeHtml(html);
 }
