@@ -4,51 +4,54 @@ import { useForm } from "react-hook-form";
 import { auth } from "../config/firebaseClient";
 import { useRouter } from "next/router";
 import { useUser } from "../hooks/useUser";
+import nookies from "nookies";
 
 const GetStartedPage: React.FC = () => {
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors, setError, clearErrors } = useForm();
   const user = useUser();
   const router = useRouter();
-
   if (user) {
-    user.getIdTokenResult().then((idTokenResult) => {
+    user.getIdTokenResult(true).then((idTokenResult) => {
         console.log(idTokenResult.claims)
       if (idTokenResult.claims.registered) {
         router.push("/");
+        return <div></div>;
       }
     });
+  } else {
+    router.push("/signup");
+    return <div></div>;
   }
 
-  async function postData(url = "", data = {}) {
-    // Default options are marked with *
-    const response = await fetch(url, {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      mode: "no-cors", // no-cors, *cors, same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: "include", // include, *same-origin, omit
-      headers: {
-        "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: "follow", // manual, *follow, error
-      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify(data), // body data type must match "Content-Type" header
-    });
-    return response.json(); // parses JSON response into native JavaScript objects
-  }
-
-  const onSubmit = (input) => {
-    console.log(input);
-    const resJSON = postData("/api/getstarted", { username: input.username });
-    resJSON.then((data) => {
-      console.log(data);
-      user.getIdTokenResult(true).then((idTokenResult) => {
-        user.getIdToken(true)
-        console.log(idTokenResult.claims);
-        if (idTokenResult.claims.registered) {
-          router.push("/");
-        }
+  const onSubmit = (data) => {
+    async function postData(url = "", data = {}) {
+      // Default options are marked with *
+      const response = await fetch(url, {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        mode: "no-cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "include", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: "follow", // manual, *follow, error
+        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(data), // body data type must match "Content-Type" header
       });
+      return response.json(); // parses JSON response into native JavaScript objects
+    }
+    postData("/api/userSetup", data).then((response) => {
+      console.log(response);
+      const { success, message } = response;
+      if (success) {
+        user.getIdToken(true).then((token) => {
+          nookies.set(undefined, "token", token, { path: "/" });
+          router.push("/");
+        });
+      } else {
+        setError("serverError", { message: message, type: "required" });
+      }
     });
   };
 
@@ -75,16 +78,22 @@ const GetStartedPage: React.FC = () => {
                   className="text-sm sm:text-base placeholder-gray-600 pl-4 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
                   placeholder="Username"
                   autoComplete="off"
+                  onChange={() => clearErrors("username")}
                   ref={register({
                     required: {
                       value: true,
-                      message: "Please choose a your username",
+                      message: "Please choose a username",
                     },
                   })}
                 />
               </div>
               {errors.username && (
                 <p className="text-red-500 mt-1">{errors.username.message}</p>
+              )}
+              {errors.serverError && (
+                <p className="text-red-500 mt-1">
+                  {errors.serverError.message}
+                </p>
               )}
             </div>
             <div className="flex w-full">

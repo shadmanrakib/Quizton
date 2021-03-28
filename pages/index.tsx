@@ -8,15 +8,14 @@ export default function Home() {
   const user = useUser();
   const router = useRouter();
 
-  // if (user) {
-  //   user.getIdTokenResult().then((idTokenResult) => {
-  //     if (idTokenResult.claims.registered) {
-  //       router.push("/");
-  //     } else {
-  //       router.push("/getstarted");
-  //     }
-  //   })
-  // }
+  if (user) {
+    user.getIdTokenResult(true).then((idTokenResult) => {
+      if (!idTokenResult.claims.registered) {
+        router.push("/getstarted");
+        return <div></div>;
+      }
+    })
+  }
 
   const handleSignOut = async () => {
     try {

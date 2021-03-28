@@ -17,15 +17,14 @@ const LoginPage: React.FC = () => {
   const user = useUser();
   const router = useRouter();
   
-  // if (user) {
-  //   user.getIdTokenResult().then((idTokenResult) => {
-  //     if (idTokenResult.claims.registered) {
-  //       router.push("/");
-  //     } else {
-  //       router.push("/getstarted");
-  //     }
-  //   })
-  // }
+  if (user) {
+    user.getIdTokenResult(true).then((idTokenResult) => {
+      if (!idTokenResult.claims.registered) {
+        router.push("/getstarted");
+        return <div></div>;
+      }
+    });
+  }
 
   const login = async ({ email, password }) => {
     try {
@@ -42,7 +41,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-      <div className="flex flex-col sm:my-6 bg-white shadow-xl px-6 sm:px-10 py-10 sm:rounded-lg w-full max-w-md">
+      <div className="flex flex-col sm:my-6 outline bg-white shadow-xl px-6 sm:px-10 py-10 sm:rounded-lg w-full max-w-md">
         <div className="font-bold self-center text-xl sm:text-2xl uppercase text-cool-gray-800">
           Login To Your Account
         </div>

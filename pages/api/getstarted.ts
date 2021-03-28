@@ -26,7 +26,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (!isAlphaNumeric(inputs.username))
         return res.status(200).send({ success: false, message: `Username must be alphanumeric` });
     if (!parsedCookies["token"])
-        return res.status(200).send({ success: false, message: `No User Token` });
+        return res.status(200).send({ success: false, message: `Must be signed in` }); //No User Token
     try {
         const token = await firebaseAdmin
             .auth()

@@ -2,7 +2,7 @@ import Link from "next/link";
 import GoogleSignInButton from "../components/GoogleSignInButton";
 import { useForm } from "react-hook-form";
 import { auth } from "../config/firebaseClient";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../hooks/useUser";
 import { useRouter } from "next/router";
 import { route } from "next/dist/next-server/server/router";
@@ -20,19 +20,20 @@ const SignUpPage: React.FC = () => {
   const { register, handleSubmit, errors } = useForm<SignUpData>();
   const user = useUser();
   const router = useRouter();
+  const [firebaseError, setFirebaseError] = useState<null | string>(null);
 
+  if (user) {
+    user.getIdTokenResult(true).then((idTokenResult) => {
+      if (idTokenResult.claims.registered) {
+        router.push("/");
+      } else {
+        router.push("/getstarted");
+      }
+    });
+    return <div></div>;
+  }
 
-  // if (user) {
-  //   user.getIdTokenResult().then((idTokenResult) => {
-  //     if (idTokenResult.claims.registered) {
-  //       router.push("/");
-  //     } else {
-  //       router.push("/getstarted");
-  //     }
-  //   })
-  // }
-
-  const SignUp = ({email, password }) => {
+  const SignUp = ({ email, password }) => {
     return auth.createUserWithEmailAndPassword(email, password);
   };
 
@@ -44,6 +45,9 @@ const SignUpPage: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <div className="flex flex-col sm:my-6 bg-white shadow-xl px-6 sm:px-10 py-10 sm:rounded-lg w-full max-w-md">
+        {firebaseError && (
+          <p className="text-red-500 mt-1">{firebaseError}</p>
+        )}
         <div className="font-bold self-center text-xl sm:text-2xl uppercase text-cool-gray-800">
           Create an Account
         </div>
