@@ -2,21 +2,62 @@
 import { firebaseAdmin, adminDB } from "../../config/firebaseAdmin";
 import { parseCookies, setCookie, destroyCookie } from "nookies";
 import type { NextApiRequest, NextApiResponse } from "next";
-import sanitizeHtml from 'sanitize-html';
+import sanitizeHtml from "sanitize-html";
 import * as quesdom from "../../types/quesdom";
 
 function sanitize(html: string) {
-  const tags = sanitizeHtml.defaults.allowedTags.concat([ 'math', 'maction', 'maligngroup', 'malignmark', 'menclose', 'merror', 'mfenced', 'mfrac', 'mi', 'mlongdiv', 'mmultiscripts', 'mn', 'mo', 'mover', 'mpadded', 'mphantom', 'mroot', 'mrow', 'ms', 'mscarries', 'mscarry', 'msgroup', 'msline', 'mspace', 'msqrt', 'msrow', 'mstack', 'mstyle', 'msub', 'msup', 'msubsup', 'mtable', 'mtd', 'mtext', 'mtr', 'munder', 'munderover', 'semantics', 'annotation', 'annotation-xml' ]);
-  console.log(tags)
+  const tags = sanitizeHtml.defaults.allowedTags.concat([
+    "math",
+    "maction",
+    "maligngroup",
+    "malignmark",
+    "menclose",
+    "merror",
+    "mfenced",
+    "mfrac",
+    "mi",
+    "mlongdiv",
+    "mmultiscripts",
+    "mn",
+    "mo",
+    "mover",
+    "mpadded",
+    "mphantom",
+    "mroot",
+    "mrow",
+    "ms",
+    "mscarries",
+    "mscarry",
+    "msgroup",
+    "msline",
+    "mspace",
+    "msqrt",
+    "msrow",
+    "mstack",
+    "mstyle",
+    "msub",
+    "msup",
+    "msubsup",
+    "mtable",
+    "mtd",
+    "mtext",
+    "mtr",
+    "munder",
+    "munderover",
+    "semantics",
+    "annotation",
+    "annotation-xml",
+  ]);
+  console.log(tags);
 
   const options = {
     allowedTags: tags,
     allowedAttributes: {
-      'span': [ 'class', 'contentEditable' ]
+      span: ["class", "contentEditable"],
     },
-    allowedIframeHostnames: ['www.youtube.com']
-  }
-  //Separate function in case we want to do more processing or use extra features 
+    allowedIframeHostnames: ["www.youtube.com"],
+  };
+  //Separate function in case we want to do more processing or use extra features
   return sanitizeHtml(html, options);
 }
 
@@ -65,7 +106,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } catch (err) {
     // Return undefined if there is no user. You may also send a different status or handle the error in any way that you wish.
     console.log(err);
-    const result = undefined;
     return res.status(200).send({ success: false, message: err });
   }
 };

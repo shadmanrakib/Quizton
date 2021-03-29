@@ -5,7 +5,6 @@ import { auth } from "../config/firebaseClient";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-
 export default function Home() {
   const user = useUser();
   const router = useRouter();
@@ -15,9 +14,8 @@ export default function Home() {
       if (!idTokenResult.claims.registered) {
         router.push("/getstarted");
       }
-    })
+    });
   }
-
 
   const handleSignOut = async () => {
     try {
@@ -29,7 +27,7 @@ export default function Home() {
 
   const onChange = (value) => {
     console.log(value);
-  }
+  };
 
   return (
     <div>
@@ -68,9 +66,6 @@ export default function Home() {
           Sign Out
         </button>
       )}
-
-      
     </div>
-   
   );
 }

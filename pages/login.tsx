@@ -3,7 +3,7 @@ import GoogleSignInButton from "../components/GoogleSignInButton";
 import { useForm } from "react-hook-form";
 import { auth } from "../config/firebaseClient";
 import { useRouter } from "next/router";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../hooks/useUser";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import LockIcon from "@material-ui/icons/Lock";
@@ -22,14 +22,14 @@ const LoginPage: React.FC = () => {
   if (user) router.push("/");
 
   const onSubmit = (data: LoginData) => {
-    auth.signInWithEmailAndPassword(data.email, data.password)
-    .then(() => {
-      setFirebaseError(null);
-      router.push("/getstarted");
-    })
-    .catch((err) => {
-      setFirebaseError(err.message);
-    });
+    auth
+      .signInWithEmailAndPassword(data.email, data.password)
+      .then(() => {
+        setFirebaseError(null);
+      })
+      .catch((err) => {
+        setFirebaseError(err.message);
+      });
     console.log(data);
   };
 
@@ -39,7 +39,7 @@ const LoginPage: React.FC = () => {
         <div className="font-bold self-center text-xl sm:text-2xl uppercase text-cool-gray-800">
           Login To Your Account
         </div>
-        <GoogleSignInButton text="Login with Google"/>
+        <GoogleSignInButton text="Login with Google" />
         <div className="relative mt-12 h-px bg-gray-300">
           <div className="absolute left-0 top-0 flex justify-center w-full -mt-2">
             <span className="bg-white px-4 text-xs text-gray-500 uppercase">
@@ -48,7 +48,7 @@ const LoginPage: React.FC = () => {
           </div>
         </div>
         <div className="mt-12">
-        {firebaseError && (
+          {firebaseError && (
             <p className="text-red-500 mt-1">{firebaseError}</p>
           )}
           <form onSubmit={handleSubmit(onSubmit)}>

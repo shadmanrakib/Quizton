@@ -12,11 +12,11 @@ export const useUser = () => {
 
 // Provider used in _app.js surrounding <Component> so all components have access to user value
 export const UserProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<firebase.default.User | null>(null);
 
   // Set value of UserContext to user when user is changed
   useEffect(() => {
-    return auth.onIdTokenChanged(async (user) => {
+    auth.onIdTokenChanged(async (user) => {
       if (!user) {
         setUser(null);
         nookies.set(undefined, "token", "", { path: "/" });

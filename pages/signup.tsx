@@ -26,7 +26,6 @@ const SignUpPage: React.FC = () => {
       .createUserWithEmailAndPassword(data.email, data.password)
       .then(() => {
         setFirebaseError(null);
-        router.push("/getstarted");
       })
       .catch((err) => {
         setFirebaseError(err.message);
