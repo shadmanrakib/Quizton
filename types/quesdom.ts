@@ -8,9 +8,12 @@ export interface questionMetaData {
   kind: string;
   question: string; //HTML
   tag: string[];
-  date: any; // TODO: Change to firebase timestamp type
+  //date: any; // TODO: Change to firebase timestamp type
   author: authorMetaData;
   explanation: string;
+  upvotes: number,
+  downvotes: number,
+  date: any
 }
 
 export interface shortAnswer extends questionMetaData {

@@ -8,10 +8,6 @@ const Question = (props) => {
   const router = useRouter();
   const { qid } = router.query;
 
-  const { register, handleSubmit, errors, control } = useForm();
-
-  const [voteCount, setVoteCount] = useState(props.data.upvote - props.data.downvote) 
-
   const onSubmit = (data) => { 
     console.log(props.data);
     fetch("/api/answerQuestion", {
@@ -28,7 +24,7 @@ const Question = (props) => {
   };
 
   return (
-    
+    <Question onSubmit={onSubmit} data={props.data} qid={props.qid} />
   );
 };
 
@@ -44,8 +40,21 @@ export async function getServerSideProps(context) {
     };
   }
 
+  const data = doc.data();
+  
+  const serializedData = {
+    kind: data.kind,
+    tag: data.tag,
+    author: data.author,
+    explanation: data.explanation,
+    upvotes: data.upvotes,
+    downvotes: data.downvotes,
+    date: JSON.parse(JSON.stringify(data.date))
+
+  }
+
   return {
-    props: { exists: doc.exists, data: doc.data(), qid: qid},
+    props: { exists: doc.exists, data: serializedData, qid: qid},
   };
 }
 
