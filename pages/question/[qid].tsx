@@ -6,10 +6,6 @@ import "katex/dist/katex.min.css";
 import Question from "../../components/Question";
 
 const QuestionPage = (props) => {
-  console.log(props.data);
-  const [state, setState] = useState(0);
-  console.log(props.data);
-
   const onSubmit = (data) => {
     console.log(props.data);
     fetch("/api/answerQuestion", {
@@ -22,7 +18,6 @@ const QuestionPage = (props) => {
         isCorrect: data.answer == props.data.answer,
       }),
     });
-    console.log(data);
   };
 
   return <Question onSubmit={onSubmit} data={props.data} qid={props.qid} />;
