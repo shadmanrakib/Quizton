@@ -13,7 +13,7 @@ interface QuestionComponentProps {
 const Question = (props: QuestionComponentProps) => {
   const { register, handleSubmit, errors, control } = useForm();
   const [voteCount, setVoteCount] = useState(
-    props.data.upvote - props.data.downvote
+    props.data.upvotes - props.data.downvotes
   );
 
   return (
@@ -39,7 +39,7 @@ const Question = (props: QuestionComponentProps) => {
           dangerouslySetInnerHTML={{ __html: props.data.question }}
         ></div>
       </div>
-      <form className="my-3" onSubmit={handleSubmit(onSubmit)}>
+      <form className="my-3" onSubmit={handleSubmit(props.onSubmit)}>
         {props.data.answerChoices.map((choice, index) => (
           <div key={index}>
             <input
