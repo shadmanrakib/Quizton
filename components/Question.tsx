@@ -11,6 +11,7 @@ interface QuestionComponentProps {
 }
 
 const Question = (props: QuestionComponentProps) => {
+  console.log("Hello", props);
   const { register, handleSubmit, errors, control } = useForm();
   const [voteCount, setVoteCount] = useState(
     props.data.upvotes - props.data.downvotes

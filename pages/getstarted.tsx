@@ -14,6 +14,7 @@ const GetStartedPage: React.FC = () => {
     user.getIdTokenResult().then((idTokenResult) => {
       if (idTokenResult.claims.registered) {
         router.push("/");
+        return <div></div>;
       }
     });
   }
