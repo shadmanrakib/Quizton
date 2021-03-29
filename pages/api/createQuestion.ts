@@ -87,6 +87,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       tag: inputs.tags.map((value) => {
         return value.value;
       }),
+      upvotes: 0,
+      downvotes: 0,
       explanation: sanitize(inputs.explanation),
       date: firebaseAdmin.firestore.FieldValue.serverTimestamp(),
       author: {
