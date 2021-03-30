@@ -8,46 +8,50 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const inputs: quesdom.voteRequest = JSON.parse(req.body);
   try {
     const { kind, qid } = inputs;
-    console.log(kind, qid);
+    // console.log(kind, qid);
     const token = await firebaseAdmin
       .auth()
       .verifyIdToken(parsedCookies["token"]);
     //Delete all user's upvotes/downvotes on question, but keep track of what they voted for.
-    const voteCollection = firebaseAdmin.firestore().collection("/votes");
+    const voteCollection = firebaseAdmin.firestore().collection("votes");
     const snapshot = await voteCollection
       .where("uid", "==", token.uid)
       .where("qid", "==", qid)
       .get();
-    let upvoteDocsDeleted = 0;
-    let downvoteDocsDeleted = 0;
-    for (let i = 0; i < snapshot.docs.length; i++) {
-      const voteDoc = snapshot.docs[i].data() as quesdom.voteDocument;
-      console.log(voteDoc);
-      if (voteDoc.kind === "downvote") downvoteDocsDeleted++;
-      else if (voteDoc.kind === "upvote") upvoteDocsDeleted++;
-      await snapshot.docs[i].ref.delete();
-    }
 
+    // let upvoteDocsDeleted = 0;
+    // let downvoteDocsDeleted = 0;
+    // for (let i = 0; i < snapshot.docs.length; i++) {
+    //   const voteDoc = snapshot.docs[i].data() as quesdom.voteDocument;
+    //   // console.log(voteDoc);
+    //   if (voteDoc.kind === "downvote") downvoteDocsDeleted++;
+    //   else if (voteDoc.kind === "upvote") upvoteDocsDeleted++;
+    //   await snapshot.docs[i].ref.delete();
+    // }
+
+    const voteDocKind: string | null = snapshot.docs.length > 0 ? snapshot.docs[0].data().kind : null;
     //Update question upvote/downvote fields.
-    const questionDoc = firebaseAdmin.firestore().doc(`/questions/${qid}`);
+    const questionDoc = firebaseAdmin.firestore().doc(`questions/${qid}`);
     const questionData = (await questionDoc.get()).data() as quesdom.Question;
-    console.log(questionData);
-    if (kind === "downvote") {
+    // console.log(questionData);
+    if (kind === "downvote" && voteDocKind !== "downvote") {
+      console.log("downvoting")
       await questionDoc.update({
-        downvotes: questionData.downvotes + 1 - downvoteDocsDeleted,
-        upvotes: questionData.upvotes - upvoteDocsDeleted,
+        downvotes: questionData.downvotes + 1,
+        upvotes: questionData.upvotes,
       });
     }
-    if (kind === "upvote") {
+    else if (kind === "upvote" && voteDocKind !== "upvote") {
+      console.log("upvoting")
       await questionDoc.update({
-        downvotes: questionData.downvotes - downvoteDocsDeleted,
-        upvotes: questionData.upvotes + 1 - upvoteDocsDeleted,
+        downvotes: questionData.downvotes,
+        upvotes: questionData.upvotes + 1,
       });
     }
-    if (kind === "unvote") {
+    else if (kind === "downvote" && voteDocKind !== "downvote") {
       await questionDoc.update({
-        upvotes: questionData.upvotes - upvoteDocsDeleted,
-        downvote: questionData.upvotes - downvoteDocsDeleted,
+        upvotes: questionData.upvotes,
+        downvote: questionData.upvotes,
       });
       res.status(200).send({ success: true, message: "Successfully unvoted" });
     }
