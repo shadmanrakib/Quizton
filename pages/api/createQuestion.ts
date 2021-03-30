@@ -5,20 +5,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import sanitizeHtml from "sanitize-html";
 import * as quesdom from "../../types/quesdom";
 import striptags from 'striptags';
-import snowball from 'node-snowball';
+import stemmer from 'stemmer';
 
-interface QuestionIndex {
-  qid: string,
-  kind: string,
-  question: string,
-  tags: string[],
-  frequency: Object, //Word freq. from question
-  keywords: string[], //All non-stopwords from tags & question
-  date: any,
-  author: any,
-  upvotes: number,
-  downvotes: number,
-}
 function sanitize(html: string) {
   const tags = sanitizeHtml.defaults.allowedTags.concat([
     "math",
@@ -85,22 +73,21 @@ const stopwords: Set<string> = new Set( ["i", "me", "my", "myself", "we", "our",
 
 function wordFreq(string) {
   var words = string.replace(/[.,&'?()!]/g, '').split(/\s/);
-  console.log(words);
-
   var freqMap = {};
-
+  var contains = {}
   words.forEach(w => {
     const lowerW = w.toLowerCase();
     if (w != '' && !stopwords.has(lowerW)) {
-      const processedWord = snowball.stemword(lowerW);
+      const processedWord = stemmer(lowerW);
       if (!freqMap[processedWord]) {
         freqMap[processedWord] = 0;
+        contains[processedWord] = true;
       }
       freqMap[processedWord] += 1;
     }
   });
 
-  return freqMap;
+  return [freqMap, contains];
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -120,6 +107,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const userDoc = await adminDB.collection("users").doc(uid).get();
     const userData = userDoc.data();
 
+    const createDate = firebaseAdmin.firestore.FieldValue.serverTimestamp();
+
     const tags = inputs.tags.map((value) => {
       return value.value;
     })
@@ -130,12 +119,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
     const sanitizedAnswer = sanitize(inputs.answer);
     const sanitizedExplanation = sanitize(inputs.explanation);
-    const createDate = firebaseAdmin.firestore.FieldValue.serverTimestamp();
     const author = {
       uid: uid,
       username: userData.username,
       hasProfilePicture: userData.hasProfilePicture,
     }
+
+    const [freq, contains] = wordFreq(striptags(sanitizedQuestion));
+    
+    tags.forEach(tag => {
+      contains[stemmer(tag.toLowerCase())] = true;
+    });
 
     const multipleChoiceQuestion: quesdom.multipleChoice = {
       kind: "multipleChoice",
@@ -143,39 +137,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       correctAnswer: sanitizedAnswer,
       question: sanitizedQuestion,
       tags: tags,
+      votes: 0,
       upvotes: 0,
       downvotes: 0,
+      contains: contains,
+      keywords: Object.keys(contains),
       explanation: sanitizedExplanation,
       date: createDate,
       author: author,
     };
     const { id } = await adminDB.collection("questions").add(multipleChoiceQuestion); // Convert Inputs to multipleChoice
-
-    //Creates index for searching later
-
-    const freq = wordFreq(striptags(sanitizedQuestion));
-
-    const keywords = Object.keys(freq)
-    keywords.push(...tags);
-
-    console.log(freq)
-
-    const questionIndexDoc: QuestionIndex = {
-      qid: id,
-      kind: "multipleChoice",
-      date: createDate,
-      question: sanitizedQuestion,
-      tags: tags,
-      frequency: freq,
-      upvotes: 0,
-      downvotes: 0,
-      keywords: keywords,
-      author: author
-    }
-
-    await adminDB.collection("questionIndex").doc(id).set(questionIndexDoc);
-
-    console.log(questionIndexDoc)
 
     return res.status(200).send({
       success: true,

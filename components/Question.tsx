@@ -2,7 +2,7 @@ import React from "react";
 import * as quesdom from "../types/quesdom";
 import "katex/dist/katex.min.css";
 import { useForm, useFieldArray } from "react-hook-form";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 
 interface QuestionComponentProps {
   onSubmit?: (any) => any;
@@ -28,20 +28,35 @@ async function postData(url = "", data = {}) {
   return response.json(); // parses JSON response into native JavaScript objects
 }
 
+interface VotedAlready { 
+  upvote: boolean;
+  downvote: boolean;
+}
+
 const Question = (props: QuestionComponentProps) => {
   const { register, handleSubmit, errors, control } = useForm();
   const [voteCount, setVoteCount] = useState(
     props.data.upvotes - props.data.downvotes
   );
+  const votedAlready = useRef({upvote: false, downvote: false} as VotedAlready);
+
   function onUpvote() {
-    const data: quesdom.voteRequest = { kind: "upvote", qid: props.qid };
-    postData("/api/userVote", data).then((s) => console.log(s));
-    setVoteCount(voteCount + 1);
+    if (!votedAlready.current.upvote) {
+      const data: quesdom.voteRequest = { kind: "upvote", qid: props.qid };
+      postData("/api/userVote", data).then((s) => console.log(s));
+      setVoteCount(voteCount + 1);
+      votedAlready.current.upvote = true;
+      votedAlready.current.downvote = false;
+    }
   }
   function onDownvote() {
-    const data: quesdom.voteRequest = { kind: "downvote", qid: props.qid };
-    postData("/api/userVote", data);
-    setVoteCount(voteCount - 1);
+    if (!votedAlready.current.downvote) {
+      const data: quesdom.voteRequest = { kind: "downvote", qid: props.qid };
+      postData("/api/userVote", data);
+      setVoteCount(voteCount - 1);
+      votedAlready.current.downvote = true;
+      votedAlready.current.upvote = false;
+    }
   }
   return (
     <div>
