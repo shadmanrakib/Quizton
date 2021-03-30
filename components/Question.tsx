@@ -24,7 +24,7 @@ const Question = (props: QuestionComponentProps) => {
       <button onClick={() => setVoteCount(voteCount - 1)}>Downvote</button>
       <div className="my-3">
         Tags:
-        {props.data.tag.map((tag, index) => (
+        {props.data.tags.map((tag, index) => (
           <span
             key={index}
             className="px-3 py-2 m-2 border rounded-md bg-light-blue-300"

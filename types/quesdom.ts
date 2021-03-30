@@ -7,7 +7,7 @@ interface authorMetaData {
 export interface questionMetaData {
   kind: string;
   question: string; //HTML
-  tag: string[];
+  tags: string[];
   //date: any; // TODO: Change to firebase timestamp type
   author: authorMetaData;
   explanation: string;
