@@ -1,4 +1,4 @@
-interface authorMetaData {
+export interface authorMetaData {
   uid: string;
   username: string;
   hasProfilePicture: boolean;
@@ -17,6 +17,18 @@ export interface questionMetaData {
   downvotes: number,
   contains: Object,
   date: any
+}
+
+export interface voteDocument {
+  uid: string;
+  username: string;
+  kind: "upvote" | "downvote";
+  qid: string;
+}
+
+export interface voteRequest {
+  kind: "upvote" | "downvote" | "unvote";
+  qid: string;
 }
 
 export interface shortAnswer extends questionMetaData {

@@ -10,18 +10,44 @@ interface QuestionComponentProps {
   qid: string;
 }
 
+async function postData(url = "", data = {}) {
+  // Default options are marked with *
+  const response = await fetch(url, {
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    mode: "no-cors", // no-cors, *cors, same-origin
+    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: "include", // include, *same-origin, omit
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: "follow", // manual, *follow, error
+    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data), // body data type must match "Content-Type" header
+  });
+  return response.json(); // parses JSON response into native JavaScript objects
+}
+
 const Question = (props: QuestionComponentProps) => {
-  console.log("Hello", props);
   const { register, handleSubmit, errors, control } = useForm();
   const [voteCount, setVoteCount] = useState(
     props.data.upvotes - props.data.downvotes
   );
-
+  function onUpvote() {
+    const data: quesdom.voteRequest = { kind: "upvote", qid: props.qid };
+    postData("/api/userVote", data).then((s) => console.log(s));
+    setVoteCount(voteCount + 1);
+  }
+  function onDownvote() {
+    const data: quesdom.voteRequest = { kind: "downvote", qid: props.qid };
+    postData("/api/userVote", data);
+    setVoteCount(voteCount - 1);
+  }
   return (
     <div>
       <div>{voteCount}</div>
-      <button onClick={() => setVoteCount(voteCount + 1)}>Upvote</button>
-      <button onClick={() => setVoteCount(voteCount - 1)}>Downvote</button>
+      <button onClick={() => onUpvote()}>Upvote</button>
+      <button onClick={() => onDownvote()}>Downvote</button>
       <div className="my-3">
         Tags:
         {props.data.tags.map((tag, index) => (
