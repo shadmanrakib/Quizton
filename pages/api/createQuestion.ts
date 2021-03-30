@@ -5,7 +5,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import sanitizeHtml from "sanitize-html";
 import * as quesdom from "../../types/quesdom";
 import striptags from 'striptags';
-import stemmer from 'stemmer';
+import snowball from 'node-snowball';
 
 interface QuestionIndex {
   qid: string,
@@ -92,7 +92,7 @@ function wordFreq(string) {
   words.forEach(w => {
     const lowerW = w.toLowerCase();
     if (w != '' && !stopwords.has(lowerW)) {
-      const processedWord = stemmer(lowerW);
+      const processedWord = snowball.stemword(lowerW);
       if (!freqMap[processedWord]) {
         freqMap[processedWord] = 0;
       }

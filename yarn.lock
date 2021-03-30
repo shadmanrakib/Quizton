@@ -4018,7 +4018,7 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-nan@^2.12.1:
+nan@^2.12.1, nan@^2.14.0:
   version "2.14.2"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.2.tgz#f5376400695168f4cc694ac9393d0c9585eeea19"
   integrity sha512-M2ufzIiINKCuDfBSAUr1vWQ+vuVcA9kqx8JJUsbQi6yf1uGRyb7HfpdfUr5qLXf3B/t8dPvcjhKMmlfnP47EzQ==
@@ -4190,6 +4190,13 @@ node-releases@^1.1.65, node-releases@^1.1.69:
   version "1.1.70"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.70.tgz#66e0ed0273aa65666d7fe78febe7634875426a08"
   integrity sha512-Slf2s69+2/uAD79pVVQo8uSiC34+g8GWY8UH2Qtqv34ZfhYrxpYpfzs9Js9d6O0mbDmALuxaTlplnBTnSELcrw==
+
+node-snowball@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/node-snowball/-/node-snowball-0.6.0.tgz#7c1f60e34f1433e09a6cb4d842ee2b7901f0a9d4"
+  integrity sha512-wZ7xQ2t7r83yJ9DToJAcs/IK23NZnS2txfRoLkKSe0ZlS4vbHnx0War2q9EMQt3hA2ahgqZk8ygN07qUdr7nuA==
+  dependencies:
+    nan "^2.14.0"
 
 nookies@^2.5.2:
   version "2.5.2"
