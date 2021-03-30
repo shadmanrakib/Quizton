@@ -85,7 +85,7 @@ const CreateMCForm: React.FC = () => {
                 <Controller
                   control={control}
                   name={`choices[${index}].value`}
-                  defaultValue={field.value}
+                  defaultValue={null}
                   render={({ onChange, onBlur, value }) => (
                     <Editor onChange={onChange} theme={"bubble"} />
                   )}

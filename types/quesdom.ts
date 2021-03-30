@@ -1,4 +1,4 @@
-interface authorMetaData {
+export interface authorMetaData {
   uid: string;
   username: string;
   hasProfilePicture: boolean;
@@ -11,9 +11,21 @@ export interface questionMetaData {
   //date: any; // TODO: Change to firebase timestamp type
   author: authorMetaData;
   explanation: string;
-  upvotes: number,
-  downvotes: number,
-  date: any
+  upvotes: number;
+  downvotes: number;
+  date: any;
+}
+
+export interface voteDocument {
+  uid: string;
+  username: string;
+  kind: "upvote" | "downvote";
+  qid: string;
+}
+
+export interface voteRequest {
+  kind: "upvote" | "downvote" | "unvote";
+  qid: string;
 }
 
 export interface shortAnswer extends questionMetaData {

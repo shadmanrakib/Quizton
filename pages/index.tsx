@@ -14,6 +14,7 @@ export default function Home() {
       if (!idTokenResult.claims.registered) {
         router.push("/getstarted");
       }
+      return <div></div>;
     });
   }
 
