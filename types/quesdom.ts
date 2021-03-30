@@ -18,7 +18,6 @@ export interface questionMetaData {
 
 export interface voteDocument {
   uid: string;
-  username: string;
   kind: "upvote" | "downvote";
   qid: string;
 }
