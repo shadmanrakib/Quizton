@@ -11,9 +11,12 @@ export interface questionMetaData {
   //date: any; // TODO: Change to firebase timestamp type
   author: authorMetaData;
   explanation: string;
-  upvotes: number;
-  downvotes: number;
-  date: any;
+  keywords: string[],
+  votes: number;
+  upvotes: number,
+  downvotes: number,
+  contains: Object,
+  date: any
 }
 
 export interface voteDocument {
