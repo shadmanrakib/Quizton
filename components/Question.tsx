@@ -5,6 +5,8 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { useState, useRef } from "react";
 import { db, auth } from "../config/firebaseClient";
 import { useUser } from "../hooks/useUser";
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 
 interface QuestionComponentProps {
   onSubmit?: (any) => any;
@@ -111,47 +113,66 @@ const Question = (props: QuestionComponentProps) => {
   }
   return (
     <div>
-      <div>{voteCount}</div>
-      <button onClick={() => onUpvote()}>Upvote</button>
-      <button onClick={() => onDownvote()}>Downvote</button>
-      <div className="my-3">
-        Tags:
-        {props.data.tags.map((tag, index) => (
-          <span
-            key={index}
-            className="px-3 py-2 m-2 border rounded-md bg-light-blue-300"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-      <div>
-        Question:
-        <div
-          className=""
-          dangerouslySetInnerHTML={{ __html: props.data.question }}
-        ></div>
-      </div>
-      <form className="my-3" onSubmit={handleSubmit(props.onSubmit)}>
-        {props.data.answerChoices.map((choice, index) => (
-          <div key={index}>
-            <input
-              type="radio"
-              id={"choice" + index}
-              name="answer"
-              ref={register}
-              value={index}
-            ></input>
-            <label
-              htmlFor={"choice" + index}
-              dangerouslySetInnerHTML={{ __html: choice }}
-            ></label>
+      <div className="flex flex-row rounded-md container mx-auto">
+        <div className="flex flex-col w-6 bg-gray-100 flex-wrap content-center justify-center self-start">
+          <ArrowUpwardIcon
+            onClick={() => onUpvote()}
+            className={`${
+              vote === "upvote" ? "text-green-500" : ""
+            } hover:text-green-500 hover:bg-gray-200`}
+          />
+          <p className="text-center">{voteCount}</p>
+          <ArrowDownwardIcon
+            onClick={() => onDownvote()}
+            className={`${
+              vote === "downvote" ? "text-red-500" : ""
+            } hover:text-red-500 hover:bg-gray-200`}
+          />
+        </div>
+        {/* Question Section */}
+        <div className="ml-3">
+          <div className="my-3">
+            Tags:
+            {props.data.tags.map((tag, index) => (
+              <span
+                key={index}
+                className="px-3 py-2 m-2 border rounded-md bg-light-blue-300"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
-        ))}
-        <button className="my-3 p-3 bg-primary text-white" type="submit">
-          Check Answer
-        </button>
-      </form>
+
+          <div>
+            Question:
+            <div
+              className=""
+              dangerouslySetInnerHTML={{ __html: props.data.question }}
+            ></div>
+          </div>
+          <form className="my-3" onSubmit={handleSubmit(props.onSubmit)}>
+            {props.data.answerChoices.map((choice, index) => (
+              <div key={index}>
+                <input
+                  type="radio"
+                  id={"choice" + index}
+                  name="answer"
+                  ref={register}
+                  value={index}
+                ></input>
+                <label
+                  htmlFor={"choice" + index}
+                  dangerouslySetInnerHTML={{ __html: choice }}
+                  className="inline-block text-md ml-3"
+                ></label>
+              </div>
+            ))}
+            <button className="my-3 p-3 bg-primary text-white" type="submit">
+              Check Answer
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
