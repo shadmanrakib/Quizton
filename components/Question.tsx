@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as quesdom from "../types/quesdom";
 import "katex/dist/katex.min.css";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useState, useRef } from "react";
+import { db, auth } from "../config/firebaseClient";
+import { useUser } from "../hooks/useUser";
 
 interface QuestionComponentProps {
   onSubmit?: (any) => any;
@@ -28,34 +30,83 @@ async function postData(url = "", data = {}) {
   return response.json(); // parses JSON response into native JavaScript objects
 }
 
-interface VotedAlready { 
-  upvote: boolean;
-  downvote: boolean;
+async function getUserVoteKind(
+  props: QuestionComponentProps
+): Promise<"upvote" | "downvote" | "none" | null> {
+  const user = auth.currentUser;
+  if (!auth.currentUser) {
+    return null;
+  }
+  const voteCollection = db.collection("/votes");
+  const voteDocs = await voteCollection
+    .where("qid", "==", props.qid)
+    .where("uid", "==", user.uid)
+    .get();
+  console.log(voteDocs);
+  if (voteDocs.empty) {
+    return "none";
+  }
+  return (voteDocs.docs[0].data() as quesdom.voteDocument).kind;
 }
 
 const Question = (props: QuestionComponentProps) => {
+  const user = useUser();
+  const [vote, setVote] = useState<null | "upvote" | "downvote" | "none">(null);
   const { register, handleSubmit, errors, control } = useForm();
   const [voteCount, setVoteCount] = useState(
     props.data.upvotes - props.data.downvotes
   );
-  const votedAlready = useRef({upvote: false, downvote: false} as VotedAlready);
+  useEffect(() => {
+    let stillMounted = true;
+    getUserVoteKind(props).then((kind) => {
+      if (stillMounted) setVote(kind);
+    });
+    return () => {
+      stillMounted = false;
+    };
+  }, [user]);
 
   function onUpvote() {
-    if (!votedAlready.current.upvote) {
+    console.log(vote);
+    if (vote === null) return; //since firebase vote document didn't load in yet
+    if (vote === "none") {
       const data: quesdom.voteRequest = { kind: "upvote", qid: props.qid };
       postData("/api/userVote", data).then((s) => console.log(s));
       setVoteCount(voteCount + 1);
-      votedAlready.current.upvote = true;
-      votedAlready.current.downvote = false;
+      setVote("upvote");
+    }
+    if (vote === "upvote") {
+      const data: quesdom.voteRequest = { kind: "unvote", qid: props.qid };
+      postData("/api/userVote", data).then((s) => console.log(s));
+      setVoteCount(voteCount - 1);
+      setVote("none");
+    }
+    if (vote === "downvote") {
+      const data: quesdom.voteRequest = { kind: "upvote", qid: props.qid };
+      postData("/api/userVote", data).then((s) => console.log(s));
+      setVoteCount(voteCount + 2);
+      setVote("upvote");
     }
   }
   function onDownvote() {
-    if (!votedAlready.current.downvote) {
+    if (vote === null) return; //since firebase vote document didn't load in yet
+    if (vote === "none") {
       const data: quesdom.voteRequest = { kind: "downvote", qid: props.qid };
-      postData("/api/userVote", data);
+      postData("/api/userVote", data).then((s) => console.log(s));
       setVoteCount(voteCount - 1);
-      votedAlready.current.downvote = true;
-      votedAlready.current.upvote = false;
+      setVote("downvote");
+    }
+    if (vote === "downvote") {
+      const data: quesdom.voteRequest = { kind: "unvote", qid: props.qid };
+      postData("/api/userVote", data).then((s) => console.log(s));
+      setVoteCount(voteCount + 1);
+      setVote("none");
+    }
+    if (vote === "upvote") {
+      const data: quesdom.voteRequest = { kind: "downvote", qid: props.qid };
+      postData("/api/userVote", data).then((s) => console.log(s));
+      setVoteCount(voteCount - 2);
+      setVote("downvote");
     }
   }
   return (
