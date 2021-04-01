@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-import { useUser } from "../hooks/useUser";
+import { useUser } from "../../hooks/useUser";
 import nookies from "nookies";
 
 const GetStartedPage: React.FC = () => {

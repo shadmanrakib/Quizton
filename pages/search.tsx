@@ -167,19 +167,28 @@ const Search: React.FC = () => {
 
   async function search(query) {
     const keywords = extractKeyTokens(query);
-    const questionsRef = db.collection("questions");
+    let reference = db.collection("questions");
     const docsArray = [];
     const docsDict = {};
 
     if (keywords.length > 0) {
-      const snapshot = await questionsRef
-        .where("keywords", "array-contains-any", keywords)
-        .get();
+      // const snapshot = await questionsRef
+      //   .where("keywords", "array-contains-any", keywords)
+      //   .get();
+      
+      keywords.forEach(element => {
+        // @ts-ignore
+        reference = reference.where(`contains.${element}`,"==",true);
+      });
+     
+      const snapshot = await reference.get(); 
+      
       if (snapshot.empty) {
         setResultsArray([]);
         setResultsDict({});
         console.log("No matching documents.");
       } else {
+        
         snapshot.forEach((doc) => {
           docsArray.push({ qid: doc.id, ...doc.data() });
           docsDict[doc.id] = doc.data();
