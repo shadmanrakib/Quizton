@@ -35,10 +35,10 @@ const Navbar = (props) => {
         </>
       ) : (
         <>
-          <div className="flex-none h-10 w-10 mx-4">
+          <div className="flex-none mx-4">
             <Image
-              src="/vercel.svg"
-              alt="Picture of the author"
+              src="/quizton.svg"
+              alt="Quizton"
               width={40}
               height={40}
             />
