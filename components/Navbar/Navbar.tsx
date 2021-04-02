@@ -12,9 +12,9 @@ const Navbar = (props) => {
   const [isUsingMobileSearch, setIsUsingMobileSearch] = useState(false);
 
   return (
-    <nav className={"border flex flex-row items-center w-full h-14"}>
+    <nav>
       {isUsingMobileSearch ? (
-       <>
+       <div className={"border flex flex-row items-center w-full h-14"}>
           <button
             className="mx-2"
             onClick={() => setIsUsingMobileSearch(false)}
@@ -32,19 +32,19 @@ const Navbar = (props) => {
               </button>
             </div>
           </div>
-        </>
+        </div>
       ) : (
-        <>
-          <div className="flex-none mx-4">
+        <div className={"border flex flex-row items-center w-full h-16"}>
+          <div className="flex-none items-center h-10 mx-4">
             <Image
-              src="/quizton.svg"
+              src="/full-logo.svg"
               alt="Quizton"
-              width={40}
-              height={40}
+              width={192}
+              height={36}
             />
           </div>
           <div className="hidden md:flex mx-4 items-center flex-grow min-w-0">
-            <div className="flex border rounded overflow-hidden h-9 w-full min-w-0 max-w-xl">
+            <div className="flex border rounded overflow-hidden h-10 w-full min-w-0 max-w-xl">
               <input
                 type="text"
                 className="flex-auto min-w-0 focus:outline-none p-2"
@@ -71,7 +71,7 @@ const Navbar = (props) => {
               </>
             )}
           </div>
-        </>
+        </div>
       )}
     </nav>
   );
