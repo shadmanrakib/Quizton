@@ -4,11 +4,10 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import Link from "next/link";
-import { useRouter } from 'next/router';
+import { auth } from '../../config/firebaseClient';
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const router = useRouter();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -16,6 +15,14 @@ export default function AccountMenu() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      return await auth.signOut();
+    } catch (err) {
+      return err;
+    }
   };
 
   return (
@@ -29,16 +36,10 @@ export default function AccountMenu() {
         onClose={handleClose}
       >
         <MenuItem onClick={() => {
-            router.push("/auth/login");
+            handleSignOut();
             handleClose();
         }}>
-            Login
-        </MenuItem>
-        <MenuItem onClick={() => {
-            router.push("/auth/signup")
-            handleClose();
-        }}>
-            Signup
+          Sign out
         </MenuItem>
       </Menu>
     </div>

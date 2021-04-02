@@ -6,10 +6,14 @@ import { useUser } from "../../hooks/useUser";
 import AccountMenu from "./AccountMenu";
 import ArrowBackIcon from "@material-ui/icons/ArrowBackRounded";
 import IconButton from "@material-ui/core/IconButton/IconButton";
+import Button from "@material-ui/core/Button/Button";
+import { useRouter } from 'next/router';
+import Link from "next/link";
 
 const Navbar = (props) => {
   const user = useUser();
   const [isUsingMobileSearch, setIsUsingMobileSearch] = useState(false);
+  const router = useRouter();
 
   return (
     <nav>
@@ -71,12 +75,17 @@ const Navbar = (props) => {
             </IconButton>
           </div>
           <div className="flex-none mx-4">
-            {user ? (
-              <></> // Add profile picture
-            ) : (
+            {!user ? (
               <>
-                <AccountMenu />
-              </>
+              <Link href="/auth/login">
+                <Button variant="text">Login</Button>
+              </Link>
+              <Link href="/auth/signup">
+                <Button variant="text">Signup</Button>
+              </Link>
+              </> // Add profile picture
+            ) : (
+              <AccountMenu />
             )}
           </div>
         </div>
