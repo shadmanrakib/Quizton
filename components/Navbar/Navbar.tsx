@@ -35,11 +35,19 @@ const Navbar = (props) => {
         </div>
       ) : (
         <div className={"border flex flex-row items-center w-full h-16"}>
-          <div className="flex-none items-center h-10 mx-4">
+          <div className="hidden sm:flex flex-none items-center h-10 mx-4">
             <Image
               src="/full-logo.svg"
               alt="Quizton"
               width={192}
+              height={36}
+            />
+          </div>
+          <div className="flex-none items-center h-10 mx-4 sm:hidden">
+            <Image
+              src="/logo.svg"
+              alt="Quizton"
+              width={36}
               height={36}
             />
           </div>
