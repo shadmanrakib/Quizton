@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Navbar from '../components/Navbar/Navbar'
 
 const index = () => {
 
@@ -6,7 +7,7 @@ const index = () => {
 
     return (
         <>
-        {/* <Navbar changeQuery={setQuery} /> */}
+            <Navbar changeQuery={setQuery} />
         </>
     )
 }
