@@ -12,9 +12,9 @@ const Navbar = (props) => {
   const [isUsingMobileSearch, setIsUsingMobileSearch] = useState(false);
 
   return (
-    <nav>
+    <nav className={"border flex flex-row items-center w-full h-14"}>
       {isUsingMobileSearch ? (
-        <div className={"border flex flex-row items-center w-full h-14"}>
+       <>
           <button
             className="mx-2"
             onClick={() => setIsUsingMobileSearch(false)}
@@ -32,9 +32,9 @@ const Navbar = (props) => {
               </button>
             </div>
           </div>
-        </div>
+        </>
       ) : (
-        <div className={"border flex flex-row items-center w-full h-14"}>
+        <>
           <div className="flex-none h-10 w-10 mx-4">
             <Image
               src="/vercel.svg"
@@ -68,15 +68,10 @@ const Navbar = (props) => {
             ) : (
               <>
                 <AccountMenu />
-                {/* <Link href="/auth/login">
-                <Button variant="outlined" color="inherit">
-                Sign up
-                </Button>
-            </Link> */}
               </>
             )}
           </div>
-        </div>
+        </>
       )}
     </nav>
   );
