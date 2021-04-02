@@ -7,13 +7,12 @@ import AccountMenu from "./AccountMenu";
 import ArrowBackIcon from "@material-ui/icons/ArrowBackRounded";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 
-
 const Navbar = (props) => {
   const user = useUser();
-  const [isUsingMobileSearch, setIsUsingMobileSearch] = useState(true);
+  const [isUsingMobileSearch, setIsUsingMobileSearch] = useState(false);
 
   return (
-    <>
+    <nav>
       {isUsingMobileSearch ? (
         <div className={"border flex flex-row items-center w-full h-14"}>
           <button
@@ -56,10 +55,11 @@ const Navbar = (props) => {
             </div>
           </div>
           <div className="flex justify-end flex-grow md:hidden">
-            <IconButton aria-label="delete">
-              <SearchIcon
-                onClick={() => setIsUsingMobileSearch(true)}
-              />
+            <IconButton
+              aria-label="delete"
+              onClick={() => setIsUsingMobileSearch(true)}
+            >
+              <SearchIcon />
             </IconButton>
           </div>
           <div className="flex-none mx-4">
@@ -78,7 +78,7 @@ const Navbar = (props) => {
           </div>
         </div>
       )}
-    </>
+    </nav>
   );
 };
 
