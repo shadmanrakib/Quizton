@@ -1,19 +1,22 @@
 import React from "react";
 import { db } from "../../config/firebaseClient";
+import { useForm } from "react-hook-form";
 
 function test({ hello }) {
+  const { register, errors } = useForm();
   console.log(hello);
-  return <div></div>;
+  return (
+    <div>
+      <p>Hello</p>
+      <input
+        name="firstName"
+        type="text"
+        ref={register({
+          validate: (value) => (value ? "True case" : "False case"),
+        })}
+      ></input>
+    </div>
+  );
 }
 
-export async function getServerSideProps(context) {
-  const docRef = db.collection("questions").doc("hnErh4qae09twkaCH3vN");
-
-  const doc = await docRef.get();
-  return {
-    props: {
-      hello: JSON.parse(JSON.stringify(doc.data())),
-    },
-  };
-}
 export default test;

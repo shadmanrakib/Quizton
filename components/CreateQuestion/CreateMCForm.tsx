@@ -1,10 +1,29 @@
-import React from "react";
+import Tags from "./Tags";
+import React, { useEffect, useRef } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { useUser } from "../hooks/useUser";
-import Editor from "./Editor";
+import { useUser } from "../../hooks/useUser";
+import Editor from "../Editor";
 
+async function postData(url = "", data = {}) {
+  // Default options are marked with *
+  const response = await fetch(url, {
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    mode: "no-cors", // no-cors, *cors, same-origin
+    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: "include", // include, *same-origin, omit
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: "follow", // manual, *follow, error
+    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data), // body data type must match "Content-Type" header
+  });
+  return response.json(); // parses JSON response into native JavaScript objects
+}
 const CreateMCForm: React.FC = () => {
   const user = useUser();
+
   const {
     register,
     handleSubmit,
@@ -24,26 +43,8 @@ const CreateMCForm: React.FC = () => {
     control,
     name: "choices",
   });
-
   const onSubmit = (data) => {
     console.log(data);
-    async function postData(url = "", data = {}) {
-      // Default options are marked with *
-      const response = await fetch(url, {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
-        mode: "no-cors", // no-cors, *cors, same-origin
-        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "include", // include, *same-origin, omit
-        headers: {
-          "Content-Type": "application/json",
-          // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: "follow", // manual, *follow, error
-        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify(data), // body data type must match "Content-Type" header
-      });
-      return response.json(); // parses JSON response into native JavaScript objects
-    }
     postData("/api/createQuestion", data).then((response) => {
       console.log(response);
     });
@@ -79,7 +80,7 @@ const CreateMCForm: React.FC = () => {
                 name="answer"
                 value={index}
                 className="my-auto"
-                ref={register}
+                ref={register()}
               ></input>
               <div className="flex-auto">
                 <Controller
@@ -131,32 +132,7 @@ const CreateMCForm: React.FC = () => {
           <div className="text-red-500">This field is required</div>
         )}
 
-        <div className="mt-6">Tags</div>
-        {tagsField.fields.map((field, index) => (
-          <div className="border" key={field.id}>
-            <input
-              className="border p-2 bg-blueGray-100"
-              name={`tags[${index}].value`}
-              ref={register()} // register() when there is no validation rules
-              defaultValue={field.value} // make sure to include defaultValue
-            />
-            <button
-              type="button"
-              className="bg-red-500 text-white p-2"
-              onClick={() => tagsField.remove(index)}
-            >
-              Remove
-            </button>
-          </div>
-        ))}
-
-        <button
-          type="button"
-          className="bg-light-blue-200 p-2"
-          onClick={tagsField.append}
-        >
-          + Add Tag
-        </button>
+        <Tags control={control}></Tags>
 
         <button
           type="submit"
