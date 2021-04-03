@@ -2,7 +2,8 @@ import React from "react";
 import * as quesdom from "../types/quesdom";
 import "katex/dist/katex.min.css";
 import { useForm, useFieldArray } from "react-hook-form";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { db } from "../config/firebaseClient";
 
 interface QuestionComponentProps {
   onSubmit?: (any) => any;
@@ -28,7 +29,7 @@ async function postData(url = "", data = {}) {
   return response.json(); // parses JSON response into native JavaScript objects
 }
 
-interface VotedAlready { 
+interface VotedAlready {
   upvote: boolean;
   downvote: boolean;
 }
@@ -38,7 +39,9 @@ const Question = (props: QuestionComponentProps) => {
   const [voteCount, setVoteCount] = useState(
     props.data.upvotes - props.data.downvotes
   );
-  const votedAlready = useRef({upvote: false, downvote: false} as VotedAlready);
+
+
+  const votedAlready = useRef({ upvote: false, downvote: false } as VotedAlready);
 
   function onUpvote() {
     if (!votedAlready.current.upvote) {
@@ -66,13 +69,13 @@ const Question = (props: QuestionComponentProps) => {
       <div className="my-3">
         Tags:
         {props.data.tags.map((tag, index) => (
-          <span
-            key={index}
-            className="px-3 py-2 m-2 border rounded-md bg-light-blue-300"
-          >
-            {tag}
-          </span>
-        ))}
+        <span
+          key={index}
+          className="px-3 py-2 m-2 border rounded-md bg-light-blue-300"
+        >
+          {tag}
+        </span>
+      ))}
       </div>
       <div>
         Question:
