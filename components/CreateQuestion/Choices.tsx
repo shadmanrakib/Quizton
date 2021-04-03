@@ -37,7 +37,11 @@ function Choices({ control }: props) {
                 name={`choices[${index}].value`}
                 defaultValue={null}
                 render={({ onChange, onBlur, value }) => (
-                  <Editor onChange={onChange} theme={"bubble"} />
+                  <Editor
+                    onChange={onChange}
+                    theme={"bubble"}
+                    style={{ zIndex: init === 0 ? 4 : 0 }}
+                  />
                 )}
               />
             </div>
