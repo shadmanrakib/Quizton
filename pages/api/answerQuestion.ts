@@ -22,7 +22,7 @@ export default async (req, res) => {
                 timestamp: firebaseAdmin.firestore.FieldValue.serverTimestamp()
             }, { merge: true })
 
-        res.status(200).json({ uid, email });
+        res.status(200).send(req.body.isCorrect);
     }
     catch(err) {
         console.log(err);
