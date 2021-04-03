@@ -1,7 +1,7 @@
-import Modal from '../components/UI/Modal';
-import Button from '../components/UI/Button/Button';
-import Tooltip from '../components/UI/Tooltip';
-import FilledTextInput from '../components/UI/TextInputs/FilledTextInput';
+import Modal from '../../components/UI/Modal';
+import Button from '../../components/UI/Button/Button';
+import Tooltip from '../../components/UI/Tooltip';
+import FilledTextInput from '../../components/UI/TextInputs/FilledTextInput';
 
 const UiPlayground: React.FC = () => {
     return (

@@ -167,14 +167,22 @@ const Search: React.FC = () => {
 
   async function search(query) {
     const keywords = extractKeyTokens(query);
-    const questionsRef = db.collection("questions");
+    let reference = db.collection("questions");
     const docsArray = [];
     const docsDict = {};
 
     if (keywords.length > 0) {
-      const snapshot = await questionsRef
-        .where("keywords", "array-contains-any", keywords)
-        .get();
+      // const snapshot = await questionsRef
+      //   .where("keywords", "array-contains-any", keywords)
+      //   .get();
+      
+      keywords.forEach(element => {
+        // @ts-ignore
+        reference = reference.where(`contains.${element}`,"==",true);
+      });
+     
+      const snapshot = await reference.get(); 
+      
       if (snapshot.empty) {
         setResultsArray([]);
         setResultsDict({});
@@ -203,7 +211,7 @@ const Search: React.FC = () => {
 
   const onSubmit = (data: SearchQuery) => {
     setLoading(true);
-    search(data.query);
+    search(data.query).then().catch((error) => console.log(error));
   };
 
   return (
@@ -222,7 +230,7 @@ const Search: React.FC = () => {
       {loading && <div>Loading...</div>}
       {!loading && resultArray.length > 0 ? (
         resultArray.map((question) => (
-          <div className="bg-white p-6 border">
+          <div key={question.id} className="bg-white p-6 border">
             {question.tags.map((tag) => (
               <span className="px-3 py-2 mr-2 border rounded-md text-sm bg-light-blue-300">
                 {tag}

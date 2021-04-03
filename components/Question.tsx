@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as quesdom from "../types/quesdom";
 import "katex/dist/katex.min.css";
 import { useForm, useFieldArray } from "react-hook-form";
-import { useState, useRef, useEffect } from "react";
-import { db } from "../config/firebaseClient";
+import { useState, useRef } from "react";
+import { db, auth } from "../config/firebaseClient";
+import { useUser } from "../hooks/useUser";
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 
 interface QuestionComponentProps {
   onSubmit?: (any) => any;
@@ -29,81 +32,147 @@ async function postData(url = "", data = {}) {
   return response.json(); // parses JSON response into native JavaScript objects
 }
 
-interface VotedAlready {
-  upvote: boolean;
-  downvote: boolean;
+async function getUserVoteKind(
+  props: QuestionComponentProps
+): Promise<"upvote" | "downvote" | "none" | null> {
+  const user = auth.currentUser;
+  if (!auth.currentUser) {
+    return null;
+  }
+  const voteCollection = db.collection("/votes");
+  const voteDocs = await voteCollection
+    .where("qid", "==", props.qid)
+    .where("uid", "==", user.uid)
+    .get();
+  console.log(voteDocs);
+  if (voteDocs.empty) {
+    return "none";
+  }
+  return (voteDocs.docs[0].data() as quesdom.voteDocument).kind;
 }
 
 const Question = (props: QuestionComponentProps) => {
+  const user = useUser();
+  const [vote, setVote] = useState<null | "upvote" | "downvote" | "none">(null);
   const { register, handleSubmit, errors, control } = useForm();
   const [voteCount, setVoteCount] = useState(
     props.data.upvotes - props.data.downvotes
   );
-
-
-  const votedAlready = useRef({ upvote: false, downvote: false } as VotedAlready);
+  useEffect(() => {
+    let stillMounted = true;
+    getUserVoteKind(props).then((kind) => {
+      if (stillMounted) setVote(kind);
+    });
+    return () => {
+      stillMounted = false;
+    };
+  }, [user]);
 
   function onUpvote() {
-    if (!votedAlready.current.upvote) {
+    console.log(vote);
+    if (vote === null) return; //since firebase vote document didn't load in yet
+    if (vote === "none") {
       const data: quesdom.voteRequest = { kind: "upvote", qid: props.qid };
       postData("/api/userVote", data).then((s) => console.log(s));
       setVoteCount(voteCount + 1);
-      votedAlready.current.upvote = true;
-      votedAlready.current.downvote = false;
+      setVote("upvote");
+    }
+    if (vote === "upvote") {
+      const data: quesdom.voteRequest = { kind: "unvote", qid: props.qid };
+      postData("/api/userVote", data).then((s) => console.log(s));
+      setVoteCount(voteCount - 1);
+      setVote("none");
+    }
+    if (vote === "downvote") {
+      const data: quesdom.voteRequest = { kind: "upvote", qid: props.qid };
+      postData("/api/userVote", data).then((s) => console.log(s));
+      setVoteCount(voteCount + 2);
+      setVote("upvote");
     }
   }
   function onDownvote() {
-    if (!votedAlready.current.downvote) {
+    if (vote === null) return; //since firebase vote document didn't load in yet
+    if (vote === "none") {
       const data: quesdom.voteRequest = { kind: "downvote", qid: props.qid };
-      postData("/api/userVote", data);
+      postData("/api/userVote", data).then((s) => console.log(s));
       setVoteCount(voteCount - 1);
-      votedAlready.current.downvote = true;
-      votedAlready.current.upvote = false;
+      setVote("downvote");
+    }
+    if (vote === "downvote") {
+      const data: quesdom.voteRequest = { kind: "unvote", qid: props.qid };
+      postData("/api/userVote", data).then((s) => console.log(s));
+      setVoteCount(voteCount + 1);
+      setVote("none");
+    }
+    if (vote === "upvote") {
+      const data: quesdom.voteRequest = { kind: "downvote", qid: props.qid };
+      postData("/api/userVote", data).then((s) => console.log(s));
+      setVoteCount(voteCount - 2);
+      setVote("downvote");
     }
   }
   return (
     <div>
-      <div>{voteCount}</div>
-      <button onClick={() => onUpvote()}>Upvote</button>
-      <button onClick={() => onDownvote()}>Downvote</button>
-      <div className="my-3">
-        Tags:
-        {props.data.tags.map((tag, index) => (
-        <span
-          key={index}
-          className="px-3 py-2 m-2 border rounded-md bg-light-blue-300"
-        >
-          {tag}
-        </span>
-      ))}
-      </div>
-      <div>
-        Question:
-        <div
-          className=""
-          dangerouslySetInnerHTML={{ __html: props.data.question }}
-        ></div>
-      </div>
-      <form className="my-3" onSubmit={handleSubmit(props.onSubmit)}>
-        {props.data.answerChoices.map((choice, index) => (
-          <div key={index}>
-            <input
-              type="radio"
-              id={"choice" + index}
-              name="answer"
-              ref={register}
-              value={index}
-            ></input>
-            <label
-              htmlFor={"choice" + index}
-              dangerouslySetInnerHTML={{ __html: choice }}
-            ></label>
+      <div className="flex flex-row rounded-md container mx-auto">
+        <div className="flex flex-col w-6 bg-gray-100 flex-wrap content-center justify-center self-start">
+          <ArrowUpwardIcon
+            onClick={() => onUpvote()}
+            className={`${
+              vote === "upvote" ? "text-green-500" : ""
+            } hover:text-green-500 hover:bg-gray-200`}
+          />
+          <p className="text-center">{voteCount}</p>
+          <ArrowDownwardIcon
+            onClick={() => onDownvote()}
+            className={`${
+              vote === "downvote" ? "text-red-500" : ""
+            } hover:text-red-500 hover:bg-gray-200`}
+          />
+        </div>
+        {/* Question Section */}
+        <div className="ml-3">
+          <div className="my-3">
+            Tags:
+            {props.data.tags.map((tag, index) => (
+              <span
+                key={index}
+                className="px-3 py-2 m-2 border rounded-md bg-light-blue-300"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
-        ))}
-        <button className="my-3 p-3 bg-primary text-white" type="submit">
-          Check Answer
-        </button>
-      </form>
+
+          <div>
+            Question:
+            <div
+              className=""
+              dangerouslySetInnerHTML={{ __html: props.data.question }}
+            ></div>
+          </div>
+          <form className="my-3" onSubmit={handleSubmit(props.onSubmit)}>
+            {props.data.answerChoices.map((choice, index) => (
+              <div key={index}>
+                <input
+                  type="radio"
+                  id={"choice" + index}
+                  name="answer"
+                  ref={register}
+                  value={index}
+                ></input>
+                <label
+                  htmlFor={"choice" + index}
+                  dangerouslySetInnerHTML={{ __html: choice }}
+                  className="inline-block text-md ml-3"
+                ></label>
+              </div>
+            ))}
+            <button className="my-3 p-3 bg-primary text-white" type="submit">
+              Check Answer
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
