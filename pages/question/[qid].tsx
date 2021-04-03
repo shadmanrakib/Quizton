@@ -11,7 +11,6 @@ const QuestionPage = (props) => {
   const [correct, setCorrect] = useState<boolean | null>(null);
 
   useEffect(() => {
-    console.log(auth.currentUser)
     if (auth.currentUser) {
       const { uid } = auth.currentUser;
       db
@@ -27,10 +26,13 @@ const QuestionPage = (props) => {
           }
         });
     }
-  }, [correct]);
+  }, []);
 
   const onSubmit = (data) => {
-    console.log(data);
+    
+    const isCorrect = data.answer == props.data.correctAnswer;
+    setCorrect(isCorrect);
+
     fetch("/api/answerQuestion", {
       method: "post",
       headers: { "Content-type": "application/json" },
@@ -38,13 +40,9 @@ const QuestionPage = (props) => {
         qid: props.qid,
         userAnswer: data.answer,
         correctAnswer: props.data.answer,
-        isCorrect: data.answer == props.data.correctAnswer,
+        isCorrect
       }),
     })
-      .then(res => res.json())
-      .then(_data => {
-        setCorrect(_data);
-      })
   };
 
   return (

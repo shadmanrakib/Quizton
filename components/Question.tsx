@@ -112,7 +112,7 @@ const Question = (props: QuestionComponentProps) => {
   }
   return (
     <div>
-      <div className="flex container pl-6 bg-gray-100 mx-auto">
+      <div className="flex container mt-4 pl-6 bg-gray-100 mx-auto">
         <div className="flex flex-col w-6 mt-3">
           <ArrowUpwardIcon
             onClick={() => onUpvote()}
@@ -141,10 +141,10 @@ const Question = (props: QuestionComponentProps) => {
           </div>
         </div>
       </div>
-      <div className="container mx-auto pl-6 md:pl-0">
+      <div className="container mx-auto mt-4 px-6 rounded-md border border-gray-300">
         <div>
           <div
-            className="my-6 font-serif text-lg"
+            className="my-6 font-serif md:text-lg"
             dangerouslySetInnerHTML={{ __html: props.data.question }}
           ></div>
         </div>
@@ -168,7 +168,7 @@ const Question = (props: QuestionComponentProps) => {
           <div className="flex items-center">
 
             <button className="my-6 px-3 py-1.5 rounded-md bg-primary text-white" type="submit">
-              Check Answer
+              Check
             </button>
             <p className="underline ml-5 cursor-pointer">
               Show answer
