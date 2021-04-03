@@ -19,6 +19,7 @@ function Tags({ control }: props) {
   return (
     <React.Fragment>
       <div>
+        <div className="mt-6">Tags</div>
         <input
           className=" w-48 h-9 border-2 box-border border-radius rounded pl-2 border-black "
           type="text"
@@ -40,37 +41,34 @@ function Tags({ control }: props) {
               setInputControl("");
             }
           }}
-          className="bg-light-blue-200 p-2 inline-block select-none"
+          className="bg-light-blue-200 p-2 inline-block select-none rounded-lg"
         >
           + Add Tag
         </div>
-        <div className="mt-6">Tags</div>
       </div>
       <div className="inline-flex flex-wrap">
         {tagsField.fields.map((field, index) => {
           return (
-            <div className="inline">
-              <Controller
-                key={field.id}
-                defaultValue={field.value}
-                control={control}
-                name={`tags[${index}].value`}
-                render={(
-                  { onChange, onBlur, value, name, ref },
-                  { invalid, isTouched, isDirty }
-                ) => {
-                  return (
-                    <div className="mx-1 my-1">
-                      <Chip
-                        key={field.id}
-                        label={field.value}
-                        onDelete={() => tagsField.remove(index)}
-                      ></Chip>
-                    </div>
-                  );
-                }}
-              />
-            </div>
+            <Controller
+              key={field.id}
+              defaultValue={field.value}
+              control={control}
+              name={`tags[${index}].value`}
+              render={(
+                { onChange, onBlur, value, name, ref },
+                { invalid, isTouched, isDirty }
+              ) => {
+                return (
+                  <div className="mx-1 my-1">
+                    <Chip
+                      key={field.id}
+                      label={field.value}
+                      onDelete={() => tagsField.remove(index)}
+                    ></Chip>
+                  </div>
+                );
+              }}
+            />
           );
         })}
       </div>

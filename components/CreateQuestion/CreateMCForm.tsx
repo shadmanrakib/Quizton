@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useUser } from "../../hooks/useUser";
 import Editor from "../Editor";
+import Choices from "./Choices";
 
 async function postData(url = "", data = {}) {
   // Default options are marked with *
@@ -35,14 +36,6 @@ const CreateMCForm: React.FC = () => {
     setError,
   } = useForm();
 
-  const tagsField = useFieldArray({
-    control,
-    name: "tags",
-  });
-  const choicesField = useFieldArray({
-    control,
-    name: "choices",
-  });
   const onSubmit = (data) => {
     console.log(data);
     postData("/api/createQuestion", data).then((response) => {
@@ -68,55 +61,8 @@ const CreateMCForm: React.FC = () => {
         {errors.question && (
           <div className="text-red-500">This field is required</div>
         )}
-
-        <div className="mt-6">Choices</div>
-        <div className="text-sm">Select the correct answer choice</div>
-
-        {choicesField.fields.map((field, index) => (
-          <div className="border" key={field.id}>
-            <div className="flex">
-              <input
-                type="radio"
-                name="answer"
-                value={index}
-                className="my-auto"
-                ref={register()}
-              ></input>
-              <div className="flex-auto">
-                <Controller
-                  control={control}
-                  name={`choices[${index}].value`}
-                  defaultValue={null}
-                  render={({ onChange, onBlur, value }) => (
-                    <Editor onChange={onChange} theme={"bubble"} />
-                  )}
-                />
-              </div>
-            </div>
-            {/* <input
-              className="border p-2 bg-blueGray-100"
-              name={`choices[${index}].value`}
-              ref={register()} // register() when there is no validation rules
-              defaultValue={field.value} // make sure to include defaultValue
-            /> */}
-            <button
-              type="button"
-              className="bg-red-500 text-white p-2"
-              onClick={() => choicesField.remove(index)}
-            >
-              Remove
-            </button>
-          </div>
-        ))}
-        <button
-          type="button"
-          className="bg-light-blue-200 p-2"
-          onClick={choicesField.append}
-        >
-          + Add Choice
-        </button>
-
-        <label className="mt-6" htmlFor="explanation">
+        <Choices control={control}></Choices>
+        <label className="mt-6 mb-3" htmlFor="explanation">
           Explanation
         </label>
         <Controller

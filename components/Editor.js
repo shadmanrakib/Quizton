@@ -1,10 +1,10 @@
 import dynamic from "next/dynamic";
-import React, {useState, useRef, useEffect} from "react";
-import "../node_modules/quill/dist/quill.snow.css"
-import "../node_modules/quill/dist/quill.bubble.css"
+import React, { useState, useRef, useEffect } from "react";
+import "../node_modules/quill/dist/quill.snow.css";
+import "../node_modules/quill/dist/quill.bubble.css";
 
-import katex from 'katex';
-import 'katex/dist/katex.min.css';
+import katex from "katex";
+import "katex/dist/katex.min.css";
 
 const ReactQuill = dynamic(
   async () => {
@@ -13,12 +13,13 @@ const ReactQuill = dynamic(
     return ({ forwardedRef, ...props }) => <RQ ref={forwardedRef} {...props} />;
   },
   {
-    ssr: false
+    ssr: false,
   }
 );
 
-const Quill = dynamic(() => import("react-quill").then((mod) => mod.Quill),
-  { ssr: false })
+const Quill = dynamic(() => import("react-quill").then((mod) => mod.Quill), {
+  ssr: false,
+});
 
 export default function Editor(props) {
   const [value, setValue] = useState("");
@@ -26,8 +27,10 @@ export default function Editor(props) {
 
   const onChange = (val) => {
     setValue(val);
-    if (props.onChange) {props.onChange(val);}
-  }
+    if (props.onChange) {
+      props.onChange(val);
+    }
+  };
 
   useEffect(async () => {
     window.katex = katex;
@@ -39,7 +42,7 @@ export default function Editor(props) {
       theme={props.theme}
       modules={{
         formula: true,
-        toolbar: ["bold", "underline", 'italic', "formula", "code"]
+        toolbar: ["bold", "underline", "italic", "formula", "code"],
       }}
       value={value}
       onChange={onChange}
