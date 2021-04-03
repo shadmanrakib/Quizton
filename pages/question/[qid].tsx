@@ -8,22 +8,25 @@ import firebase from 'firebase/app';
 
 const QuestionPage = (props) => {
 
-  const [correct, setCorrect] = useState(false);
+  const [correct, setCorrect] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const { uid } = auth.currentUser;
-    db
-      .collection("users")
-      .doc(uid)
-      .collection("questionsAnswered")
-      .doc(props.qid)
-      .get()
-      .then(doc => {
-        const data = doc.data();
-        if (data) {
-          setCorrect(data.isCorrect);
-        }
-      })
+    console.log(auth.currentUser)
+    if (auth.currentUser) {
+      const { uid } = auth.currentUser;
+      db
+        .collection("users")
+        .doc(uid)
+        .collection("questionsAnswered")
+        .doc(props.qid)
+        .get()
+        .then(doc => {
+          const data = doc.data();
+          if (data) {
+            setCorrect(data.isCorrect);
+          }
+        });
+    }
   }, [correct]);
 
   const onSubmit = (data) => {
