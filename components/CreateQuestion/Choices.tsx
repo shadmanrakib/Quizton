@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Control, Controller, useFieldArray } from "react-hook-form";
 import ClearIcon from "@material-ui/icons/Clear";
 import Editor from "../Editor";
@@ -8,14 +8,7 @@ interface props {
 }
 
 function Choices({ control }: props) {
-  const [init, setInit] = useState(0);
   const choicesField = useFieldArray({ name: "choices", control: control });
-  useEffect(() => {
-    if (init < 4) {
-      choicesField.append({});
-      setInit((x) => x + 1);
-    }
-  }, [init]);
   return (
     <div>
       <div className="mt-6">Choices</div>
@@ -37,11 +30,7 @@ function Choices({ control }: props) {
                 name={`choices[${index}].value`}
                 defaultValue={null}
                 render={({ onChange, onBlur, value }) => (
-                  <Editor
-                    onChange={onChange}
-                    theme={"bubble"}
-                    style={{ zIndex: init === 0 ? 4 : 0 }}
-                  />
+                  <Editor onChange={onChange} theme={"bubble"} />
                 )}
               />
             </div>

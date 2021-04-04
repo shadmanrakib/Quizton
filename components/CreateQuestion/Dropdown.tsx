@@ -30,7 +30,7 @@ export default function Dropdown({ onChange }: props) {
         <button
           className="outline-none focus:outline-none border px-3 py-1 bg-white rounded-sm flex items-center"
           onClick={() => {
-            setOpen(true);
+            setOpen(!open);
           }}
         >
           <span className="pr-1 font-normal flex-1">
@@ -40,7 +40,7 @@ export default function Dropdown({ onChange }: props) {
             <svg
               className={`fill-current h-4 w-4 ${
                 open
-                  ? "transform group-hover:-rotate-180 transition duration-150 ease-in-out"
+                  ? "transform -rotate-180 transition duration-150 ease-in-out"
                   : ""
               }`}
               xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +51,7 @@ export default function Dropdown({ onChange }: props) {
           </span>
         </button>
         <ul
-          className={`bg-white border rounded-sm absolute transform scale-0 group-hover:scale-100 transition duration-150 ease-in-out origin-top min-w-32 ${
+          className={`bg-white border rounded-sm absolute min-w-32 ${
             open ? "" : "hidden"
           }`}
         >

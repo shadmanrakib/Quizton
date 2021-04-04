@@ -34,7 +34,16 @@ const CreateMCForm: React.FC = () => {
     reset,
     trigger,
     setError,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      choices: [{}, {}, {}, {}],
+      question: null,
+      explanation: null,
+      answer: "0",
+    },
+    shouldFocusError: true,
+    reValidateMode: "onChange",
+  });
 
   const onSubmit = (data) => {
     console.log(data);
@@ -45,37 +54,44 @@ const CreateMCForm: React.FC = () => {
   return (
     <div>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        <label className="mt-6" htmlFor="question">
+        <label className="mt-6 mb-3" htmlFor="question">
           Question
+          <span className={`${errors.question ? "text-red-500" : "hidden"}`}>
+            {" "}
+            This field is required
+          </span>
         </label>
         <Controller
           control={control}
           name="question"
           defaultValue={null}
-          rules={{ required: true }}
+          rules={{ required: true, minLength: 1 }}
           render={({ onChange, onBlur, value }) => (
-            <Editor onChange={onChange} theme={"snow"} />
+            <div className={`${errors.question ? "bg-red-50" : ""}`}>
+              <Editor onChange={onChange} theme={"snow"} />
+            </div>
           )}
         />
-        {errors.question && (
-          <div className="text-red-500">This field is required</div>
-        )}
+
         <Choices control={control}></Choices>
         <label className="mt-6 mb-3" htmlFor="explanation">
           Explanation
+          <span className={`${errors.explanation ? "text-red-500" : "hidden"}`}>
+            {" "}
+            This field is required
+          </span>
         </label>
         <Controller
           control={control}
           name="explanation"
           defaultValue={null}
-          rules={{ required: true }}
+          rules={{ required: true, minLength: 1 }}
           render={({ onChange, onBlur, value }) => (
-            <Editor onChange={onChange} theme={"snow"} />
+            <div className={`${errors.explanation ? "bg-red-50" : ""}`}>
+              <Editor onChange={onChange} theme={"snow"} />
+            </div>
           )}
         />
-        {errors.explanation && (
-          <div className="text-red-500">This field is required</div>
-        )}
 
         <Tags control={control}></Tags>
 

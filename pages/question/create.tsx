@@ -10,7 +10,7 @@ const Create: React.FC = () => {
   // moves the menu below the select input
   return (
     <div className="flex justify-center h-screen">
-      <div className="container mt-10">
+      <div className="container mt-10 box-border">
         <Dropdown
           onChange={(kind) => {
             setKind(kind);
