@@ -42,7 +42,6 @@ const CreateMCForm: React.FC = () => {
       console.log(response);
     });
   };
-
   return (
     <div>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
