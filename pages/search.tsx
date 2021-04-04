@@ -3,7 +3,7 @@ import { db } from "../config/firebaseClient";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useUser } from "../hooks/useUser";
-import stemmer from "stemmer";
+import stemmer from "lancaster-stemmer";
 import "katex/dist/katex.min.css";
 import Link from "next/link";
 
@@ -142,13 +142,12 @@ const stopwords: Set<string> = new Set([
 ]);
 
 function extractKeyTokens(string) {
-  var words = string.replace(/[.,&'?()!]/g, "").split(/\s/);
+  var words = string.toLowerCase().replace(/[.,&'?()\/!]/g, '').replace(/[\-]/g, ' ').split(/\s/);
   var freqMap = {};
   var contains = {};
   words.forEach((w) => {
-    const lowerW = w.toLowerCase();
-    if (w != "" && !stopwords.has(lowerW)) {
-      const processedWord = stemmer(lowerW);
+    if (w != "" && !stopwords.has(w)) {
+      const processedWord = stemmer(w);
       if (!freqMap[processedWord]) {
         contains[processedWord] = true;
       }

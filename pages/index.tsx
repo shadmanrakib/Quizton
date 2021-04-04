@@ -3,10 +3,22 @@ import Navbar from "../components/Navbar/Navbar";
 import Fab from "@material-ui/core/Fab/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useUser } from "../hooks/useUser";
 
 const index = () => {
   const [query, setQuery] = useState("");
+  const user = useUser();
+  const router = useRouter();
 
+  if (user) {
+    user.getIdTokenResult(true).then((idTokenResult) => {
+      if (!idTokenResult.claims.registered) {
+        router.push("/auth/getstarted");
+      }
+      return <div></div>;
+    });
+  }
   return (
     <div className="min-h-screen w-screen relative">
       <Navbar changeQuery={setQuery} />
