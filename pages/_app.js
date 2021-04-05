@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     auth.onIdTokenChanged((user) => {
       if (user) {
-        user.getIdTokenResult(false).then((token) => {
+        user.getIdTokenResult(true).then((token) => {
           if (!token.claims.registered) router.push("/auth/getstarted");
         });
       }
