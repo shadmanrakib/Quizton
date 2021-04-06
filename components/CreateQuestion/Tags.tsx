@@ -21,7 +21,7 @@ function Tags({ control }: props) {
       <div>
         <div className="mt-6">Tags</div>
         <input
-          className=" w-48 h-9 border-2 box-border border-radius rounded pl-2 border-black "
+          className=" w-48 h-9 border-2 box-border border-radius rounded pl-2 border-gray"
           type="text"
           value={inputControl}
           onChange={(e) => setInputControl(e.currentTarget.value)}
@@ -41,7 +41,7 @@ function Tags({ control }: props) {
               setInputControl("");
             }
           }}
-          className="bg-light-blue-200 p-2 inline-block select-none rounded-lg"
+          className="bg-light-blue-200 p-2 ml-3 inline-block select-none rounded-md"
         >
           + Add Tag
         </div>
