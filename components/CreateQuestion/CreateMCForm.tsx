@@ -52,57 +52,55 @@ const CreateMCForm: React.FC = () => {
     });
   };
   return (
-    <div>
-      <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        <label className="mt-6 mb-3" htmlFor="question">
-          Question
+    <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+      <label className="mt-6 mb-3" htmlFor="question">
+        Question
           <span className={`${errors.question ? "text-red-500" : "hidden"}`}>
-            {" "}
+          {" "}
             This field is required
           </span>
-        </label>
-        <Controller
-          control={control}
-          name="question"
-          defaultValue={null}
-          rules={{ required: true, minLength: 1 }}
-          render={({ onChange, onBlur, value }) => (
-            <div className={`${errors.question ? "bg-red-50" : ""}`}>
-              <Editor onChange={onChange} theme={"snow"} />
-            </div>
-          )}
-        />
+      </label>
+      <Controller
+        control={control}
+        name="question"
+        defaultValue={null}
+        rules={{ required: true, minLength: 1 }}
+        render={({ onChange, onBlur, value }) => (
+          <div className={`${errors.question ? "bg-red-50" : ""}`}>
+            <Editor onChange={onChange} theme={"snow"} />
+          </div>
+        )}
+      />
 
-        <Choices control={control}></Choices>
-        <label className="mt-6 mb-3" htmlFor="explanation">
-          Explanation
+      <Choices control={control}></Choices>
+      <label className="mt-6 mb-3" htmlFor="explanation">
+        Explanation
           <span className={`${errors.explanation ? "text-red-500" : "hidden"}`}>
-            {" "}
+          {" "}
             This field is required
           </span>
-        </label>
-        <Controller
-          control={control}
-          name="explanation"
-          defaultValue={null}
-          rules={{ required: true, minLength: 1 }}
-          render={({ onChange, onBlur, value }) => (
-            <div className={`${errors.explanation ? "bg-red-50" : ""}`}>
-              <Editor onChange={onChange} theme={"snow"} />
-            </div>
-          )}
-        />
+      </label>
+      <Controller
+        control={control}
+        name="explanation"
+        defaultValue={null}
+        rules={{ required: true, minLength: 1 }}
+        render={({ onChange, onBlur, value }) => (
+          <div className={`${errors.explanation ? "bg-red-50" : ""}`}>
+            <Editor onChange={onChange} theme={"snow"} />
+          </div>
+        )}
+      />
 
-        <Tags control={control}></Tags>
+      <Tags control={control}></Tags>
 
-        <button
-          type="submit"
-          className="mt-6 bg-primary text-white font-bold p-3 hover:bg-blue-700"
-        >
-          Submit
+      <button
+        type="submit"
+        className="mt-6 rounded-md bg-primary text-white font-bold p-3 hover:bg-blue-700"
+      >
+        Submit
         </button>
-      </form>
-    </div>
+    </form>
   );
 };
 

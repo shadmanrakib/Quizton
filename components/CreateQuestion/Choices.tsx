@@ -36,17 +36,17 @@ function Choices({ control }: props) {
             </div>
             <button
               type="button"
-              className="bg-white text-black p-2 inline-block"
+              className="transition duration-200 bg-white text-black p-2 inline-block hover:text-red-500"
               onClick={() => choicesField.remove(index)}
             >
-              <ClearIcon></ClearIcon>
+              <ClearIcon />
             </button>
           </div>
         </div>
       ))}
       <button
         type="button"
-        className="bg-light-blue-200 p-2"
+        className="bg-light-blue-200 p-2 mt-3"
         onClick={choicesField.append}
       >
         + Add Choice
