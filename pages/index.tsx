@@ -27,11 +27,9 @@ const index = () => {
       <main className="">
         <Results/>
       </main>
-      <Link href="/question/create">
-      <button className="border h-16 w-16 rounded-full absolute bottom-4 right-4">
+      <button className="border h-16 w-16 rounded-full absolute bottom-4 right-4" onClick={() => router.push("/question/create")}>
         <AddIcon fontSize="large"/>
       </button>
-      </Link>
     </div>
   );
 };
