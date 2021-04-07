@@ -6,9 +6,11 @@ import { useEffect } from "react";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
+  const {pathname} = router;
+
   useEffect(() => {
     auth.onIdTokenChanged((user) => {
-      if (user) {
+      if (user && pathname != "/auth/getstarted") {
         user.getIdTokenResult(true).then((token) => {
           if (!token.claims.registered) router.push("/auth/getstarted");
         });
