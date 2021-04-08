@@ -17,6 +17,7 @@ function MyApp({ Component, pageProps }) {
       }
     });
   }, []);
+  
   return (
     <UserProvider>
       <Component {...pageProps} />
