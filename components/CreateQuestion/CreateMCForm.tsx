@@ -96,7 +96,7 @@ const CreateMCForm: React.FC = () => {
 
       <button
         type="submit"
-        className="mt-6 rounded-md bg-primary text-white font-bold p-3 hover:bg-blue-700"
+        className="mt-6 rounded-md bg-light-blue-500 text-white font-bold p-3 hover:bg-blue-700"
       >
         Submit
         </button>

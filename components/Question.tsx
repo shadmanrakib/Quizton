@@ -167,7 +167,7 @@ const Question = (props: QuestionComponentProps) => {
           ))}
           <div className="flex items-center">
 
-            <button className="my-6 px-3 py-1.5 rounded-md bg-primary text-white" type="submit">
+            <button className="my-6 px-3 py-1.5 rounded-md bg-light-blue-500 text-white" type="submit">
               Check
             </button>
             <p className="underline ml-5 cursor-pointer">

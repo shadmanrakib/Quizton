@@ -68,7 +68,7 @@ const SignUpPage: React.FC = () => {
                   id="email"
                   type="email"
                   name="email"
-                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
+                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-light-blue-500"
                   placeholder="Email Address"
                   ref={register({
                     required: {
@@ -100,7 +100,7 @@ const SignUpPage: React.FC = () => {
                   id="password"
                   type="password"
                   name="password"
-                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
+                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-light-blue-500"
                   placeholder="Password"
                   ref={register({
                     required: true,
@@ -119,7 +119,7 @@ const SignUpPage: React.FC = () => {
             <div className="flex w-full">
               <button
                 type="submit"
-                className="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-primary hover:bg-blue-700 rounded-lg py-3 w-full transition duration-100 ease-in"
+                className="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-light-blue-500 hover:bg-blue-700 rounded-lg py-3 w-full transition duration-100 ease-in"
               >
                 <span className="mr-2 uppercase">Register</span>
                 <span>
@@ -142,7 +142,7 @@ const SignUpPage: React.FC = () => {
 
         <div className="flex justify-center items-center mt-6">
           <Link href="/login">
-            <a className="inline-flex items-center font-bold text-primary hover:text-blue-700 text-xs text-center">
+            <a className="inline-flex items-center font-bold text-light-blue-500 hover:text-blue-700 text-xs text-center">
               {/* <span>
                 <svg
                   className="h-6 w-6"

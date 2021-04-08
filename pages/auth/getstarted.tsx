@@ -69,7 +69,7 @@ const GetStartedPage: React.FC = () => {
                   id="username"
                   type="username"
                   name="username"
-                  className="text-sm sm:text-base placeholder-gray-600 pl-4 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-primary"
+                  className="text-sm sm:text-base placeholder-gray-600 pl-4 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-light-blue-500"
                   placeholder="Username"
                   autoComplete="off"
                   onChange={() => clearErrors("serverError")}
@@ -93,7 +93,7 @@ const GetStartedPage: React.FC = () => {
             <div className="flex w-full">
               <button
                 type="submit"
-                className="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-primary hover:bg-blue-700 rounded-lg py-3 w-full transition duration-100 ease-in"
+                className="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-light-blue-500 hover:bg-blue-700 rounded-lg py-3 w-full transition duration-100 ease-in"
               >
                 <span className="mr-2 uppercase">Submit</span>
                 <span>
