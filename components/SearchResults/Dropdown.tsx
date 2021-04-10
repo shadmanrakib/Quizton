@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from "react";
 import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked";
 import CreateIcon from "@material-ui/icons/Create";
-
-const Votes = (
+const relevance = (
   <span className="">
-    {"Highest to Lowest Votes"}
+    {"Relevance"}
   </span>
 );
-
-const Relevance = (
+const votes = (
   <span className="">
-    {"Most to Least Relevant"}
+    {"Votes: Descending"}
   </span>
 );
 
 interface props {
   onChange: (kind: "votes" | "relevance") => void;
 }
+
 export default function Dropdown({ onChange }: props) {
   const [open, setOpen] = useState<boolean>(false);
   const [kind, setKind] = useState<"votes" | "relevance">(
     "relevance"
   );
+
   useEffect(() => {
     onChange(kind);
   }, [kind]);
@@ -35,7 +35,7 @@ export default function Dropdown({ onChange }: props) {
           }}
         >
           <span className="pr-1 font-normal flex-1">
-            {kind === "votes" ? Votes : Relevance}
+            {kind === "relevance" ? relevance : votes}
           </span>
           <span>
             <svg
@@ -59,20 +59,20 @@ export default function Dropdown({ onChange }: props) {
           <li
             className="rounded-sm px-3 py-1 hover:bg-gray-100 select-none min-w-32"
             onClick={() => {
-              setKind("votes");
-              setOpen(false);
-            }}
-          >
-            {Votes}
-          </li>
-          <li
-            className="rounded-sm px-3 py-1 hover:bg-gray-100 select-none min-w-32"
-            onClick={() => {
               setKind("relevance");
               setOpen(false);
             }}
           >
-            {Relevance}
+            {relevance}
+          </li>
+          <li
+            className="rounded-sm px-3 py-1 hover:bg-gray-100 select-none min-w-32"
+            onClick={() => {
+              setKind("votes");
+              setOpen(false);
+            }}
+          >
+            {votes}
           </li>
         </ul>
       </div>

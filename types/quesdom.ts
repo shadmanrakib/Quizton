@@ -14,8 +14,7 @@ export interface questionMetaData {
   votes: number;
   upvotes: number,
   downvotes: number,
-  contains: Object,
-  freq: Object,
+  index: Object;
   totalWords: number,
   date: any
 }

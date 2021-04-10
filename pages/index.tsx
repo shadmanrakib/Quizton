@@ -13,12 +13,10 @@ const index = () => {
   const router = useRouter();
   
   return (
-    <div className="min-h-screen w-screen relative bg-cool-gray-200">
+    <div className="min-h-screen w-full bg-cool-gray-50">
       <Navbar changeQuery={setQuery} />
-      <main className="">
-        <Results/>
-      </main>
-      <button className="bg-white shadow h-16 w-16 rounded-full absolute bottom-4 right-4" onClick={() => router.push("/question/create")}>
+      <Results/>
+      <button className="bg-blue-500 hover:bg-blue-600 text-white shadow-lg h-16 w-16 rounded-full fixed bottom-4 right-4" onClick={() => router.push("/question/create")}>
         <AddIcon fontSize="large"/>
       </button>
     </div>

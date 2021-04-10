@@ -6,7 +6,7 @@ import sanitizeHtml from "sanitize-html";
 import * as quesdom from "../../types/quesdom";
 import striptags from 'striptags';
 import stemmer from 'lancaster-stemmer';
-import wn from "wordnetjs";
+import thesaurus from "thesaurus";
 
 function sanitize(html: string) {
   const tags = sanitizeHtml.defaults.allowedTags.concat([
@@ -72,73 +72,72 @@ function sanitize(html: string) {
 
 const stopwords: Set<string> = new Set(["i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"]);
 
-function preprocessing(string) {
-  var words = string.toLowerCase().replace(/[.,&'?()\/!]/g, '').replace(/[\-]/g, ' ').split(/\s/);
-  // var tags = new Tag(words)
-  //   .initial() // initial dictionary and pattern based tagging (Add .smooth() for further context based smoothing and accuracy
-  //   .tags;
+/**
+ * Generates an index which includes stemmed words from the 
+ * question, tags, and synonyms
+ * @param {string} question - Question without any html tags.
+ * @param {string[]} tags - Tags to add to the index
+ */
+function createIndex(question: string, tags: string[]) {
+  var words = question.toLowerCase().replace(/[.,&'?:;#@*\/!]/g, '').replace(/[()\-"{}\[\]]/g, ' ').split(/\s/);
 
-  var freqMap = {};
-  var contains = {}
+  var wordsAdded: Set<string> = new Set();
+  var index: Object = {};
   var total = 0;
 
-  for (let index = 0; index < words.length; index++) {
-    const w = words[index];
+  for (let i = 0; i < words.length; i++) {
+    const w = words[i];
+
+    //Initial processing (Adds to index and creates set of words)
     if (w != '' && !stopwords.has(w)) {
-      const processedWord = stemmer(w);
-      if (!freqMap[processedWord]) {
-        freqMap[processedWord] = 0;
-        contains[processedWord] = true;
-      }
-      freqMap[processedWord] += 1;
       total += 1;
 
-      try {
-        wn.synonyms(w).forEach(synset => {
-          synset.close.forEach(e => {
-            e.replace(/[\-]/g, ' ').split(/\s/).forEach(t => {
-              contains[stemmer(t)] = true;
-            });
-          });
+      const stemmedWord = stemmer(w);
 
-          synset.far.forEach(e => {
-            e.replace(/[\-]/g, ' ').split(/\s/).forEach(t => {
-              contains[stemmer(t)] = true;
-            });
-          });
-        });
+      // //Add to set so for synonyms later
+      wordsAdded.add(w);
 
-        // More precise but costly
-        // if (tags[index]) {
-        //   var pos = tags[index].charAt(0).toLowerCase();
-        //   var synsets;
-        //   switch (pos) {
-        //     case "j":
-        //       synsets = wn.adjective(w);
-        //       break;
-        //     case "n":
-        //       synsets = wn.noun(w);
-        //       break;
-        //     case "r":
-        //       synsets = wn.adverb(w);
-        //       break;
-        //     case "v":
-        //       synsets = wn.verb(w);
-        //   }
-
-        // synsets.forEach(synset => {
-        //   synset.words.forEach(e => {
-        //     e.split(/\s/).forEach(t => {
-        //       contains[stemmer(t)] = true;
-        //     });
-        //   });
-        // });
-        // }
-      } catch (err) { console.log(err) }
+      //Add stemmed word to index
+      if (!index[stemmedWord]) {
+        index[stemmedWord] = 0;
+      }
+      index[stemmedWord] += 1;
     }
   }
 
-  return { freq: freqMap, contains: contains, total: total };
+  //Add synonyms to index
+  wordsAdded.forEach((word) => {
+    try {
+      const synonyms: string[] = thesaurus.find(word);
+
+      synonyms.forEach(syn => {
+        if (!wordsAdded.has(syn)) {
+          const stemmedSyn = stemmer(syn);
+          if (!index[stemmedSyn]) {
+            index[stemmedSyn] = -1;
+          } else if (index[stemmedSyn] < 0) {
+            index[stemmedSyn] -= 1;
+          }
+        }
+      });
+
+    } catch (error) {
+      console.log(error)
+    }
+  });
+
+  //Add tags to index
+  tags.forEach(tag => {
+    tag.toLowerCase().replace(/[\-]/g, ' ').split(/\s/).forEach(t => {
+      const stemmedTagWord = stemmer(t);
+      if (!index[stemmedTagWord]) {
+        index[stemmedTagWord] = 0;
+      }
+      index[stemmedTagWord] += 1;
+    });
+  });
+  
+  return { index: index, total: total };
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -154,6 +153,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       .auth()
       .verifyIdToken(parsedCookies["token"]);
     // the user is authenticated!
+
     const { uid, email } = token;
     const userDoc = await adminDB.collection("users").doc(uid).get();
     const userData = userDoc.data();
@@ -176,13 +176,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       hasProfilePicture: userData.hasProfilePicture,
     }
 
-    const processedMetadata = preprocessing(striptags(sanitizedQuestion));
-
-    tags.forEach(tag => {
-      tag.toLowerCase().replace(/[\-]/g, ' ').split(/\s/).forEach(t => {
-        processedMetadata.contains[stemmer(t)] = true;
-      });
-    });
+    const { index, total } = createIndex(striptags(sanitizedQuestion), tags);
 
     const multipleChoiceQuestion: quesdom.multipleChoice = {
       kind: "multipleChoice",
@@ -193,9 +187,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       votes: 0,
       upvotes: 0,
       downvotes: 0,
-      contains: processedMetadata.contains,
-      freq: processedMetadata.freq,
-      totalWords: processedMetadata.total,
+      index: index,
+      totalWords: total,
       explanation: sanitizedExplanation,
       date: createDate,
       author: author,
