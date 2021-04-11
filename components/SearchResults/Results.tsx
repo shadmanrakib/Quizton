@@ -160,8 +160,11 @@ const Results = () => {
   const router = useRouter();
   const { search } = router.query;
   const [kind, setKind] = useState<"votes" | "relevance">("relevance");
-  const [resultArray, setResultsArray] = useState([]);
-  const [resultDict, setResultsDict] = useState({});
+  const [isVotesSorted, setIsVotesSorted] = useState(false);
+  const [isRelevanceSorted, setIsRelevanceSorted] = useState(false);
+  const [votesSorted, setVotesSorted] = useState([]);
+  const [relevanceSorted, setRelevanceSorted] = useState([]);
+  const [resultsDict, setResultsDict] = useState({});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -170,6 +173,9 @@ const Results = () => {
       let reference = db.collection("questions");
       const docsArray = [];
       const docsDict = {};
+
+      setIsVotesSorted(false);
+      setIsRelevanceSorted(false);
 
       if (keywords.length > 0) {
         setLoading(true);
@@ -181,7 +187,8 @@ const Results = () => {
 
         reference.get().then((snapshot) => {
           if (snapshot.empty) {
-            setResultsArray([]);
+            setVotesSorted([]);
+            setRelevanceSorted([]);
             setResultsDict({});
             setLoading(false);
             console.log("No matching documents.");
@@ -189,23 +196,36 @@ const Results = () => {
             console.log(docsArray);
           } else {
             snapshot.forEach((doc) => {
-              docsArray.push({ qid: doc.id, ...doc.data() });
-              docsDict[doc.id] = doc.data();
+              const data = doc.data();
+              var score = 0;
+              keywords.forEach((word) => {
+                if (data.index[word]) {
+                  score += Math.abs(data.index[word]) / data.totalWords;
+                }
+              });
+              docsDict[doc.id] = { qid:doc.id, score: score, ...data };
             });
 
-            setResultsArray(
-              docsArray.sort(function (a, b) {
-                return b.votes - a.votes;
+            setResultsDict(docsDict);
+            setVotesSorted(
+              Object.keys(docsDict).sort((a, b) => {
+                return docsDict[b].votes - docsDict[a].votes;
               })
             );
-            setResultsDict(docsDict);
+            setRelevanceSorted(
+              Object.keys(docsDict).sort((a, b) => {
+                return docsDict[b].score - docsDict[a].score;
+              })
+            );
             setLoading(false);
-            console.log(docsDict);
-            console.log(docsArray);
+
+            console.log(votesSorted);
+            console.log(relevanceSorted);
           }
         });
       } else {
-        setResultsArray([]);
+        setVotesSorted([]);
+        setRelevanceSorted([]);
         setResultsDict({});
         setLoading(false);
         console.log(docsDict);
@@ -213,6 +233,7 @@ const Results = () => {
       }
     }
   }, [search]);
+
 
   if (!search) return null;
   return (
@@ -222,7 +243,9 @@ const Results = () => {
       ) : (
         <div className="">
           <div className="flex items-center w-auto justify-between flex-wrap">
-            <div className="flex-none">{`${resultArray.length} result(s)`}</div>
+            <div className="flex-none">{`${
+              Object.keys(resultsDict).length
+            } result(s)`}</div>
             <div className="flex-none">
               <Dropdown
                 onChange={(kind) => {
@@ -231,15 +254,25 @@ const Results = () => {
               ></Dropdown>
             </div>
           </div>
-          <div className="mt-2 result-cards">
-            {resultArray.length > 0
-              ? resultArray.map((question) => (
-                  <QuestionCard question={question} />
-                ))
-              : "No results"}
-          </div>
+          {kind === "relevance" ? (
+            <div className="mt-2 result-cards">
+              {relevanceSorted.length > 0
+                ? relevanceSorted.map((qid) => (
+                    <QuestionCard question={resultsDict[qid]} />
+                  ))
+                : "No results"}
+            </div>
+          ) : (
+            <div className="mt-2 result-cards">
+              {votesSorted.length > 0
+                ? votesSorted.map((qid) => (
+                    <QuestionCard question={resultsDict[qid]} />
+                  ))
+                : "No results"}
+            </div>
+          )}
         </div>
-      )}{" "}
+      )}
     </div>
   );
 };

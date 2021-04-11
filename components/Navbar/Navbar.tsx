@@ -92,7 +92,7 @@ const Navbar = (props) => {
                 type="submit"
                 className="rounded-full flex-none h-10 w-10 hover:bg-cool-gray-200 text-gray-600 ml-2"
               >
-                <SearchIcon />
+                <SearchIcon/>
               </button>
               <input
                 type="text"
