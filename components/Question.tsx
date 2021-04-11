@@ -111,8 +111,8 @@ const Question = (props: QuestionComponentProps) => {
     }
   }
   return (
-    <div>
-      <div className="flex container mt-4 pl-6 bg-gray-100 mx-auto">
+    <div className="border bg-cool-gray-100">
+      <div className="flex max-w-6xl my-4 p-6 mx-auto">
         <div className="flex flex-col w-6 mt-3">
           <ArrowUpwardIcon
             onClick={() => onUpvote()}
@@ -133,7 +133,7 @@ const Question = (props: QuestionComponentProps) => {
               {props.data.tags.map((tag, index) => (
             <span
               key={index}
-              className="px-1.5 py-1 m-2 border rounded-md bg-light-blue-300"
+              className="rounded-full px-3 py-1 m-1 border bg-blue-300"
             >
               {tag}
             </span>
@@ -141,7 +141,8 @@ const Question = (props: QuestionComponentProps) => {
           </div>
         </div>
       </div>
-      <div className="container mx-auto mt-4 px-6 rounded-md border border-gray-300">
+      <div className="flex max-w-6xl my-4 p-6 mx-auto bg-white rounded-md border border-gray-300">
+        <div className="">
         <div>
           <div
             className="my-6 font-serif md:text-lg"
@@ -167,7 +168,7 @@ const Question = (props: QuestionComponentProps) => {
           ))}
           <div className="flex items-center">
 
-            <button className="my-6 px-3 py-1.5 rounded-md bg-light-blue-500 text-white" type="submit">
+            <button className="my-6 px-3 py-1.5 rounded-md bg-blue-500 text-white" type="submit">
               Check
             </button>
             <p className="underline ml-5 cursor-pointer">
@@ -176,6 +177,7 @@ const Question = (props: QuestionComponentProps) => {
           </div>
         </form>
       </div>
+        </div>
     </div>
   );
 };

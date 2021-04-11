@@ -46,7 +46,7 @@ const QuestionPage = (props) => {
   };
 
   return (
-    <div className="min-h-screen w-screen">
+    <div className="min-h-screen bg-cool-gray-100 w-full">
       <Navbar />
       <div className="container mx-auto">
         {correct &&

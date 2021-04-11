@@ -41,7 +41,7 @@ function Tags({ control }: props) {
               setInputControl("");
             }
           }}
-          className="bg-light-blue-200 p-2 ml-3 inline-block select-none rounded-md"
+          className="bg-blue-300 p-2 ml-3 inline-block select-none rounded-md"
         >
           + Add Tag
         </div>

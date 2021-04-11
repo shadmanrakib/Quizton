@@ -15,7 +15,7 @@ function Choices({ control }: props) {
       <div className="text-sm">Select the correct answer choice</div>
 
       {choicesField.fields.map((field, index) => (
-        <div className="border" key={field.id}>
+        <div className="border bg-white" key={field.id}>
           <div className="flex">
             <input
               type="radio"
@@ -46,7 +46,7 @@ function Choices({ control }: props) {
       ))}
       <button
         type="button"
-        className="bg-light-blue-200 p-2 mt-3"
+        className="bg-blue-300 p-2 mt-3"
         onClick={choicesField.append}
       >
         + Add Choice

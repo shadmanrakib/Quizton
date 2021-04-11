@@ -66,7 +66,7 @@ const CreateMCForm: React.FC = () => {
         defaultValue={null}
         rules={{ required: true, minLength: 1 }}
         render={({ onChange, onBlur, value }) => (
-          <div className={`${errors.question ? "bg-red-50" : ""}`}>
+          <div className={`bg-white ${errors.question ? "bg-red-50" : ""}`}>
             <Editor onChange={onChange} theme={"snow"} />
           </div>
         )}
@@ -86,7 +86,7 @@ const CreateMCForm: React.FC = () => {
         defaultValue={null}
         rules={{ required: true, minLength: 1 }}
         render={({ onChange, onBlur, value }) => (
-          <div className={`${errors.explanation ? "bg-red-50" : ""}`}>
+          <div className={`bg-white ${errors.explanation ? "bg-red-50" : ""}`}>
             <Editor onChange={onChange} theme={"snow"} />
           </div>
         )}
@@ -96,7 +96,7 @@ const CreateMCForm: React.FC = () => {
 
       <button
         type="submit"
-        className="mt-6 rounded-md bg-light-blue-500 text-white font-bold p-3 hover:bg-blue-700"
+        className="mt-6 rounded-md bg-blue-500 text-white font-bold p-3 hover:bg-blue-700"
       >
         Submit
         </button>
