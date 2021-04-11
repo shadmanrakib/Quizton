@@ -17,6 +17,7 @@ const Navbar = (props) => {
   const [isUsingMobileSearch, setIsUsingMobileSearch] = useState(false);
   const { register, handleSubmit } = useForm();
   const router = useRouter();
+  const {search} = router.query;
 
   const onSubmitHandler = (data) => {
     console.log(data);
@@ -50,6 +51,7 @@ const Navbar = (props) => {
               <input
                 type="text"
                 className="flex-auto bg-transparent min-w-0 focus:outline-none p-2"
+                defaultValue={search ? search : ""}
                 ref={register}
                 name="query"
               />
@@ -97,6 +99,7 @@ const Navbar = (props) => {
               <input
                 type="text"
                 className="flex-auto bg-transparent min-w-0 focus:outline-none p-2"
+                defaultValue={search ? search : ""}
                 ref={register}
                 name="query"
               />
