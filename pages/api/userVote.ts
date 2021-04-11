@@ -67,6 +67,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             downvotes: firebaseAdmin.firestore.FieldValue.increment(
               kind === "downvote" ? 1 : 0
             ),
+            votes: firebaseAdmin.firestore.FieldValue.increment(kind === "upvote" ? -1 : 1),
           });
         res.status(200).send({ success: true, message: "Successfully voted" });
         return;
@@ -82,6 +83,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           .update({
             upvotes: firebaseAdmin.firestore.FieldValue.increment(1),
             downvotes: firebaseAdmin.firestore.FieldValue.increment(-1),
+            votes: firebaseAdmin.firestore.FieldValue.increment(2),
           });
       }
       if (kind === "downvote" && oldDocData.kind === "upvote") {
@@ -92,6 +94,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           .update({
             upvotes: firebaseAdmin.firestore.FieldValue.increment(-1),
             downvotes: firebaseAdmin.firestore.FieldValue.increment(1),
+            votes: firebaseAdmin.firestore.FieldValue.increment(-2),
           });
       }
       if (kind === oldDocData.kind) {

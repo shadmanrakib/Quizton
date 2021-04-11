@@ -43,7 +43,7 @@ const Navbar = (props) => {
             >
               <button
                 type="submit"
-                className="rounded-full flex-none h-10 w-10 hover:bg-cool-gray-300 text-gray-600 ml-2"
+                className="rounded-full flex-none h-10 w-10	 hover:bg-cool-gray-300 text-gray-600 ml-2"
               >
                 <SearchIcon />
               </button>

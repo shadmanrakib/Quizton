@@ -258,7 +258,7 @@ const Results = () => {
             <div className="mt-2 result-cards">
               {relevanceSorted.length > 0
                 ? relevanceSorted.map((qid) => (
-                    <QuestionCard question={resultsDict[qid]} />
+                    <QuestionCard key={qid} question={resultsDict[qid]} />
                   ))
                 : "No results"}
             </div>
@@ -266,7 +266,7 @@ const Results = () => {
             <div className="mt-2 result-cards">
               {votesSorted.length > 0
                 ? votesSorted.map((qid) => (
-                    <QuestionCard question={resultsDict[qid]} />
+                    <QuestionCard  key={qid} question={resultsDict[qid]} />
                   ))
                 : "No results"}
             </div>
