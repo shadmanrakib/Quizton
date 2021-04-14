@@ -10,14 +10,13 @@ import Button from "@material-ui/core/Button/Button";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import MediaQuery from "react-responsive";
 
 const Navbar = (props) => {
   const user = useUser();
   const [isUsingMobileSearch, setIsUsingMobileSearch] = useState(false);
   const { register, handleSubmit } = useForm();
   const router = useRouter();
-  const {search} = router.query;
+  const { search } = router.query;
 
   const onSubmitHandler = (data) => {
     console.log(data);
@@ -94,7 +93,7 @@ const Navbar = (props) => {
                 type="submit"
                 className="rounded-full flex-none h-10 w-10 hover:bg-cool-gray-200 text-gray-600 ml-2"
               >
-                <SearchIcon/>
+                <SearchIcon />
               </button>
               <input
                 type="text"
@@ -106,11 +105,7 @@ const Navbar = (props) => {
             </form>
           </div>
 
-          <div
-            className={
-              "flex md:hidden items-center flex-grow min-w-0"
-            }
-          >
+          <div className={"flex md:hidden items-center flex-grow min-w-0"}>
             <button
               className="rounded-full bg-cool-gray-100 hover:bg-cool-gray-200 border h-12 w-12"
               onClick={() => setIsUsingMobileSearch(true)}

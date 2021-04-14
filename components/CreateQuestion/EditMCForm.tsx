@@ -5,6 +5,13 @@ import { useUser } from "../../hooks/useUser";
 import router from "next/router";
 import Editor from "../Editor";
 import Choices from "./Choices";
+import {
+  Question,
+  multipleChoice,
+  shortAnswer,
+  EditRequest,
+  MultipleChoiceRequest,
+} from "../../types/quesdom";
 
 async function postData(url = "", data = {}) {
   // Default options are marked with *
@@ -23,9 +30,35 @@ async function postData(url = "", data = {}) {
   });
   return response.json(); // parses JSON response into native JavaScript objects
 }
-const CreateMCForm: React.FC = () => {
-  const user = useUser();
 
+interface Props {
+  qid: string;
+  question: Question;
+}
+
+const CreateMCForm: React.FC<Props> = (props) => {
+  const user = useUser();
+  let defaultValues;
+  if (props.question.kind === "multipleChoice") {
+    defaultValues = {
+      choices: props.question.answerChoices.map((value) => {
+        //React Hook Form needs default values in the form {value: string}[] since html element's name is "value"
+        return { value: value };
+      }),
+      question: props.question.question,
+      explanation: props.question.explanation,
+      answer: props.question.correctAnswer + "",
+      tags: props.question.tags.map((value) => {
+        //React Hook Form needs default values in the form {value: string}[] since html element's name is "value"
+        return { value: value };
+      }),
+    };
+  }
+  if (props.question.kind === "shortAnswer") {
+    defaultValues = {
+      //Todo
+    };
+  }
   const {
     register,
     handleSubmit,
@@ -36,21 +69,29 @@ const CreateMCForm: React.FC = () => {
     trigger,
     setError,
   } = useForm({
-    defaultValues: {
-      choices: [{}, {}, {}, {}],
-      question: null,
-      explanation: null,
-      answer: "0",
-    },
+    defaultValues: defaultValues,
     shouldFocusError: true,
     reValidateMode: "onChange",
   });
 
   const onSubmit = (data) => {
     console.log(data);
-    postData("/api/createQuestion", data).then((response) => {
-      console.log(response);
-      router.push("/");
+    let postQuestion: MultipleChoiceRequest = {
+      kind: "multipleChoice",
+      answerChoices: data.choices.map((value) => {
+        return value.value;
+      }),
+      correctAnswer: Number.parseInt(data.answer),
+      explanation: data.explanation,
+      question: data.question,
+      tags: data.tags.map((value) => {
+        return value.value;
+      }),
+    };
+    let postThis: EditRequest = { question: postQuestion, qid: props.qid };
+
+    postData("/api/editQuestion", postThis).then((res) => {
+      console.log(res);
     });
   };
   return (
@@ -65,11 +106,15 @@ const CreateMCForm: React.FC = () => {
       <Controller
         control={control}
         name="question"
-        defaultValue={null}
+        defaultValue={control.getValues("question")}
         rules={{ required: true, minLength: 1 }}
         render={({ onChange, onBlur, value }) => (
           <div className={`bg-white ${errors.question ? "bg-red-50" : ""}`}>
-            <Editor onChange={onChange} theme={"snow"} />
+            <Editor
+              onChange={onChange}
+              theme={"snow"}
+              defaultSetValue={value}
+            />
           </div>
         )}
       />
@@ -85,11 +130,15 @@ const CreateMCForm: React.FC = () => {
       <Controller
         control={control}
         name="explanation"
-        defaultValue={null}
+        defaultValue={control.getValues("explanation")}
         rules={{ required: true, minLength: 1 }}
         render={({ onChange, onBlur, value }) => (
           <div className={`bg-white ${errors.explanation ? "bg-red-50" : ""}`}>
-            <Editor onChange={onChange} theme={"snow"} />
+            <Editor
+              onChange={onChange}
+              theme={"snow"}
+              defaultSetValue={value}
+            />
           </div>
         )}
       />
