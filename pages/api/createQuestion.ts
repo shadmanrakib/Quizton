@@ -4,8 +4,8 @@ import { parseCookies } from "nookies"; //, setCookie, destroyCookie
 import type { NextApiRequest, NextApiResponse } from "next";
 import sanitizeHtml from "sanitize-html";
 import * as quesdom from "../../types/quesdom";
-import striptags from 'striptags';
-import stemmer from 'lancaster-stemmer';
+import striptags from "striptags";
+import stemmer from "lancaster-stemmer";
 import thesaurus from "thesaurus";
 
 function sanitize(html: string) {
@@ -59,27 +59,159 @@ function sanitize(html: string) {
       annotation: ["encoding"],
       math: [
         {
-          name: 'xmlns',
+          name: "xmlns",
           multiple: true,
-          values: ["http://www.w3.org/1998/Math/MathML"]
-        }
-      ]
+          values: ["http://www.w3.org/1998/Math/MathML"],
+        },
+      ],
     },
   };
   //Separate function in case we want to do more processing or use extra features
   return sanitizeHtml(html, options);
 }
 
-const stopwords: Set<string> = new Set(["i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"]);
+const stopwords: Set<string> = new Set([
+  "i",
+  "me",
+  "my",
+  "myself",
+  "we",
+  "our",
+  "ours",
+  "ourselves",
+  "you",
+  "your",
+  "yours",
+  "yourself",
+  "yourselves",
+  "he",
+  "him",
+  "his",
+  "himself",
+  "she",
+  "her",
+  "hers",
+  "herself",
+  "it",
+  "its",
+  "itself",
+  "they",
+  "them",
+  "their",
+  "theirs",
+  "themselves",
+  "what",
+  "which",
+  "who",
+  "whom",
+  "this",
+  "that",
+  "these",
+  "those",
+  "am",
+  "is",
+  "are",
+  "was",
+  "were",
+  "be",
+  "been",
+  "being",
+  "have",
+  "has",
+  "had",
+  "having",
+  "do",
+  "does",
+  "did",
+  "doing",
+  "a",
+  "an",
+  "the",
+  "and",
+  "but",
+  "if",
+  "or",
+  "because",
+  "as",
+  "until",
+  "while",
+  "of",
+  "at",
+  "by",
+  "for",
+  "with",
+  "about",
+  "against",
+  "between",
+  "into",
+  "through",
+  "during",
+  "before",
+  "after",
+  "above",
+  "below",
+  "to",
+  "from",
+  "up",
+  "down",
+  "in",
+  "out",
+  "on",
+  "off",
+  "over",
+  "under",
+  "again",
+  "further",
+  "then",
+  "once",
+  "here",
+  "there",
+  "when",
+  "where",
+  "why",
+  "how",
+  "all",
+  "any",
+  "both",
+  "each",
+  "few",
+  "more",
+  "most",
+  "other",
+  "some",
+  "such",
+  "no",
+  "nor",
+  "not",
+  "only",
+  "own",
+  "same",
+  "so",
+  "than",
+  "too",
+  "very",
+  "s",
+  "t",
+  "can",
+  "will",
+  "just",
+  "don",
+  "should",
+  "now",
+]);
 
 /**
- * Generates an index which includes stemmed words from the 
+ * Generates an index which includes stemmed words from the
  * question, tags, and synonyms
  * @param {string} question - Question without any html tags.
  * @param {string[]} tags - Tags to add to the index
  */
 function createIndex(question: string, tags: string[]) {
-  var words = question.toLowerCase().replace(/[.,&'?:;#@*\/!]/g, '').replace(/[()\-"{}\[\]]/g, ' ').split(/\s/);
+  var words = question
+    .toLowerCase()
+    .replace(/[.,&'?:;#@*\/!]/g, "")
+    .replace(/[()\-"{}\[\]]/g, " ")
+    .split(/\s/);
 
   var wordsAdded: Set<string> = new Set();
   var index: Object = {};
@@ -89,7 +221,7 @@ function createIndex(question: string, tags: string[]) {
     const w = words[i];
 
     //Initial processing (Adds to index and creates set of words)
-    if (w != '' && !stopwords.has(w)) {
+    if (w != "" && !stopwords.has(w)) {
       total += 1;
 
       const stemmedWord = stemmer(w);
@@ -110,7 +242,7 @@ function createIndex(question: string, tags: string[]) {
     try {
       const synonyms: string[] = thesaurus.find(word);
 
-      synonyms.forEach(syn => {
+      synonyms.forEach((syn) => {
         if (!wordsAdded.has(syn)) {
           const stemmedSyn = stemmer(syn);
           if (!index[stemmedSyn]) {
@@ -120,23 +252,26 @@ function createIndex(question: string, tags: string[]) {
           }
         }
       });
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   });
 
   //Add tags to index
-  tags.forEach(tag => {
-    tag.toLowerCase().replace(/[\-]/g, ' ').split(/\s/).forEach(t => {
-      const stemmedTagWord = stemmer(t);
-      if (!index[stemmedTagWord]) {
-        index[stemmedTagWord] = 0;
-      }
-      index[stemmedTagWord] += 1;
-    });
+  tags.forEach((tag) => {
+    tag
+      .toLowerCase()
+      .replace(/[\-]/g, " ")
+      .split(/\s/)
+      .forEach((t) => {
+        const stemmedTagWord = stemmer(t);
+        if (!index[stemmedTagWord]) {
+          index[stemmedTagWord] = 0;
+        }
+        index[stemmedTagWord] += 1;
+      });
   });
-  
+
   return { index: index, total: total };
 }
 
@@ -160,21 +295,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const createDate = firebaseAdmin.firestore.FieldValue.serverTimestamp();
 
+    if (!inputs.tags) inputs.tags = [];
     const tags = inputs.tags.map((value) => {
       return value.value;
-    })
+    });
 
     const sanitizedQuestion = sanitize(inputs.question);
     const sanitizedChoices = inputs.choices.map((value) => {
       return sanitize(value.value);
-    })
+    });
     const sanitizedAnswer = sanitize(inputs.answer);
     const sanitizedExplanation = sanitize(inputs.explanation);
+    console.log(sanitizedExplanation);
     const author = {
       uid: uid,
       username: userData.username,
       hasProfilePicture: userData.hasProfilePicture,
-    }
+    };
 
     const { index, total } = createIndex(striptags(sanitizedQuestion), tags);
 
@@ -193,7 +330,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       date: createDate,
       author: author,
     };
-    const { id } = await adminDB.collection("questions").add(multipleChoiceQuestion); // Convert Inputs to multipleChoice
+    const { id } = await adminDB
+      .collection("questions")
+      .add(multipleChoiceQuestion); // Convert Inputs to multipleChoice
 
     return res.status(200).send({
       success: true,

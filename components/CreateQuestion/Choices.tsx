@@ -28,12 +28,13 @@ function Choices({ control }: props) {
               <Controller
                 control={control}
                 name={`choices[${index}].value`}
-                defaultValue={control.getValues(`choices[${index}].value`)}
+                defaultValue={field.value}
                 render={({ onChange, onBlur, value }) => (
                   <Editor
                     onChange={onChange}
                     theme={"bubble"}
                     defaultSetValue={value}
+                    tabIndex={0}
                   />
                 )}
               />

@@ -5,6 +5,9 @@ import { useUser } from "../../hooks/useUser";
 import router from "next/router";
 import Editor from "../Editor";
 import Choices from "./Choices";
+import { Accordion, AccordionSummary } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMoreOutlined";
 
 async function postData(url = "", data = {}) {
   // Default options are marked with *
@@ -37,9 +40,9 @@ const CreateMCForm: React.FC = () => {
     setError,
   } = useForm({
     defaultValues: {
-      choices: [{}, {}, {}, {}],
+      choices: [{ value: "" }, { value: "" }, { value: "" }, { value: "" }],
       question: null,
-      explanation: null,
+      explanation: "",
       answer: "0",
     },
     shouldFocusError: true,
@@ -69,30 +72,35 @@ const CreateMCForm: React.FC = () => {
         rules={{ required: true, minLength: 1 }}
         render={({ onChange, onBlur, value }) => (
           <div className={`bg-white ${errors.question ? "bg-red-50" : ""}`}>
-            <Editor onChange={onChange} theme={"snow"} />
+            <Editor onChange={onChange} theme={"snow"} tabIndex={0} />
           </div>
         )}
       />
 
       <Choices control={control}></Choices>
-      <label className="mt-6 mb-3" htmlFor="explanation">
-        Explanation
-        <span className={`${errors.explanation ? "text-red-500" : "hidden"}`}>
-          {" "}
-          This field is required
-        </span>
-      </label>
-      <Controller
-        control={control}
-        name="explanation"
-        defaultValue={null}
-        rules={{ required: true, minLength: 1 }}
-        render={({ onChange, onBlur, value }) => (
-          <div className={`bg-white ${errors.explanation ? "bg-red-50" : ""}`}>
-            <Editor onChange={onChange} theme={"snow"} />
-          </div>
-        )}
-      />
+      <Accordion className={"mt-3 -mb-3"}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <p>Explanation</p>
+        </AccordionSummary>
+
+        <Controller
+          control={control}
+          name="explanation"
+          defaultValue={control.getValues("explanation")}
+          render={({ onChange, onBlur, value }) => (
+            <div
+              className={`bg-white ${errors.explanation ? "bg-red-50" : ""}`}
+            >
+              <Editor
+                onChange={onChange}
+                theme={"snow"}
+                tabIndex={0}
+                defaultSetValue={value}
+              />
+            </div>
+          )}
+        />
+      </Accordion>
 
       <Tags control={control}></Tags>
 
