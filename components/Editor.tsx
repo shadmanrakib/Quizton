@@ -12,8 +12,8 @@ if (process.browser) {
   window.katex = katex;
 }
 const Editor = React.forwardRef((props: any, ref) => {
-  const [value, setValue] = useState("");
-  const { onChange, ...otherProps } = props;
+  const { onChange, defaultSetValue, ...otherProps } = props;
+  const [value, setValue] = useState(defaultSetValue ? defaultSetValue : "");
   const onChangeHandler = (val) => {
     setValue(val);
     if (props.onChange) {

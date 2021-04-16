@@ -21,6 +21,7 @@ function Tags({ control }: props) {
       <div>
         <div className="mt-6">Tags</div>
         <input
+          tabIndex={0}
           className=" w-48 h-9 border-2 box-border border-radius rounded pl-2 border-gray"
           type="text"
           value={inputControl}

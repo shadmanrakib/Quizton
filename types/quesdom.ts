@@ -3,6 +3,19 @@ export interface authorMetaData {
   username: string;
   hasProfilePicture: boolean;
 }
+export interface EditRequest {
+  qid: string;
+  question: MultipleChoiceRequest;
+}
+
+export interface MultipleChoiceRequest {
+  kind: "multipleChoice";
+  answerChoices: string[];
+  correctAnswer: number;
+  question: string;
+  explanation: string;
+  tags: string[];
+}
 
 export interface questionMetaData {
   kind: string;
@@ -12,11 +25,11 @@ export interface questionMetaData {
   author: authorMetaData;
   explanation: string;
   votes: number;
-  upvotes: number,
-  downvotes: number,
+  upvotes: number;
+  downvotes: number;
   index: Object;
-  totalWords: number,
-  date: any
+  totalWords: number;
+  date: any;
 }
 
 export interface voteDocument {
