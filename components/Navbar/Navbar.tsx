@@ -46,7 +46,7 @@ const Navbar = (props) => {
                 type="submit"
                 className="rounded-full flex-none h-10 w-10	 hover:bg-cool-gray-300 text-gray-600 ml-2"
               >
-                <SearchIcon />
+                <SearchIcon fontSize="default"/>
               </button>
               <input
                 type="text"
@@ -94,7 +94,7 @@ const Navbar = (props) => {
                 type="submit"
                 className="rounded-full flex-none h-10 w-10 hover:bg-cool-gray-200 text-gray-600 ml-2"
               >
-                <SearchIcon/>
+                <SearchIcon fontSize="default"/>
               </button>
               <input
                 type="text"
@@ -115,7 +115,7 @@ const Navbar = (props) => {
               className="rounded-full bg-cool-gray-100 hover:bg-cool-gray-200 border h-12 w-12"
               onClick={() => setIsUsingMobileSearch(true)}
             >
-              <SearchIcon />
+                <SearchIcon fontSize="default"/>
             </button>
           </div>
 
