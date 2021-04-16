@@ -1,15 +1,11 @@
 import React, { useState } from "react";
-import styles from "./Navbar.module.css";
 import Image from "next/image";
-import SearchIcon from "@material-ui/icons/SearchRounded";
 import { useUser } from "../../hooks/useUser";
-import AccountMenu from "./AccountMenu";
-import ArrowBackIcon from "@material-ui/icons/ArrowBackRounded";
-import IconButton from "@material-ui/core/IconButton/IconButton";
-import Button from "@material-ui/core/Button/Button";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { SearchIcon, ArrowLeftIcon } from "@heroicons/react/outline";
+import { auth } from '../../config/firebaseClient';
 
 const Navbar = (props) => {
   const user = useUser();
@@ -31,10 +27,10 @@ const Navbar = (props) => {
       {isUsingMobileSearch ? (
         <div className={"border flex flex-row items-center w-full h-16"}>
           <button
-            className="mx-2"
+            className="mx-2 h-10 w-10 flex-none text-sm"
             onClick={() => setIsUsingMobileSearch(false)}
           >
-            <ArrowBackIcon />
+            <ArrowLeftIcon className="m-auto h-6 w-6" />
           </button>
           <div className="flex-auto mr-2 items-center">
             <form
@@ -43,9 +39,9 @@ const Navbar = (props) => {
             >
               <button
                 type="submit"
-                className="rounded-full flex-none h-10 w-10	 hover:bg-cool-gray-300 text-gray-600 ml-2"
+                className="rounded-full flex-none h-10 w-10 hover:bg-cool-gray-300 text-gray-600 ml-2"
               >
-                <SearchIcon fontSize="default"/>
+                <SearchIcon className="m-auto h-6 w-6" />
               </button>
               <input
                 type="text"
@@ -93,7 +89,7 @@ const Navbar = (props) => {
                 type="submit"
                 className="rounded-full flex-none h-10 w-10 hover:bg-cool-gray-200 text-gray-600 ml-2"
               >
-                <SearchIcon fontSize="default"/>
+                <SearchIcon className="m-auto h-6 w-6" />
               </button>
               <input
                 type="text"
@@ -110,7 +106,7 @@ const Navbar = (props) => {
               className="rounded-full bg-cool-gray-100 hover:bg-cool-gray-200 border h-12 w-12"
               onClick={() => setIsUsingMobileSearch(true)}
             >
-                <SearchIcon fontSize="default"/>
+              <SearchIcon className="m-auto h-6 w-6" />
             </button>
           </div>
 
@@ -118,14 +114,14 @@ const Navbar = (props) => {
             {!user ? (
               <>
                 <Link href="/auth/login">
-                  <Button variant="text">Login</Button>
+                  <button className="px-2 py-1">Login</button>
                 </Link>
                 <Link href="/auth/signup">
-                  <Button variant="text">Signup</Button>
+                  <button className="px-2 py-1">Signup</button>
                 </Link>
               </> // Add profile picture
             ) : (
-              <AccountMenu />
+              <button className="px-2 py-1" onClick={() => auth.signOut()}>Signout</button>
             )}
           </div>
         </div>
