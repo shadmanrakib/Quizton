@@ -144,15 +144,18 @@ function extractKeyTokens(string) {
     .split(/\s/);
 
   var contains: Set<string> = new Set<string>();
-  var tokens = [];
+  var freq = {};
+  var total = 0;
   words.forEach((w) => {
     if (w.length > 1 && !stopwords.has(w)) {
       const processedWord = stemmer(w);
       contains.add(processedWord);
-      tokens.push(processedWord);
+      if (!freq[processedWord]) { freq[processedWord] = 0}
+      freq[processedWord] += 1;
+      total++;
     }
   });
-  return {contains: contains, tokens: tokens};
+  return {contains: contains, freq: freq, total: total};
 }
 
 const Results = () => {
@@ -168,7 +171,7 @@ const Results = () => {
 
   useEffect(() => {
     if (q) {
-      const { contains, tokens } = extractKeyTokens(q);
+      const { contains, freq, total } = extractKeyTokens(q);
       let reference = db.collection("questions");
       const docsArray = [];
       const docsDict = {};
@@ -197,9 +200,10 @@ const Results = () => {
             snapshot.forEach((doc) => {
               const data = doc.data();
               var score = 0;
-              tokens.forEach((word) => {
+              contains.forEach((word) => {
                 if (data.index[word]) {
-                  score += Math.log(Math.abs(data.index[word]) / data.totalWords);
+                  const weight = Math.log( total / freq[word] + 1);
+                  score += weight * Math.log(Math.abs(data.index[word]) / data.totalWords + 1);
                 }
               });
               docsDict[doc.id] = { qid: doc.id, score: score, ...data };

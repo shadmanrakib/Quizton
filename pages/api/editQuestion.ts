@@ -300,11 +300,17 @@ export default async function editQuestion(
       question.kind === "multipleChoice" &&
       parsed.question.kind === "multipleChoice"
     ) {
+
       const editDate = firebaseAdmin.firestore.FieldValue.serverTimestamp();
+
+
+    
+
 
       const sanitizedQuestion = sanitize(parsed.question.question);
 
       var choicesString = "";
+
 
       const sanitizedChoices = parsed.question.answerChoices.map((value) => {
         const sanitizedChoice = sanitize(value);
@@ -316,6 +322,8 @@ export default async function editQuestion(
       const sanitizedAnswer = parsed.question.correctAnswer;
       const sanitizedExplanation = sanitize(parsed.question.explanation);
       console.log(sanitizedExplanation);
+   
+
 
       const { index, total, contains } = createIndex(
         striptags(sanitizedQuestion + " " + choicesString),
