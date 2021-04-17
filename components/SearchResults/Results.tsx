@@ -140,25 +140,24 @@ const stopwords: Set<string> = new Set([
 function extractKeyTokens(string) {
   var words = string
     .toLowerCase()
-    .replace(/[.,&'?:;#@*\/!]/g, "")
-    .replace(/[()\-"{}\[\]]/g, " ")
+    .replace(/[.,&'?:;#@*\/!()\-"{}\[\]]/g, " ")
     .split(/\s/);
-  var freqMap = {};
-  var contains = {};
+
+  var contains: Set<string> = new Set<string>();
+  var tokens = [];
   words.forEach((w) => {
-    if (w != "" && !stopwords.has(w)) {
+    if (w.length > 1 && !stopwords.has(w)) {
       const processedWord = stemmer(w);
-      if (!freqMap[processedWord]) {
-        contains[processedWord] = true;
-      }
+      contains.add(processedWord);
+      tokens.push(processedWord);
     }
   });
-  return Object.keys(contains);
+  return {contains: contains, tokens: tokens};
 }
 
 const Results = () => {
   const router = useRouter();
-  const { search } = router.query;
+  const { q } = router.query;
   const [kind, setKind] = useState<"votes" | "relevance">("relevance");
   const [isVotesSorted, setIsVotesSorted] = useState(false);
   const [isRelevanceSorted, setIsRelevanceSorted] = useState(false);
@@ -168,8 +167,8 @@ const Results = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (search) {
-      const keywords = extractKeyTokens(search);
+    if (q) {
+      const { contains, tokens } = extractKeyTokens(q);
       let reference = db.collection("questions");
       const docsArray = [];
       const docsDict = {};
@@ -177,12 +176,12 @@ const Results = () => {
       setIsVotesSorted(false);
       setIsRelevanceSorted(false);
 
-      if (keywords.length > 0) {
+      if (contains.size > 0) {
         setLoading(true);
 
-        keywords.forEach((element) => {
+        contains.forEach((element) => {
           // @ts-ignore
-          reference = reference.where(`index.${element}`, "!=", 0);
+          reference = reference.where(`contains.${element}`, "==", true);
         });
 
         reference.get().then((snapshot) => {
@@ -198,12 +197,12 @@ const Results = () => {
             snapshot.forEach((doc) => {
               const data = doc.data();
               var score = 0;
-              keywords.forEach((word) => {
+              tokens.forEach((word) => {
                 if (data.index[word]) {
-                  score += Math.abs(data.index[word]) / data.totalWords;
+                  score += Math.log(Math.abs(data.index[word]) / data.totalWords);
                 }
               });
-              docsDict[doc.id] = { qid:doc.id, score: score, ...data };
+              docsDict[doc.id] = { qid: doc.id, score: score, ...data };
             });
 
             setResultsDict(docsDict);
@@ -232,10 +231,9 @@ const Results = () => {
         console.log(docsArray);
       }
     }
-  }, [search]);
+  }, [q]);
 
-
-  if (!search) return null;
+  if (!q) return null;
   return (
     <div className="p-4 w-auto max-w-6xl">
       {loading ? (
@@ -266,7 +264,7 @@ const Results = () => {
             <div className="mt-2 result-cards">
               {votesSorted.length > 0
                 ? votesSorted.map((qid) => (
-                    <QuestionCard  key={qid} question={resultsDict[qid]} />
+                    <QuestionCard key={qid} question={resultsDict[qid]} />
                   ))
                 : "No results"}
             </div>

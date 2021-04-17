@@ -209,11 +209,12 @@ const stopwords: Set<string> = new Set([
 function createIndex(question: string, tags: string[]) {
   var words = question
     .toLowerCase()
-    .replace(/[.,&'?:;#@*\/!]/g, "")
-    .replace(/[()\-"{}\[\]]/g, " ")
+    .replace(/[.,&'?:;#@*\/!()\-"{}\[\]]/g, " ")
     .split(/\s/);
 
   var wordsAdded: Set<string> = new Set();
+  var contains = {};
+
   var index: Object = {};
   var total = 0;
 
@@ -232,6 +233,7 @@ function createIndex(question: string, tags: string[]) {
       //Add stemmed word to index
       if (!index[stemmedWord]) {
         index[stemmedWord] = 0;
+        contains[stemmedWord] = true;
       }
       index[stemmedWord] += 1;
     }
@@ -243,14 +245,20 @@ function createIndex(question: string, tags: string[]) {
       const synonyms: string[] = thesaurus.find(word);
 
       synonyms.forEach((syn) => {
-        if (!wordsAdded.has(syn)) {
-          const stemmedSyn = stemmer(syn);
-          if (!index[stemmedSyn]) {
-            index[stemmedSyn] = -1;
-          } else if (index[stemmedSyn] < 0) {
-            index[stemmedSyn] -= 1;
+        const synTokens = syn
+          .replace(/[-]/g, " ")
+          .split(/\s/);
+        synTokens.forEach(synToken => {
+          if (synToken != "" && !wordsAdded.has(synToken)) {
+            const stemmedSyn = stemmer(syn);
+            if (!index[stemmedSyn]) {
+              index[stemmedSyn] = -1;
+              contains[stemmedSyn] = true;
+            } else if (index[stemmedSyn] < 0) {
+              index[stemmedSyn] -= 1;
+            }
           }
-        }
+        });
       });
     } catch (error) {
       console.log(error);
@@ -267,12 +275,13 @@ function createIndex(question: string, tags: string[]) {
         const stemmedTagWord = stemmer(t);
         if (!index[stemmedTagWord]) {
           index[stemmedTagWord] = 0;
+          contains[stemmedTagWord] = true;
         }
         index[stemmedTagWord] += 1;
       });
   });
 
-  return { index: index, total: total };
+  return { index: index, total: total, contains: contains };
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -301,30 +310,35 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     const sanitizedQuestion = sanitize(inputs.question);
+
+    var choicesString = "";
     const sanitizedChoices = inputs.choices.map((value) => {
-      return sanitize(value.value);
+      const sanitizedChoice = sanitize(value.value);
+      if (sanitizedChoice) {
+        choicesString += (" " + sanitizedChoice);
+      }
+      return sanitizedChoice;
     });
-    const sanitizedAnswer = sanitize(inputs.answer);
     const sanitizedExplanation = sanitize(inputs.explanation);
-    console.log(sanitizedExplanation);
     const author = {
       uid: uid,
       username: userData.username,
       hasProfilePicture: userData.hasProfilePicture,
     };
 
-    const { index, total } = createIndex(striptags(sanitizedQuestion), tags);
+    const { index, total, contains } = createIndex(striptags(sanitizedQuestion + " " + choicesString), tags);
 
     const multipleChoiceQuestion: quesdom.multipleChoice = {
       kind: "multipleChoice",
       answerChoices: sanitizedChoices,
-      correctAnswer: sanitizedAnswer,
+      correctAnswer: inputs.answer,
       question: sanitizedQuestion,
       tags: tags,
       votes: 0,
       upvotes: 0,
       downvotes: 0,
       index: index,
+      contains: contains,
       totalWords: total,
       explanation: sanitizedExplanation,
       date: createDate,

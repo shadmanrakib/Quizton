@@ -28,6 +28,7 @@ export interface questionMetaData {
   upvotes: number;
   downvotes: number;
   index: Object;
+  contains: Object;
   totalWords: number;
   date: any;
 }

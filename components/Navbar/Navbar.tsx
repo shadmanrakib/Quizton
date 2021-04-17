@@ -12,13 +12,13 @@ const Navbar = (props) => {
   const [isUsingMobileSearch, setIsUsingMobileSearch] = useState(false);
   const { register, handleSubmit } = useForm();
   const router = useRouter();
-  const { search } = router.query;
+  const { q } = router.query;
 
   const onSubmitHandler = (data) => {
     console.log(data);
     router.push({
-      pathname: "/",
-      query: { search: data.query },
+      pathname: "/search",
+      query: { q: data.query },
     });
   };
 
@@ -27,26 +27,26 @@ const Navbar = (props) => {
       {isUsingMobileSearch ? (
         <div className={"border flex flex-row items-center w-full h-16"}>
           <button
-            className="mx-2 h-10 w-10 flex-none text-sm"
+            className="mr-2 h-10 w-10 flex-none text-sm"
             onClick={() => setIsUsingMobileSearch(false)}
           >
-            <ArrowLeftIcon className="m-auto h-6 w-6" />
+            <ArrowLeftIcon className="m-auto h-5 w-5" />
           </button>
           <div className="flex-auto mr-2 items-center">
             <form
-              className="flex rounded-lg items-center bg-cool-gray-100 hover:shadow-lg overflow-hidden h-12 min-w-0 max-w-3xl focus-within:shadow-lg focus-within:bg-white focus-within:ring-1 focus-within:ring-gray-200"
+              className="flex rounded-lg items-center bg-cool-gray-100 hover:shadow-lg overflow-hidden h-12 min-w-0 max-w-3xl focus-within:shadow-lg focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-400"
               onSubmit={handleSubmit(onSubmitHandler)}
             >
               <button
                 type="submit"
-                className="rounded-full flex-none h-10 w-10 hover:bg-cool-gray-300 text-gray-600 ml-2"
+                className="rounded-full flex-none h-10 w-10 hover:bg-cool-gray-300 text-gray-600 ml-1 focus:outline-none"
               >
-                <SearchIcon className="m-auto h-6 w-6" />
+                <SearchIcon className="m-auto h-5 w-5" />
               </button>
               <input
                 type="text"
                 className="flex-auto bg-transparent min-w-0 focus:outline-none p-2"
-                defaultValue={search ? search : ""}
+                defaultValue={q ? q : ""}
                 ref={register}
                 name="query"
               />
@@ -82,19 +82,19 @@ const Navbar = (props) => {
             }
           >
             <form
-              className="flex rounded-lg items-center bg-cool-gray-100 hover:shadow-lg overflow-hidden h-12 w-full min-w-0 max-w-xl focus-within:shadow-lg focus-within:bg-white focus-within:ring-1 focus-within:ring-gray-200"
+              className="flex rounded-lg items-center bg-cool-gray-100 hover:shadow-lg overflow-hidden h-12 w-full min-w-0 max-w-xl focus-within:shadow-lg focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-400"
               onSubmit={handleSubmit(onSubmitHandler)}
             >
               <button
                 type="submit"
-                className="rounded-full flex-none h-10 w-10 hover:bg-cool-gray-200 text-gray-600 ml-2"
+                className="rounded-full flex-none h-10 w-10 hover:bg-cool-gray-200 text-gray-600 ml-1 focus:outline-none"
               >
-                <SearchIcon className="m-auto h-6 w-6" />
+                <SearchIcon className="m-auto h-5 w-5" />
               </button>
               <input
                 type="text"
                 className="flex-auto bg-transparent min-w-0 focus:outline-none p-2"
-                defaultValue={search ? search : ""}
+                defaultValue={q ? q : ""}
                 ref={register}
                 name="query"
               />
@@ -106,7 +106,7 @@ const Navbar = (props) => {
               className="rounded-full bg-cool-gray-100 hover:bg-cool-gray-200 border h-12 w-12"
               onClick={() => setIsUsingMobileSearch(true)}
             >
-              <SearchIcon className="m-auto h-6 w-6" />
+              <SearchIcon className="m-auto h-5 w-5" />
             </button>
           </div>
 
