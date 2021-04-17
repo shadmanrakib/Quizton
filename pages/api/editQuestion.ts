@@ -302,7 +302,7 @@ export default async function editQuestion(
       parsed.question.kind === "multipleChoice"
     ) {
 
-      const editDate = firebaseAdmin.firestore.FieldValue.serverTimestamp();
+    const editDate = firebaseAdmin.firestore.FieldValue.serverTimestamp();
 
     const sanitizedQuestion = sanitize(parsed.question.question);
 
@@ -318,10 +318,12 @@ export default async function editQuestion(
     const sanitizedAnswer = parsed.question.correctAnswer;
     const sanitizedExplanation = sanitize(parsed.question.explanation);
     console.log(sanitizedExplanation);
+    const userDoc = await fs.collection("users").doc(user.uid).get();
+    const userDocData = userDoc.data();
     const author = {
       uid: user.uid,
-      username: user.username,
-      hasProfilePicture: user.hasProfilePicture,
+      username: userDocData.username,
+      hasProfilePicture: userDocData.hasProfilePicture,
     };
 
     const { index, total, contains } = createIndex(striptags(sanitizedQuestion + " " + choicesString), parsed.question.tags);
