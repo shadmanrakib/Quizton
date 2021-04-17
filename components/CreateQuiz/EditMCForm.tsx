@@ -1,44 +1,18 @@
 import Tags from "./Tags";
 import React, { useEffect, useRef } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { useUser } from "../../hooks/useUser";
 import Editor from "../Editor";
 import Choices from "./Choices";
-import {
-  Question,
-  multipleChoice,
-  shortAnswer,
-  EditRequest,
-  MultipleChoiceRequest,
-} from "../../types/quesdom";
+import { Question, MultipleChoiceRequest } from "../../types/quesdom";
 import { Accordion, AccordionSummary } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandLessOutlined";
 
-async function postData(url = "", data = {}) {
-  // Default options are marked with *
-  const response = await fetch(url, {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    mode: "no-cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "include", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
-}
-
 interface Props {
-  qid: string;
-  question: Question;
+  question: MultipleChoiceRequest;
+  onSubmit: (question: MultipleChoiceRequest) => void;
 }
 
 const CreateMCForm: React.FC<Props> = (props) => {
-  const user = useUser();
   let defaultValues;
   if (props.question.kind === "multipleChoice") {
     defaultValues = {
@@ -55,11 +29,7 @@ const CreateMCForm: React.FC<Props> = (props) => {
       }),
     };
   }
-  if (props.question.kind === "shortAnswer") {
-    defaultValues = {
-      //Todo
-    };
-  }
+  console.log("Defaults", defaultValues);
   const {
     register,
     handleSubmit,
@@ -76,7 +46,9 @@ const CreateMCForm: React.FC<Props> = (props) => {
   });
 
   const onSubmit = (data) => {
-    if (data.tags === undefined) data.tags = [];
+    if (data.tags === undefined) {
+      data.tags = [];
+    }
     let postQuestion: MultipleChoiceRequest = {
       kind: "multipleChoice",
       answerChoices: data.choices.map((value) => {
@@ -85,15 +57,12 @@ const CreateMCForm: React.FC<Props> = (props) => {
       correctAnswer: Number.parseInt(data.answer),
       explanation: data.explanation,
       question: data.question,
-      tags: data.tags ? data.tags.map((value) => {
+      tags: data.tags.map((value) => {
         return value.value;
-      }) : [],
+      }),
     };
-    let postThis: EditRequest = { question: postQuestion, qid: props.qid };
 
-    postData("/api/editQuestion", postThis).then((res) => {
-      console.log(res);
-    });
+    props.onSubmit(postQuestion);
   };
   return (
     <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
