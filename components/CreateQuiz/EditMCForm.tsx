@@ -65,7 +65,10 @@ const CreateMCForm: React.FC<Props> = (props) => {
     props.onSubmit(postQuestion);
   };
   return (
-    <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="flex flex-col max-w-6xl mx-auto"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <label className="mt-6 mb-3" htmlFor="question">
         Question
         <span className={`${errors.question ? "text-red-500" : "hidden"}`}>
