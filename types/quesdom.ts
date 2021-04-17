@@ -8,6 +8,11 @@ export interface EditRequest {
   question: MultipleChoiceRequest;
 }
 
+//Quizzes only support multiple choice for now
+export interface QuizRequest {
+  questions: MultipleChoiceRequest[];
+}
+
 export interface MultipleChoiceRequest {
   kind: "multipleChoice";
   answerChoices: string[];

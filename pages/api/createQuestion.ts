@@ -245,10 +245,8 @@ function createIndex(question: string, tags: string[]) {
       const synonyms: string[] = thesaurus.find(word);
 
       synonyms.forEach((syn) => {
-        const synTokens = syn
-          .replace(/[-]/g, " ")
-          .split(/\s/);
-        synTokens.forEach(synToken => {
+        const synTokens = syn.replace(/[-]/g, " ").split(/\s/);
+        synTokens.forEach((synToken) => {
           if (synToken != "" && !wordsAdded.has(synToken)) {
             const stemmedSyn = stemmer(syn);
             if (!index[stemmedSyn]) {
@@ -315,7 +313,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const sanitizedChoices = inputs.choices.map((value) => {
       const sanitizedChoice = sanitize(value.value);
       if (sanitizedChoice) {
-        choicesString += (" " + sanitizedChoice);
+        choicesString += " " + sanitizedChoice;
       }
       return sanitizedChoice;
     });
@@ -326,7 +324,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       hasProfilePicture: userData.hasProfilePicture,
     };
 
-    const { index, total, contains } = createIndex(striptags(sanitizedQuestion + " " + choicesString), tags);
+    const { index, total, contains } = createIndex(
+      striptags(sanitizedQuestion + " " + choicesString),
+      tags
+    );
 
     const multipleChoiceQuestion: quesdom.multipleChoice = {
       kind: "multipleChoice",

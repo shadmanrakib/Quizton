@@ -271,9 +271,8 @@ function createIndex(question: string, tags: string[]) {
       });
   });
 
-  return { index: index, total: total,contains: contains };
+  return { index: index, total: total, contains: contains };
 }
-
 
 export default async function editQuestion(
   req: NextApiRequest,
@@ -301,32 +300,29 @@ export default async function editQuestion(
       question.kind === "multipleChoice" &&
       parsed.question.kind === "multipleChoice"
     ) {
-
       const editDate = firebaseAdmin.firestore.FieldValue.serverTimestamp();
 
-    const sanitizedQuestion = sanitize(parsed.question.question);
+      const sanitizedQuestion = sanitize(parsed.question.question);
 
-    var choicesString = "";
+      var choicesString = "";
 
-    const sanitizedChoices = parsed.question.answerChoices.map((value) => {
-      const sanitizedChoice = sanitize(value);
-      if (sanitizedChoice) {
-        choicesString += (" " + sanitizedChoice);
-      } 
-      return sanitizedChoice;
-    });
-    const sanitizedAnswer = parsed.question.correctAnswer;
-    const sanitizedExplanation = sanitize(parsed.question.explanation);
-    console.log(sanitizedExplanation);
-    const author = {
-      uid: user.uid,
-      username: user.username,
-      hasProfilePicture: user.hasProfilePicture,
-    };
+      const sanitizedChoices = parsed.question.answerChoices.map((value) => {
+        const sanitizedChoice = sanitize(value);
+        if (sanitizedChoice) {
+          choicesString += " " + sanitizedChoice;
+        }
+        return sanitizedChoice;
+      });
+      const sanitizedAnswer = parsed.question.correctAnswer;
+      const sanitizedExplanation = sanitize(parsed.question.explanation);
+      console.log(sanitizedExplanation);
 
-    const { index, total, contains } = createIndex(striptags(sanitizedQuestion + " " + choicesString), parsed.question.tags);
+      const { index, total, contains } = createIndex(
+        striptags(sanitizedQuestion + " " + choicesString),
+        parsed.question.tags
+      );
 
-      await fs.doc("/questions/" + parsed.qid).update({
+      const question = {
         kind: "multipleChoice",
         answerChoices: sanitizedChoices,
         correctAnswer: parsed.question.correctAnswer,
@@ -337,8 +333,9 @@ export default async function editQuestion(
         totalWords: total,
         explanation: sanitizedExplanation,
         date: editDate,
-        author: author,
-      });
+      };
+
+      await fs.doc("/questions/" + parsed.qid).update(question);
       res.status(200).send({
         success: true,
         message: "Multiple choice question successfully edited",

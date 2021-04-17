@@ -116,68 +116,73 @@ const Question = (props: QuestionComponentProps) => {
         <div className="flex flex-col w-6 mt-3">
           <ArrowUpwardIcon
             onClick={() => onUpvote()}
-            className={`${vote === "upvote" ? "text-green-500" : ""
-              } hover:text-green-500 hover:bg-gray-200`}
+            className={`${
+              vote === "upvote" ? "text-green-500" : ""
+            } hover:text-green-500 hover:bg-gray-200`}
           />
           <p className="text-center">{voteCount}</p>
           <ArrowDownwardIcon
             onClick={() => onDownvote()}
-            className={`${vote === "downvote" ? "text-red-500" : ""
-              } hover:text-red-500 hover:bg-gray-200`}
+            className={`${
+              vote === "downvote" ? "text-red-500" : ""
+            } hover:text-red-500 hover:bg-gray-200`}
           />
         </div>
         <div className="m-3">
-          <p className="text-gray-400 text-sm">DIFFICULTY: <span className="text-red-500">{5}/5</span> | {props.data.author.username}</p>
+          <p className="text-gray-400 text-sm">
+            DIFFICULTY: <span className="text-red-500">{5}/5</span> |{" "}
+            {props.data.author.username}
+          </p>
           <div className="flex items-center">
             Tags:
-              {props.data.tags.map((tag, index) => (
-            <span
-              key={index}
-              className="rounded-full px-3 py-1 m-1 border bg-blue-300"
-            >
-              {tag}
-            </span>
-          ))}
+            {props.data.tags.map((tag, index) => (
+              <span
+                key={index}
+                className="rounded-full px-3 py-1 m-1 border bg-blue-300"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
         </div>
       </div>
       <div className="flex max-w-6xl my-4 p-6 mx-auto bg-white rounded-md border border-gray-300">
         <div className="">
-        <div>
-          <div
-            className="my-6 font-serif md:text-lg"
-            dangerouslySetInnerHTML={{ __html: props.data.question }}
-          ></div>
-        </div>
-        <form onSubmit={handleSubmit(props.onSubmit)}>
-          {props.data.answerChoices.map((choice, index) => (
-            <div key={index}>
-              <input
-                type="radio"
-                id={"choice" + index}
-                name="answer"
-                ref={register}
-                value={index}
-              ></input>
-              <label
-                htmlFor={"choice" + index}
-                dangerouslySetInnerHTML={{ __html: choice }}
-                className="inline-block ml-3 text-lg font-light"
-              ></label>
-            </div>
-          ))}
-          <div className="flex items-center">
-
-            <button className="my-6 px-3 py-1.5 rounded-md bg-blue-500 text-white" type="submit">
-              Check
-            </button>
-            <p className="underline ml-5 cursor-pointer">
-              Show answer
-            </p>
+          <div>
+            <div
+              className="my-6 font-serif md:text-lg"
+              dangerouslySetInnerHTML={{ __html: props.data.question }}
+            ></div>
           </div>
-        </form>
-      </div>
+          <form onSubmit={handleSubmit(props.onSubmit)}>
+            {props.data.answerChoices.map((choice, index) => (
+              <div key={index}>
+                <input
+                  type="radio"
+                  id={"choice" + index}
+                  name="answer"
+                  ref={register}
+                  value={index}
+                ></input>
+                <label
+                  htmlFor={"choice" + index}
+                  dangerouslySetInnerHTML={{ __html: choice }}
+                  className="inline-block ml-3 text-lg font-light"
+                ></label>
+              </div>
+            ))}
+            <div className="flex items-center">
+              <button
+                className="my-6 px-3 py-1.5 rounded-md bg-blue-500 text-white"
+                type="submit"
+              >
+                Check
+              </button>
+              <p className="underline ml-5 cursor-pointer">Show answer</p>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
   );
 };
