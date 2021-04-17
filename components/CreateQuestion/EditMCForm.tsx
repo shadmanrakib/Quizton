@@ -2,7 +2,6 @@ import Tags from "./Tags";
 import React, { useEffect, useRef } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useUser } from "../../hooks/useUser";
-import router from "next/router";
 import Editor from "../Editor";
 import Choices from "./Choices";
 import {
@@ -86,9 +85,9 @@ const CreateMCForm: React.FC<Props> = (props) => {
       correctAnswer: Number.parseInt(data.answer),
       explanation: data.explanation,
       question: data.question,
-      tags: data.tags.map((value) => {
+      tags: data.tags ? data.tags.map((value) => {
         return value.value;
-      }),
+      }) : [],
     };
     let postThis: EditRequest = { question: postQuestion, qid: props.qid };
 
