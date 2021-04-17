@@ -66,10 +66,10 @@ const CreateMCForm: React.FC<Props> = (props) => {
   };
   return (
     <form
-      className="flex flex-col max-w-6xl mx-auto"
+      className="flex flex-col mx-auto"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <label className="mt-6 mb-3" htmlFor="question">
+      <label className="" htmlFor="question">
         Question
         <span className={`${errors.question ? "text-red-500" : "hidden"}`}>
           {" "}

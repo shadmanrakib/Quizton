@@ -13,7 +13,7 @@ const defaultMCChoice: MultipleChoiceRequest = {
 };
 
 function CreateQuiz() {
-  const { control } = useForm({
+  const { control, register } = useForm({
     defaultValues: { questions: [{ ...defaultMCChoice }] },
   });
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
@@ -23,9 +23,14 @@ function CreateQuiz() {
       // keyName: "id", default to "id", you can change the key name
     }
   );
+  
   return (
-    <div className="flex flex-col">
-      <p>Create a Quiz</p>
+    <div className="flex flex-col max-w-3xl mx-auto">
+      <h1 className="text-2xl mt-4">Create a Quiz</h1>
+      <div className="p-4 md:p-8 my-4 bg-white rounded-2xl shadow flex flex-col">
+        <label htmlFor="title">Quiz Title</label>
+        <input className="border-gray-400 border-b-2 focus:border-blue-400 focus:outline-none p-4 bg-gray-100  text-xl w-auto" name="title" ref={register({default: ""})} type="text"/>
+      </div>
       {fields.map((field, index) => {
         return (
           <Controller
@@ -34,7 +39,7 @@ function CreateQuiz() {
             defaultValue={null}
             name={`questions[${index}].value`}
             render={({ onChange, value }) => {
-              return <QuizQuestionCard onEdit={onChange} value={value} />;
+              return (<div className="p-4 md:p-8 my-4 bg-white rounded-2xl shadow hover:shadow-2xl"><QuizQuestionCard onEdit={onChange} value={value} /></div>);
             }}
           ></Controller>
         );
