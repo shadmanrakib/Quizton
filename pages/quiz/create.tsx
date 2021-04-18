@@ -4,7 +4,7 @@ import Navbar from "../../components/Navbar/Navbar";
 
 function create() {
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-200">
       <Navbar/>
       <CreateQuiz></CreateQuiz>
     </div>

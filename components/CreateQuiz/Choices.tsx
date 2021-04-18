@@ -16,7 +16,7 @@ function Choices({ control }: props) {
 
       {choicesField.fields.map((field, index) => (
         <div className="border bg-white" key={field.id}>
-          <div className="flex">
+          <div className="flex flex-row">
             <input
               type="radio"
               name="answer"

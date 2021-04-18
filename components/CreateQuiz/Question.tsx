@@ -4,12 +4,12 @@ import { MultipleChoiceRequest } from "../../types/quesdom";
 
 interface props {
   question: MultipleChoiceRequest;
-  onEdit: () => void;
+  onEdit?: () => void;
 }
 
 function Question(props: props) {
   return (
-    <div className="flex max-w-6xl my-4 p-6 mx-auto bg-white rounded-md border border-gray-300">
+    <div className="flex w-auto my-4 mx-auto">
       <div className="">
         <div>
           <div
@@ -34,19 +34,11 @@ function Question(props: props) {
               <label
                 htmlFor={"choice" + index}
                 dangerouslySetInnerHTML={{ __html: choice }}
-                className="inline-block ml-3 text-lg font-light"
+                className={"inline-block ml-3 text-lg" + (index === props.question.correctAnswer ? " font-bold" : "")}
               ></label>
+              {index === props.question.correctAnswer && <span className="text-green-600"> {" "} (Correct Answer)</span>}
             </div>
           ))}
-          <div className="flex items-center">
-            <button
-              className="my-6 px-3 py-1.5 rounded-md bg-pink-800 text-white"
-              type="submit"
-            >
-              Edit
-            </button>
-            <p className="underline ml-5 cursor-pointer">Show answer</p>
-          </div>
         </form>
       </div>
     </div>

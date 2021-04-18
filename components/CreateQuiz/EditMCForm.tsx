@@ -9,7 +9,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandLessOutlined";
 
 interface Props {
   question: MultipleChoiceRequest;
-  onSubmit: (question: MultipleChoiceRequest) => void;
+  onChange: (question: MultipleChoiceRequest) => void;
 }
 
 const CreateMCForm: React.FC<Props> = (props) => {
@@ -45,7 +45,7 @@ const CreateMCForm: React.FC<Props> = (props) => {
     reValidateMode: "onChange",
   });
 
-  const onSubmit = (data) => {
+  const onChange = (data) => {
     if (data.tags === undefined) {
       data.tags = [];
     }
@@ -62,14 +62,14 @@ const CreateMCForm: React.FC<Props> = (props) => {
       }),
     };
 
-    props.onSubmit(postQuestion);
+    props.onChange(postQuestion);
   };
   return (
     <form
-      className="flex flex-col mx-auto"
-      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col max-w-6xl mx-auto"
+      onChange={handleSubmit(onChange)}
     >
-      <label className="" htmlFor="question">
+      <label className="mt-6 mb-3" htmlFor="question">
         Question
         <span className={`${errors.question ? "text-red-500" : "hidden"}`}>
           {" "}
@@ -118,13 +118,6 @@ const CreateMCForm: React.FC<Props> = (props) => {
       </Accordion>
 
       <Tags control={control}></Tags>
-
-      <button
-        type="submit"
-        className="mt-6 rounded-md bg-blue-500 text-white font-bold p-3 hover:bg-blue-700"
-      >
-        Submit
-      </button>
     </form>
   );
 };

@@ -4,39 +4,25 @@ import EditMCForm from "./EditMCForm";
 import Question from "./Question";
 
 interface props {
-  onEdit: (question) => void;
+  onChange: (question) => void;
   value: MultipleChoiceRequest;
+  isFocused: boolean;
 }
 
 function QuizQuestionCard(props: props) {
-  const [mode, setMode] = useState<"edit" | "view">("edit");
-  const [question, setQuestion] = useState<MultipleChoiceRequest>({
-    answerChoices: ["", "", "", ""],
-    correctAnswer: 0,
-    explanation: "",
-    kind: "multipleChoice",
-    question: "",
-    tags: [],
-  });
   return (
     <div>
-      {mode === "view" && (
-        <Question
-          question={question}
-          onEdit={() => {
-            setMode("edit");
-          }}
-        ></Question>
-      )}
-      {mode === "edit" && (
+      {props.isFocused ?
         <EditMCForm
-          onSubmit={(question: MultipleChoiceRequest) => {
-            setQuestion(question);
-            setMode("view");
-          }}
-          question={question}
-        ></EditMCForm>
-      )}
+        onChange={(question: MultipleChoiceRequest) => {
+          props.onChange(question);
+        }}
+        question={props.value}/>
+      : 
+        <Question
+          question={props.value}
+        ></Question>
+      }
     </div>
   );
 }
