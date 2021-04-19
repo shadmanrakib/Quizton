@@ -1,5 +1,5 @@
 import React from "react";
-import CreateFormV2 from "../../components/CreateQuiz/CreateFormV2";
+import CreateFormV2 from "../../components/CreateQuiz/Form";
 import Navbar from "../../components/Navbar/Navbar";
 
 function create() {

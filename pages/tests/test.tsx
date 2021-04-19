@@ -9,12 +9,10 @@ function test({ hello }) {
     <div>
       <p>Hello</p>
       <input
-        name="firstName"
-        type="text"
-        ref={register({
+        {...register('firstName', {
           validate: (value) => (value ? "True case" : "False case"),
         })}
-      ></input>
+        type="text"></input>
     </div>
   );
 }

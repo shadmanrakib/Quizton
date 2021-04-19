@@ -218,9 +218,7 @@ const Search: React.FC = () => {
       <form className="w-full mb-6" onSubmit={handleSubmit(onSubmit)}>
         <input
           className="border p-2 bg-blueGray-100"
-          name="query"
-          ref={register({ required: true, minLength: 1 })}
-        />
+          {...register('query', { required: true, minLength: 1 })} />
         <button type="submit" className="p-2 text-white bg-light-blue-500">
           Search
         </button>

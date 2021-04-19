@@ -1,80 +1,73 @@
-import { Chip } from "@material-ui/core";
 import React, { useState } from "react";
 import {
-  Control,
-  FieldValues,
+  useFormContext,
   useFieldArray,
   Controller,
 } from "react-hook-form";
+import Chip from "@material-ui/core/Chip";
 
-interface props {
-  control: Control<FieldValues>;
-}
-function Tags({ control }: props) {
-  const tagsField = useFieldArray({
-    control,
-    name: "tags",
-  });
-  const [inputControl, setInputControl] = useState<string>("");
-  return (
-    <React.Fragment>
-      <div>
-        <div className="mt-6">Tags</div>
-        <input
-          tabIndex={0}
-          className=" w-48 h-9 border-2 box-border border-radius rounded pl-2 border-gray"
-          type="text"
-          value={inputControl}
-          onChange={(e) => setInputControl(e.currentTarget.value)}
-          onKeyPress={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              if (e.currentTarget.value === "") return;
-              tagsField.append({ value: inputControl });
-              setInputControl("");
-            }
-          }}
-        ></input>
-        <div
+export default function Tags({ questionIndex }) {
+    const { register, control } = useFormContext(); // retrieve all hook methods
+    const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
+      {
+        control, // control props comes from useForm (optional: if you are using FormContext)
+        name: `questions.${questionIndex}.tags`, // unique name for your Field Array
+        // keyName: "id", default to "id", you can change the key name
+      }
+    );
+
+    const [inputControl, setInputControl] = useState<string>("");
+
+    return (
+    <>
+      <input 
+      type="text" 
+      value={inputControl}
+      onChange={(e) => setInputControl(e.currentTarget.value)}
+      onKeyPress={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          if (e.currentTarget.value === "") return;
+          append({ value: inputControl });
+          setInputControl("");
+        }
+      }}
+      />
+      <button
+        type="button"
           onClick={() => {
             if (inputControl !== "") {
-              tagsField.append({ value: inputControl });
+              append({ value: inputControl });
               setInputControl("");
             }
           }}
           className="bg-blue-300 p-2 ml-3 inline-block select-none rounded-md"
         >
           + Add Tag
-        </div>
-      </div>
-      <div className="inline-flex flex-wrap">
-        {tagsField.fields.map((field, index) => {
-          return (
+      </button>
+      {fields.map((field, index) => {
+        return (
+          <div key={field.id} className="border flex flex-row w-auto">
             <Controller
               key={field.id}
               defaultValue={field.value}
               control={control}
-              name={`tags[${index}].value`}
-              render={(
-                { onChange, onBlur, value, name, ref },
-                { invalid, isTouched, isDirty }
-              ) => {
+              name={`questions.${questionIndex}.tags.${index}.value`}
+              render={({ field: { onChange, onBlur, value, ref } }) => {
                 return (
                   <div className="mx-1 my-1">
                     <Chip
                       key={field.id}
                       label={field.value}
-                      onDelete={() => tagsField.remove(index)}
-                    ></Chip>
+                      onDelete={() => remove(index)}
+                    />
                   </div>
                 );
               }}
             />
-          );
-        })}
-      </div>
-    </React.Fragment>
-  );
-}
-
-export default Tags;
+          </div>
+        );
+      })}
+      </>
+    );
+  }

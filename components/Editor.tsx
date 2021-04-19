@@ -12,10 +12,9 @@ if (process.browser) {
   window.katex = katex;
 }
 const Editor = React.forwardRef((props: any, ref) => {
-  const { onChange, defaultSetValue, ...otherProps } = props;
-  const [value, setValue] = useState(defaultSetValue ? defaultSetValue : "");
-  const onChangeHandler = (val) => {
-    setValue(val);
+  const { onChange, editorValue, ...otherProps } = props;
+
+  const onChangeHandler = (val: string) => {
     if (props.onChange) {
       props.onChange(val);
     }
@@ -27,8 +26,8 @@ const Editor = React.forwardRef((props: any, ref) => {
         formula: true,
         toolbar: ["bold", "underline", "italic", "formula", "code"],
       }}
-      value={value}
-      onChange={onChangeHandler}
+      value={editorValue || ''}
+      onChange={(description, delta, source, editor) => onChangeHandler(description)}
       ref={ref}
       {...otherProps}
     />

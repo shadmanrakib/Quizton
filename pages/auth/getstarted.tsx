@@ -68,18 +68,16 @@ const GetStartedPage: React.FC = () => {
                 <input
                   id="username"
                   type="username"
-                  name="username"
-                  className="text-sm sm:text-base placeholder-gray-600 pl-4 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-light-blue-500"
-                  placeholder="Username"
-                  autoComplete="off"
-                  onChange={() => clearErrors("serverError")}
-                  ref={register({
+                  {...register('username', {
                     required: {
                       value: true,
                       message: "Please choose a username",
                     },
                   })}
-                />
+                  className="text-sm sm:text-base placeholder-gray-600 pl-4 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-light-blue-500"
+                  placeholder="Username"
+                  autoComplete="off"
+                  onChange={() => clearErrors("serverError")} />
               </div>
               {errors.username && (
                 <p className="text-red-500 mt-1">{errors.username.message}</p>

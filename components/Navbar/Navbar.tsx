@@ -47,9 +47,7 @@ const Navbar = (props) => {
                 type="text"
                 className="flex-auto bg-transparent min-w-0 focus:outline-none p-2"
                 defaultValue={q ? q : ""}
-                ref={register}
-                name="query"
-              />
+                {...register('query')} />
             </form>
           </div>
         </div>
@@ -95,9 +93,7 @@ const Navbar = (props) => {
                 type="text"
                 className="flex-auto bg-transparent min-w-0 focus:outline-none p-2"
                 defaultValue={q ? q : ""}
-                ref={register}
-                name="query"
-              />
+                {...register('query')} />
             </form>
           </div>
 

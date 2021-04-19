@@ -67,17 +67,15 @@ const LoginPage: React.FC = () => {
                 <input
                   id="email"
                   type="email"
-                  name="email"
-                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-light-blue-500"
-                  placeholder="Email Address"
-                  autoComplete="off"
-                  ref={register({
+                  {...register('email', {
                     required: {
                       value: true,
                       message: "Please enter your email",
                     },
                   })}
-                />
+                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-light-blue-500"
+                  placeholder="Email Address"
+                  autoComplete="off" />
               </div>
               {errors.email && (
                 <p className="text-red-500 mt-1">{errors.email.message}</p>
@@ -98,17 +96,15 @@ const LoginPage: React.FC = () => {
                 <input
                   id="password"
                   type="password"
-                  name="password"
-                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-light-blue-500"
-                  placeholder="Password"
-                  ref={register({
+                  {...register('password', {
                     required: true,
                     minLength: {
                       value: 6,
                       message: "Password must be at least 6 characters long",
                     },
                   })}
-                />
+                  className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-light-blue-500"
+                  placeholder="Password" />
               </div>
               {errors.password && (
                 <p className="text-red-500 mt-1">{errors.password.message}</p>

@@ -157,13 +157,7 @@ const Question = (props: QuestionComponentProps) => {
           <form onSubmit={handleSubmit(props.onSubmit)}>
             {props.data.answerChoices.map((choice, index) => (
               <div key={index}>
-                <input
-                  type="radio"
-                  id={"choice" + index}
-                  name="answer"
-                  ref={register}
-                  value={index}
-                ></input>
+                <input type="radio" id={"choice" + index} {...register('answer')} value={index}></input>
                 <label
                   htmlFor={"choice" + index}
                   dangerouslySetInnerHTML={{ __html: choice }}
