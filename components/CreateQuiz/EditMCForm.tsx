@@ -7,67 +7,11 @@ import { Question, MultipleChoiceRequest } from "../../types/quesdom";
 import { Accordion, AccordionSummary } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandLessOutlined";
 
-interface Props {
-  question: MultipleChoiceRequest;
-  onChange: (question: MultipleChoiceRequest) => void;
-}
 
-const CreateMCForm: React.FC<Props> = (props) => {
-  let defaultValues;
-  if (props.question.kind === "multipleChoice") {
-    defaultValues = {
-      choices: props.question.answerChoices.map((value) => {
-        //React Hook Form needs default values in the form {value: string}[] since html element's name is "value"
-        return { value: value };
-      }),
-      question: props.question.question,
-      explanation: props.question.explanation,
-      answer: props.question.correctAnswer + "",
-      tags: props.question.tags.map((value) => {
-        //React Hook Form needs default values in the form {value: string}[] since html element's name is "value"
-        return { value: value };
-      }),
-    };
-  }
-  console.log("Defaults", defaultValues);
-  const {
-    register,
-    handleSubmit,
-    watch,
-    errors,
-    control,
-    reset,
-    trigger,
-    setError,
-  } = useForm({
-    defaultValues: defaultValues,
-    shouldFocusError: true,
-    reValidateMode: "onChange",
-  });
-
-  const onChange = (data) => {
-    if (data.tags === undefined) {
-      data.tags = [];
-    }
-    let postQuestion: MultipleChoiceRequest = {
-      kind: "multipleChoice",
-      answerChoices: data.choices.map((value) => {
-        return value.value;
-      }),
-      correctAnswer: Number.parseInt(data.answer),
-      explanation: data.explanation,
-      question: data.question,
-      tags: data.tags.map((value) => {
-        return value.value;
-      }),
-    };
-
-    props.onChange(postQuestion);
-  };
+const CreateMCForm: React.FC = ({control, register, errors, questionIndex, setValue, getValues}) => {
   return (
     <form
-      className="flex flex-col max-w-6xl mx-auto"
-      onChange={handleSubmit(onChange)}
+      className="flex flex-col mx-auto"
     >
       <label className="mt-6 mb-3" htmlFor="question">
         Question

@@ -7,6 +7,7 @@ interface props {
   onChange: (question) => void;
   value: MultipleChoiceRequest;
   isFocused: boolean;
+  
 }
 
 function QuizQuestionCard(props: props) {

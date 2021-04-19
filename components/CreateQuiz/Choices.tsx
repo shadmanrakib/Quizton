@@ -3,11 +3,7 @@ import { Control, Controller, useFieldArray } from "react-hook-form";
 import ClearIcon from "@material-ui/icons/Clear";
 import Editor from "../Editor";
 
-interface props {
-  control: Control;
-}
-
-function Choices({ control }: props) {
+function Choices({ control, register, errors, questionIndex, setValue, getValues}) {
   const choicesField = useFieldArray({ name: "choices", control: control });
   return (
     <div>
@@ -16,18 +12,18 @@ function Choices({ control }: props) {
 
       {choicesField.fields.map((field, index) => (
         <div className="border bg-white" key={field.id}>
-          <div className="flex flex-row">
+          <div className="flex">
             <input
               type="radio"
               name="answer"
               value={index}
               className="my-auto ml-3 mr-1"
-              ref={control.register()}
+              ref={register}
             ></input>
             <div className="flex-grow w-9/12">
               <Controller
                 control={control}
-                name={`choices[${index}].value`}
+                name={`questions[${questionIndex}].value.choices[${index}].value`}
                 defaultValue={field.value}
                 render={({ onChange, onBlur, value }) => (
                   <Editor

@@ -1,12 +1,12 @@
 import React from "react";
-import CreateQuiz from "../../components/CreateQuiz/CreateQuiz";
+import CreateFormV2 from "../../components/CreateQuiz/CreateFormV2";
 import Navbar from "../../components/Navbar/Navbar";
 
 function create() {
   return (
-    <div className="bg-gray-200">
+    <div className="bg-gray-200 min-h-screen">
       <Navbar/>
-      <CreateQuiz></CreateQuiz>
+      <CreateFormV2/>
     </div>
   );
 }

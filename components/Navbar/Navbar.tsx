@@ -25,7 +25,7 @@ const Navbar = (props) => {
   return (
     <nav className="bg-white">
       {isUsingMobileSearch ? (
-        <div className={"border flex flex-row items-center w-full h-16"}>
+        <div className={"flex flex-row items-center w-full h-16"}>
           <button
             className="mr-2 h-10 w-10 flex-none text-sm"
             onClick={() => setIsUsingMobileSearch(false)}

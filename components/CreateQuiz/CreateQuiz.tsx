@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import QuizQuestionCard from "./QuizQuestionCard";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { MultipleChoiceRequest } from "../../types/quesdom";
+import EditMCForm from "./EditMCForm";
 import Question from "./Question";
 
 const defaultMCChoice: MultipleChoiceRequest = {
@@ -14,7 +15,7 @@ const defaultMCChoice: MultipleChoiceRequest = {
 };
 
 function CreateQuiz() {
-  const { control, register } = useForm({
+  const { control, register, getValues, setValue, errors } = useForm({
     defaultValues: { questions: [{ ...defaultMCChoice }] },
   });
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
@@ -27,6 +28,13 @@ function CreateQuiz() {
   
   const [focusedQuestion, setFocusedQuestion] = useState(0);
 
+  useEffect(() => {
+    if (focusedQuestion > fields.length - 1) {
+      console.log(fields.length - 1)
+      setFocusedQuestion(fields.length - 1);
+
+    }
+  }, [fields.length])
   return (
     <div className="flex flex-col max-w-3xl mx-auto">
       <h1 className="text-2xl mt-4">Create a Quiz</h1>
@@ -47,7 +55,20 @@ function CreateQuiz() {
                 className={"p-4 md:p-8 my-4 bg-white rounded-2xl shadow hover:shadow-2xl" + (index === focusedQuestion ? " border-l-8 border-blue-400" : "" )}
                 onClick={() => setFocusedQuestion(index)}
               >
-                <QuizQuestionCard onChange={onChange} value={value} isFocused={index === focusedQuestion} />
+                {index === focusedQuestion ?
+        <EditMCForm
+        control={control}
+        register={register}
+        getValues={getValues} 
+        setValue={setValue}
+        errors={errors}
+        questionIndex={index}
+        question={value}/>
+      : 
+        <Question
+          question={value}
+        ></Question>
+      }
               </div>);
             }}
           ></Controller>
