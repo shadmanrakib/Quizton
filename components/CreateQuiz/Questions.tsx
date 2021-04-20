@@ -27,12 +27,10 @@ export default function Questions({defaultMCChoice}) {
     <div className="">
       {fields.map((field, index) => (
         <div className={`p-8 bg-white my-4 rounded-2xl hover:shadow-2xl ${focusedQuestion === index && "border-l-8 border-blue-200"}`} key={field.id} onClick={() => setFocusedQuestion(index)}>          
-            <div className={`${focusedQuestion === index ? "block" : "hidden"}`}>
+            <div key={`edit${field.id}`} className={`${focusedQuestion === index ? "block" : "hidden"}`}>
               <EditQuestion remove={remove} field={field} index={index} />
             </div>
-            <div className={`${focusedQuestion != index ? "block" : "hidden"}`}>
-              {/* getValues(`questions.${index}.question`) */}
-              {/* getValues(`questions.${index}.answerChoices`) */}
+            <div key={`render${field.id}`} className={`${focusedQuestion != index ? "block" : "hidden"}`}>
               <RenderQuestion question={ getValues(`questions.${index}.question`) } choices={getValues(`questions.${index}.answerChoices`)} answer={getValues(`questions.${index}.correctAnswer`)}/>
             </div>
         </div>

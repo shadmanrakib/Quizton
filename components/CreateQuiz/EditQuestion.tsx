@@ -7,7 +7,7 @@ import { TrashIcon } from "@heroicons/react/outline";
 import Tags from "./Tags"
 import Choices from "./Choices"
 
-export default function EditQuestion({ field, index, remove }) {
+function EditQuestion({ field, index, remove }) {
   const { control } = useFormContext(); // retrieve all hook methods
   return (
     <React.Fragment>
@@ -45,3 +45,5 @@ export default function EditQuestion({ field, index, remove }) {
     </React.Fragment>
   );
 }
+
+export default React.memo(EditQuestion);

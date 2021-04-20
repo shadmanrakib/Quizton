@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import striptags from "striptags";
 
-export default function RenderQuestion({ question, choices, answer }) {
+function RenderQuestion({ question, choices, answer }) {
+
   return (
     <div>
       {/* Ask how to check if question is completed. */}
@@ -41,3 +42,5 @@ export default function RenderQuestion({ question, choices, answer }) {
     </div>
   );
 }
+
+export default React.memo(RenderQuestion);
