@@ -32,7 +32,7 @@ export default function Choices() {
               <div className="flex-auto">
                 <Controller
                   control={control}
-                  name={`answerChoices.${index}.value` as const}
+                  name={`answerChoices.${index}.value` as "answerChoices.${index}.value"}
                   defaultValue={field.value}
                   rules={{ required: true, minLength: 1 }}
                   render={({ field: { onChange, onBlur, value, ref } }) => (

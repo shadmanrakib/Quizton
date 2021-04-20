@@ -58,8 +58,8 @@ async function postData(url = "", data = {}) {
 }
 
 export default function Form() {
-  const methods = useForm<QuizTS>({
-    defaultValues: { title: "", questions: [defaultMCChoice] },
+  const methods = useForm<QuestionTS>({
+    defaultValues: defaultMCChoice,
   });
   const onSubmit = (data) => {
     console.log(data);
