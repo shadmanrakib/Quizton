@@ -56,6 +56,7 @@ const CreateMCForm: React.FC = () => {
       router.push("/");
     });
   };
+  
   return (
     <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
       <label className="mt-6 mb-3" htmlFor="question">

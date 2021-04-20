@@ -18,7 +18,13 @@ const defaultMCChoice = {
 
 export default function Form() {
   const methods = useForm({ defaultValues: defaultMCChoice });
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    console.log(data);
+    postData("/api/createQuestion", data).then((response) => {
+      console.log(response);
+      router.push("/");
+    });
+  };
 
   return (
     <div className="flex flex-col max-w-3xl p-4 mx-auto">
