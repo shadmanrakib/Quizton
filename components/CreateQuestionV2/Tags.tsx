@@ -51,7 +51,7 @@ export default function Tags() {
               key={field.id}
               defaultValue={field.value}
               control={control}
-              name={`tags.${index}.value`}
+              name={`tags.${index}.value` as const}
               render={({ field: { onChange, onBlur, value, ref } }) => {
                 return (
                   <div className="mx-1 my-1">

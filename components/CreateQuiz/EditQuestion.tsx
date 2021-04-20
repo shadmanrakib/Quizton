@@ -13,7 +13,7 @@ function EditQuestion({ field, index, remove }) {
     <React.Fragment>
       <Controller
         control={control}
-        name={`questions.${index}.question`}
+        name={`questions.${index}.question` as const}
         defaultValue={field.question}
         rules={{ required: true, minLength: 1 }}
         render={({ field: { onChange, onBlur, value, ref } }) => (
@@ -30,7 +30,7 @@ function EditQuestion({ field, index, remove }) {
 
         <Controller
           control={control}
-          name={`questions.${index}.explanation`}
+          name={`questions.${index}.explanation` as const}
           defaultValue={field.explanation}
           render={({ field: { onChange, onBlur, value, ref } }) => (
             <Editor onChange={onChange} theme={"snow"} editorValue={value} />
