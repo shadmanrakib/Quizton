@@ -28,7 +28,7 @@ interface QuestionTS {
   question: string;
 }
 
-interface QuizTS {
+type QuizTS = {
   title: string;
   questions: NestedValue<QuestionTS[]>;
 }

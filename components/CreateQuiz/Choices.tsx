@@ -27,12 +27,12 @@ export default function Choices({ questionIndex }) {
                 type="radio"
                 value={index}
                 className="my-auto ml-3 mr-1"
-                {...register(`questions.${questionIndex}.correctAnswer` as const)}
+                {...register(`questions.${questionIndex}.correctAnswer`)}
               />
               <div className="flex-auto">
                 <Controller
                   control={control}
-                  name={`questions.${questionIndex}.answerChoices.${index}.value` as "questions.${questionIndex}.answerChoices.${index}.value"}
+                  name={`questions.${questionIndex}.answerChoices.${index}.value` as "questions.0.answerChoices.0.value"}
                   defaultValue={field.value}
                   rules={{ required: true, minLength: 1 }}
                   render={({ field: { onChange, onBlur, value, ref } }) => (
