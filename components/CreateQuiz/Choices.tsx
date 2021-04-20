@@ -23,7 +23,9 @@ export default function Choices({ questionIndex }) {
               type="radio"
               value={index}
               className="my-auto ml-3 mr-1"
-              {...register(`questions.${questionIndex}.correctAnswer`)}
+              {...register(
+                `questions.${questionIndex}.correctAnswer` as `questions.0.correctAnswer`
+              )}
             />
             <div className="flex-auto">
               <Controller
