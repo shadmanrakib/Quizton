@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, NestedValue  } from "react-hook-form";
 import Questions from "./Questions";
 
 const defaultMCChoice = {
@@ -20,9 +20,9 @@ interface ChoiceTS {
 }
 
 interface QuestionTS {
-  tags: TagTS[];
+  tags: NestedValue<TagTS[]>;
   kind: string;
-  answerChoices: ChoiceTS[];
+  answerChoices: NestedValue<ChoiceTS[]>;
   correctAnswer: string;
   explanation: string;
   question: string;
@@ -30,7 +30,7 @@ interface QuestionTS {
 
 interface QuizTS {
   title: string;
-  questions: QuestionTS[];
+  questions: NestedValue<QuestionTS[]>;
 }
 
 export default function Form() {
