@@ -39,9 +39,15 @@ export default function Questions({ defaultMCChoice }) {
             {/* getValues(`questions.${index}.question`) */}
             {/* getValues(`questions.${index}.answerChoices`) */}
             <RenderQuestion
-              question={getValues(`questions.${index}.question`)}
-              choices={getValues(`questions.${index}.answerChoices`)}
-              answer={getValues(`questions.${index}.correctAnswer`)}
+              question={getValues(
+                `questions.${index}.question` as `questions.0.question`
+              )}
+              choices={getValues(
+                `questions.${index}.answerChoices` as `questions.0.answerChoices`
+              )}
+              answer={getValues(
+                `questions.${index}.correctAnswer` as `questions.0.correctAnswer`
+              )}
             />
           </div>
         </div>
