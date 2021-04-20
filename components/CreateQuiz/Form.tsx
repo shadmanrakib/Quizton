@@ -16,7 +16,7 @@ export default function Form() {
   const onSubmit = (data) => console.log(data);
 
   return (
-    <div className="flex flex-col max-w-3xl mx-auto">
+    <div className="flex flex-col max-w-3xl p-4 mx-auto">
         <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
             <h1 className="text-2xl mt-4">Create a Quiz</h1>
