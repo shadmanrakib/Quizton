@@ -8,7 +8,7 @@ export default function Choices({ questionIndex }) {
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
     {
       control, // control props comes from useForm (optional: if you are using FormContext)
-      name: `questions.${questionIndex}.answerChoices`, // unique name for your Field Array
+      name: `questions.${questionIndex}.answerChoices` as `questions.0.answerChoices`, // unique name for your Field Array
       // keyName: "id", default to "id", you can change the key name
     }
   );
