@@ -20,14 +20,14 @@ export default function Choices() {
       <>
         <div className="mt-6">Choices</div>
         <div className="text-sm">Select the correct answer choice</div>
-        {fields.map((field, index) => {
+        {fields.map((field: {id: string, value: string}, index) => {
           return (
             <div key={field.id} className="border flex flex-row w-auto">
               <input
                 type="radio"
                 value={index}
                 className="my-auto ml-3 mr-1"
-                {...register(`correctAnswer`)}
+                {...register('correctAnswer')}
               />
               <div className="flex-auto">
                 <Controller

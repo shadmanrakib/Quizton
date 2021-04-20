@@ -20,7 +20,7 @@ export default function Choices({ questionIndex }) {
       <>
         <div className="mt-6">Choices</div>
         <div className="text-sm">Select the correct answer choice</div>
-        {fields.map((field, index) => {
+        {fields.map((field: {id: string, value: string}, index) => {
           return (
             <div key={field.id} className="border flex flex-row w-auto">
               <input
@@ -32,7 +32,7 @@ export default function Choices({ questionIndex }) {
               <div className="flex-auto">
                 <Controller
                   control={control}
-                  name={`questions.${questionIndex}.answerChoices.${index}.value` as "questions.0.answerChoices.0.value"}
+                  name={`questions.${questionIndex}.answerChoices.${index}.value` as "questions.${questionIndex}.answerChoices.${index}.value"}
                   defaultValue={field.value}
                   rules={{ required: true, minLength: 1 }}
                   render={({ field: { onChange, onBlur, value, ref } }) => (

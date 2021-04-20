@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import * as quesdom from "../types/quesdom";
 import "katex/dist/katex.min.css";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useFormState } from "react-hook-form";
 import { useState, useRef } from "react";
 import { db, auth } from "../config/firebaseClient";
 import { useUser } from "../hooks/useUser";
@@ -15,7 +15,6 @@ interface QuestionComponentProps {
 }
 
 async function postData(url = "", data = {}) {
-  // Default options are marked with *
   const response = await fetch(url, {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
     mode: "no-cors", // no-cors, *cors, same-origin
@@ -53,7 +52,8 @@ async function getUserVoteKind(
 const Question = (props: QuestionComponentProps) => {
   const user = useUser();
   const [vote, setVote] = useState<null | "upvote" | "downvote" | "none">(null);
-  const { register, handleSubmit, errors, control } = useForm();
+  const { register, handleSubmit, control } = useForm();
+  const { errors } = useFormState({ control });
   const [voteCount, setVoteCount] = useState(
     props.data.upvotes - props.data.downvotes
   );
@@ -157,7 +157,12 @@ const Question = (props: QuestionComponentProps) => {
           <form onSubmit={handleSubmit(props.onSubmit)}>
             {props.data.answerChoices.map((choice, index) => (
               <div key={index}>
-                <input type="radio" id={"choice" + index} {...register('answer')} value={index}></input>
+                <input
+                  type="radio"
+                  id={"choice" + index}
+                  {...register("answer")}
+                  value={index}
+                ></input>
                 <label
                   htmlFor={"choice" + index}
                   dangerouslySetInnerHTML={{ __html: choice }}

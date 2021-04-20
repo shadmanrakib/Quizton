@@ -1,10 +1,11 @@
-import { useForm } from "react-hook-form";
+import { useForm, useFormState } from "react-hook-form";
 import { useRouter } from "next/router";
 import { useUser } from "../../hooks/useUser";
 import nookies from "nookies";
 
 const GetStartedPage: React.FC = () => {
-  const { register, handleSubmit, errors, setError, clearErrors } = useForm();
+  const { register, handleSubmit, setError, clearErrors, control } = useForm();
+  const { errors } = useFormState({ control });
   const user = useUser();
   const router = useRouter();
   if (user) {
@@ -68,7 +69,7 @@ const GetStartedPage: React.FC = () => {
                 <input
                   id="username"
                   type="username"
-                  {...register('username', {
+                  {...register("username", {
                     required: {
                       value: true,
                       message: "Please choose a username",
@@ -77,7 +78,8 @@ const GetStartedPage: React.FC = () => {
                   className="text-sm sm:text-base placeholder-gray-600 pl-4 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-light-blue-500"
                   placeholder="Username"
                   autoComplete="off"
-                  onChange={() => clearErrors("serverError")} />
+                  onChange={() => clearErrors("serverError")}
+                />
               </div>
               {errors.username && (
                 <p className="text-red-500 mt-1">{errors.username.message}</p>

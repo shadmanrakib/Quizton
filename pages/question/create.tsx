@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Link from "next/link";
 
 import CreateMCForm from "../../components/CreateQuestionV2/Form";
-import { MenuProps } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Dropdown from "../../components/CreateQuestionV2/Dropdown";
 import Navbar from "../../components/Navbar/Navbar";

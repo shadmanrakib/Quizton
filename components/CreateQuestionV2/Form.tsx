@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm, FormProvider, Controller } from "react-hook-form";
+import { useForm, FormProvider, Controller, NestedValue } from "react-hook-form";
 import Editor from "../Editor";
 import { Accordion, AccordionSummary } from "@material-ui/core/";
 import ExpandMoreIcon from "@material-ui/icons/ExpandLessOutlined";
@@ -26,18 +26,14 @@ interface ChoiceTS {
 }
 
 interface QuestionTS {
-  tags: TagTS[];
+  tags: NestedValue<TagTS[]>;
   kind: string;
-  answerChoices: ChoiceTS[];
+  answerChoices: NestedValue<ChoiceTS[]>;
   correctAnswer: string;
   explanation: string;
   question: string;
 }
 
-interface QuizTS {
-  title: string;
-  questions: QuestionTS[];
-}
 
 async function postData(url = "", data = {}) {
   // Default options are marked with *

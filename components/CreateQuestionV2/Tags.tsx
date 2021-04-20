@@ -45,7 +45,7 @@ export default function Tags() {
         </button>
       </div>
       <div className="flex flex-row flex-wrap">
-        {fields.map((field, index) => {
+        {fields.map((field: {id: string, value: string}, index) => {
           return (
             <Controller
               key={field.id}

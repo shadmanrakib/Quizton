@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {useFormContext, useFieldArray} from "react-hook-form";
+import { useFormContext, useFieldArray } from "react-hook-form";
 import { PlusIcon } from "@heroicons/react/outline";
 import EditQuestion from "./EditQuestion";
 import RenderQuestion from "./RenderQuestion";
 
-export default function Questions({defaultMCChoice}) {
+export default function Questions({ defaultMCChoice }) {
   const { register, control, getValues } = useFormContext(); // retrieve all hook methods
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
     {
@@ -20,8 +20,7 @@ export default function Questions({defaultMCChoice}) {
     if (focusedQuestion >= fields.length) {
       setFocusedQuestion(fields.length - 1);
     }
-  }, [fields.length])
-
+  }, [fields.length]);
 
   return (
     <div className="">
@@ -43,9 +42,11 @@ export default function Questions({defaultMCChoice}) {
           setFocusedQuestion(fields.length);
         }}
       >
-        <div className="mx-auto"><PlusIcon className="inline w-6 h-6"/><span>Add Question</span></div>
+        <div className="mx-auto">
+          <PlusIcon className="inline w-6 h-6" />
+          <span>Add Question</span>
+        </div>
       </button>
     </div>
   );
 }
-

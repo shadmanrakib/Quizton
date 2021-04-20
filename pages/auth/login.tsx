@@ -1,6 +1,6 @@
 import Link from "next/link";
 import GoogleSignInButton from "../../components/GoogleSignInButton";
-import { useForm } from "react-hook-form";
+import { useForm, useFormState } from "react-hook-form";
 import { auth } from "../../config/firebaseClient";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -14,7 +14,8 @@ interface LoginData {
 }
 
 const LoginPage: React.FC = () => {
-  const { register, handleSubmit, errors } = useForm<LoginData>();
+  const { register, handleSubmit, control } = useForm<LoginData>();
+  const { errors } = useFormState({ control });
   const user = useUser();
   const router = useRouter();
   const [firebaseError, setFirebaseError] = useState<null | string>(null);
@@ -67,7 +68,7 @@ const LoginPage: React.FC = () => {
                 <input
                   id="email"
                   type="email"
-                  {...register('email', {
+                  {...register("email", {
                     required: {
                       value: true,
                       message: "Please enter your email",
@@ -75,7 +76,8 @@ const LoginPage: React.FC = () => {
                   })}
                   className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-light-blue-500"
                   placeholder="Email Address"
-                  autoComplete="off" />
+                  autoComplete="off"
+                />
               </div>
               {errors.email && (
                 <p className="text-red-500 mt-1">{errors.email.message}</p>
@@ -96,7 +98,7 @@ const LoginPage: React.FC = () => {
                 <input
                   id="password"
                   type="password"
-                  {...register('password', {
+                  {...register("password", {
                     required: true,
                     minLength: {
                       value: 6,
@@ -104,7 +106,8 @@ const LoginPage: React.FC = () => {
                     },
                   })}
                   className="text-sm sm:text-base placeholder-gray-600 pl-10 pr-4 rounded-lg border-b-2 bg-blue-gray-200 border-gray-400 w-full py-3 focus:outline-none focus:border-light-blue-500"
-                  placeholder="Password" />
+                  placeholder="Password"
+                />
               </div>
               {errors.password && (
                 <p className="text-red-500 mt-1">{errors.password.message}</p>
