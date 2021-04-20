@@ -30,7 +30,7 @@ function Choices() {
               <div className="flex-grow w-9/12">
                 <Controller
                   control={control}
-                  name={`choices.${index}.value`}
+                  name={`choices.${index}.value` as "choices.0.value"}
                   defaultValue={field.value}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Editor
