@@ -17,6 +17,28 @@ const defaultMCChoice = {
   tags: [],
 };
 
+interface TagTS {
+  value: string;
+}
+
+interface ChoiceTS {
+  value: string;
+}
+
+interface QuestionTS {
+  tags: TagTS[];
+  kind: string;
+  answerChoices: ChoiceTS[];
+  correctAnswer: string;
+  explanation: string;
+  question: string;
+}
+
+interface QuizTS {
+  title: string;
+  questions: QuestionTS[];
+}
+
 async function postData(url = "", data = {}) {
   // Default options are marked with *
   const response = await fetch(url, {
@@ -36,7 +58,9 @@ async function postData(url = "", data = {}) {
 }
 
 export default function Form() {
-  const methods = useForm({ defaultValues: defaultMCChoice });
+  const methods = useForm<QuizTS>({
+    defaultValues: { title: "", questions: [defaultMCChoice] },
+  });
   const onSubmit = (data) => {
     console.log(data);
     postData("/api/createQuestion", data).then((response) => {
@@ -68,7 +92,7 @@ export default function Form() {
 
             <Controller
               control={methods.control}
-              name={'explanation'}
+              name={"explanation"}
               defaultValue={methods.getValues("explanation")}
               render={({ field: { onChange, onBlur, value, ref } }) => (
                 <Editor
