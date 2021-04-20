@@ -1,6 +1,12 @@
 import Tags from "./Tags";
 import React, { useEffect, useRef } from "react";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import {
+  useForm,
+  useFieldArray,
+  Controller,
+  FormProvider,
+  useFormState,
+} from "react-hook-form";
 import { useUser } from "../../hooks/useUser";
 import router from "next/router";
 import Editor from "../Editor";
@@ -29,16 +35,7 @@ async function postData(url = "", data = {}) {
 const CreateMCForm: React.FC = () => {
   const user = useUser();
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    errors,
-    control,
-    reset,
-    trigger,
-    setError,
-  } = useForm({
+  const methods = useForm({
     defaultValues: {
       choices: [{ value: "" }, { value: "" }, { value: "" }, { value: "" }],
       question: null,
@@ -48,7 +45,17 @@ const CreateMCForm: React.FC = () => {
     shouldFocusError: true,
     reValidateMode: "onChange",
   });
-
+  const {
+    register,
+    handleSubmit,
+    watch,
+    getValues,
+    control,
+    reset,
+    trigger,
+    setError,
+  } = methods;
+  const { errors } = useFormState({ control });
   const onSubmit = (data) => {
     console.log(data);
     postData("/api/createQuestion", data).then((response) => {
@@ -70,14 +77,21 @@ const CreateMCForm: React.FC = () => {
         name="question"
         defaultValue={null}
         rules={{ required: true, minLength: 1 }}
-        render={({ onChange, onBlur, value }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <div className={`bg-white ${errors.question ? "bg-red-50" : ""}`}>
-            <Editor onChange={onChange} theme={"snow"} tabIndex={0} />
+            <Editor
+              onChange={onChange}
+              theme={"snow"}
+              tabIndex={0}
+              value={value}
+            />
           </div>
         )}
       />
+      <FormProvider {...methods}>
+        <Choices></Choices>
+      </FormProvider>
 
-      <Choices control={control}></Choices>
       <Accordion className={"mt-3 -mb-3"}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <p>Explanation</p>
@@ -86,8 +100,8 @@ const CreateMCForm: React.FC = () => {
         <Controller
           control={control}
           name="explanation"
-          defaultValue={control.getValues("explanation")}
-          render={({ onChange, onBlur, value }) => (
+          defaultValue={getValues("explanation")}
+          render={({ field: { onChange, onBlur, value } }) => (
             <div
               className={`bg-white ${errors.explanation ? "bg-red-50" : ""}`}
             >
@@ -95,14 +109,15 @@ const CreateMCForm: React.FC = () => {
                 onChange={onChange}
                 theme={"snow"}
                 tabIndex={0}
-                defaultSetValue={value}
+                value={value}
               />
             </div>
           )}
         />
       </Accordion>
-
-      <Tags control={control}></Tags>
+      <FormProvider {...methods}>
+        <Tags></Tags>
+      </FormProvider>
 
       <button
         type="submit"

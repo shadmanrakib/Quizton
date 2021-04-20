@@ -1,6 +1,12 @@
 import Tags from "./Tags";
 import React, { useEffect, useRef } from "react";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import {
+  useForm,
+  useFieldArray,
+  Controller,
+  useFormState,
+  FormProvider,
+} from "react-hook-form";
 import { useUser } from "../../hooks/useUser";
 import Editor from "../Editor";
 import Choices from "./Choices";
@@ -60,20 +66,22 @@ const CreateMCForm: React.FC<Props> = (props) => {
       //Todo
     };
   }
-  const {
-    register,
-    handleSubmit,
-    watch,
-    errors,
-    control,
-    reset,
-    trigger,
-    setError,
-  } = useForm({
+  const methods = useForm({
     defaultValues: defaultValues,
     shouldFocusError: true,
     reValidateMode: "onChange",
   });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    getValues,
+    control,
+    reset,
+    trigger,
+    setError,
+  } = methods;
+  const { errors } = useFormState({ control });
 
   const onSubmit = (data) => {
     if (data.tags === undefined) data.tags = [];
@@ -85,9 +93,11 @@ const CreateMCForm: React.FC<Props> = (props) => {
       correctAnswer: Number.parseInt(data.answer),
       explanation: data.explanation,
       question: data.question,
-      tags: data.tags ? data.tags.map((value) => {
-        return value.value;
-      }) : [],
+      tags: data.tags
+        ? data.tags.map((value) => {
+            return value.value;
+          })
+        : [],
     };
     let postThis: EditRequest = { question: postQuestion, qid: props.qid };
 
@@ -107,20 +117,18 @@ const CreateMCForm: React.FC<Props> = (props) => {
       <Controller
         control={control}
         name="question"
-        defaultValue={control.getValues("question")}
+        defaultValue={getValues("question")}
         rules={{ required: true, minLength: 1 }}
-        render={({ onChange, onBlur, value }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <div className={`bg-white ${errors.question ? "bg-red-50" : ""}`}>
-            <Editor
-              onChange={onChange}
-              theme={"snow"}
-              defaultSetValue={value}
-            />
+            <Editor onChange={onChange} theme={"snow"} value={value} />
           </div>
         )}
       />
+      <FormProvider {...methods}>
+        <Choices></Choices>
+      </FormProvider>
 
-      <Choices control={control}></Choices>
       <Accordion className={"mt-3"}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <p>Explanation</p>
@@ -129,8 +137,8 @@ const CreateMCForm: React.FC<Props> = (props) => {
         <Controller
           control={control}
           name="explanation"
-          defaultValue={control.getValues("explanation")}
-          render={({ onChange, onBlur, value }) => (
+          defaultValue={getValues("explanation")}
+          render={({ field: { onChange, onBlur, value } }) => (
             <div
               className={`bg-white ${errors.explanation ? "bg-red-50" : ""}`}
             >
@@ -138,14 +146,15 @@ const CreateMCForm: React.FC<Props> = (props) => {
                 onChange={onChange}
                 theme={"snow"}
                 tabIndex={0}
-                defaultSetValue={value}
+                value={value}
               />
             </div>
           )}
         />
       </Accordion>
-
-      <Tags control={control}></Tags>
+      <FormProvider {...methods}>
+        <Tags></Tags>
+      </FormProvider>
 
       <button
         type="submit"

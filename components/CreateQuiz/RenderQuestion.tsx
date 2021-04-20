@@ -5,7 +5,7 @@ export default function RenderQuestion({ question, choices, answer }) {
   return (
     <div>
       {/* Ask how to check if question is completed. */}
-      {striptags(question) != "" ? (  
+      {striptags(question) != "" ? (
         <>
           <div
             className="my-6 font-serif md:text-lg"

@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useFormState } from "react-hook-form";
 import { db } from "../config/firebaseClient";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -142,7 +142,11 @@ const stopwords: Set<string> = new Set([
 ]);
 
 function extractKeyTokens(string) {
-  var words = string.toLowerCase().replace(/[.,&'?()\/!]/g, '').replace(/[\-]/g, ' ').split(/\s/);
+  var words = string
+    .toLowerCase()
+    .replace(/[.,&'?()\/!]/g, "")
+    .replace(/[\-]/g, " ")
+    .split(/\s/);
   var freqMap = {};
   var contains = {};
   words.forEach((w) => {
@@ -157,7 +161,8 @@ function extractKeyTokens(string) {
 }
 
 const Search: React.FC = () => {
-  const { register, handleSubmit, errors } = useForm<SearchQuery>();
+  const { register, handleSubmit, control } = useForm<SearchQuery>();
+  const { errors } = useFormState({ control });
   const user = useUser();
   const router = useRouter();
   const [resultArray, setResultsArray] = useState([]);
@@ -174,14 +179,14 @@ const Search: React.FC = () => {
       // const snapshot = await questionsRef
       //   .where("keywords", "array-contains-any", keywords)
       //   .get();
-      
-      keywords.forEach(element => {
+
+      keywords.forEach((element) => {
         // @ts-ignore
-        reference = reference.where(`contains.${element}`,"==",true);
+        reference = reference.where(`contains.${element}`, "==", true);
       });
-     
-      const snapshot = await reference.get(); 
-      
+
+      const snapshot = await reference.get();
+
       if (snapshot.empty) {
         setResultsArray([]);
         setResultsDict({});
@@ -210,7 +215,9 @@ const Search: React.FC = () => {
 
   const onSubmit = (data: SearchQuery) => {
     setLoading(true);
-    search(data.query).then().catch((error) => console.log(error));
+    search(data.query)
+      .then()
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -218,7 +225,8 @@ const Search: React.FC = () => {
       <form className="w-full mb-6" onSubmit={handleSubmit(onSubmit)}>
         <input
           className="border p-2 bg-blueGray-100"
-          {...register('query', { required: true, minLength: 1 })} />
+          {...register("query", { required: true, minLength: 1 })}
+        />
         <button type="submit" className="p-2 text-white bg-light-blue-500">
           Search
         </button>
@@ -247,8 +255,7 @@ const Search: React.FC = () => {
             </Link>
           </div>
         ))
-      ) 
-      : (
+      ) : (
         <></>
       )}
     </div>

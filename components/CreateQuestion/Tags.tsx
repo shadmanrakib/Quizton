@@ -5,12 +5,11 @@ import {
   FieldValues,
   useFieldArray,
   Controller,
+  useFormContext,
 } from "react-hook-form";
 
-interface props {
-  control: Control<FieldValues>;
-}
-function Tags({ control }: props) {
+function Tags() {
+  const { control } = useFormContext();
   const tagsField = useFieldArray({
     control,
     name: "tags",
@@ -48,17 +47,14 @@ function Tags({ control }: props) {
         </div>
       </div>
       <div className="inline-flex flex-wrap">
-        {tagsField.fields.map((field, index) => {
+        {tagsField.fields.map((field: { id: string; value: string }, index) => {
           return (
             <Controller
               key={field.id}
               defaultValue={field.value}
               control={control}
-              name={`tags[${index}].value`}
-              render={(
-                { onChange, onBlur, value, name, ref },
-                { invalid, isTouched, isDirty }
-              ) => {
+              name={`tags.${index}.value`}
+              render={() => {
                 return (
                   <div className="mx-1 my-1">
                     <Chip

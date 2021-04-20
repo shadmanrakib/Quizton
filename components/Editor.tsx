@@ -26,8 +26,10 @@ const Editor = React.forwardRef((props: any, ref) => {
         formula: true,
         toolbar: ["bold", "underline", "italic", "formula", "code"],
       }}
-      value={editorValue || ''}
-      onChange={(description, delta, source, editor) => onChangeHandler(description)}
+      value={editorValue || ""}
+      onChange={(description, delta, source, editor) =>
+        onChangeHandler(description)
+      }
       ref={ref}
       {...otherProps}
     />

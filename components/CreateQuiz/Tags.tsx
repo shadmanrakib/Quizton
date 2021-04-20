@@ -43,7 +43,7 @@ export default function Tags({ questionIndex }) {
         + Add Tag
       </button>
       <div className="flex flex-row w-auto">
-        {fields.map((field, index) => {
+        {fields.map((field: { id: string; value: string }, index) => {
           return (
             <Controller
               key={field.id}
