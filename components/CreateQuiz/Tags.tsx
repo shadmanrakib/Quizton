@@ -7,7 +7,7 @@ export default function Tags({ questionIndex }) {
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
     {
       control, // control props comes from useForm (optional: if you are using FormContext)
-      name: `questions.${questionIndex}.tags`, // unique name for your Field Array
+      name: `questions.${questionIndex}.tags` as "questions.0.tags", // unique name for your Field Array
       // keyName: "id", default to "id", you can change the key name
     }
   );
