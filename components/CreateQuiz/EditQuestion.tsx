@@ -13,7 +13,7 @@ export default function EditQuestion({ field, index, remove }) {
     <React.Fragment>
       <Controller
         control={control}
-        name={`questions.${index}.question`}
+        name={`questions.${index}.question` as `questions.0.question`}
         defaultValue={field.question}
         rules={{ required: true, minLength: 1 }}
         render={({ field: { onChange, onBlur, value, ref } }) => (
@@ -30,7 +30,7 @@ export default function EditQuestion({ field, index, remove }) {
 
         <Controller
           control={control}
-          name={`questions.${index}.explanation`}
+          name={`questions.${index}.explanation` as `questions.0.explanation`}
           defaultValue={field.explanation}
           rules={{ required: true, minLength: 1 }}
           render={({ field: { onChange, onBlur, value, ref } }) => (

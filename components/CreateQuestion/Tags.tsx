@@ -53,7 +53,7 @@ function Tags() {
               key={field.id}
               defaultValue={field.value}
               control={control}
-              name={`tags.${index}.value`}
+              name={`tags.${index}.value` as "tags.0.value"}
               render={() => {
                 return (
                   <div className="mx-1 my-1">

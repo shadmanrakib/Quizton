@@ -28,7 +28,9 @@ export default function Choices({ questionIndex }) {
             <div className="flex-auto">
               <Controller
                 control={control}
-                name={`questions.${questionIndex}.answerChoices.${index}.value`}
+                name={
+                  `questions.${questionIndex}.answerChoices.${index}.value` as "questions.0.answerChoices.0.value"
+                }
                 defaultValue={field.value}
                 rules={{ required: true, minLength: 1 }}
                 render={({ field: { onChange, onBlur, value, ref } }) => (
