@@ -50,13 +50,12 @@ function MyApp({ Component, pageProps }) {
         <meta name="theme-color" content="#ffffff"></meta>
         {/* <!-- Global site tag (gtag.js) - Google Analytics --> */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-1BY1TYDHMF"></script>
-        <script>
-          {window.dataLayer = window.dataLayer || [];
+        <script dangerouslySetInnerHTML={{
+          __html: `window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments)};
             gtag('js', new Date());
-            gtag('config', 'G-1BY1TYDHMF');
-          }
-        </script>
+            gtag('config', 'G-1BY1TYDHMF');`
+        }}></script>
       </Head>
       <UserProvider>
         <Component {...pageProps} />
