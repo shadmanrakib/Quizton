@@ -26,11 +26,11 @@ function RenderQuestion({ question, choices, answer }) {
                   dangerouslySetInnerHTML={{ __html: choice.value }}
                   className={
                     "inline-block ml-3 text-lg" +
-                    (index === answer ? " font-bold" : "")
+                    (index == answer ? "" : " text-gray-500")
                   }
                 ></label>
-                {index === answer && (
-                  <span className="text-green-600"> (Correct Answer)</span>
+                {index == answer && (
+                  <span className="text-green-600"> (Answer)</span>
                 )}
               </div>
             ))}
