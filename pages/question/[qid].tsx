@@ -8,12 +8,13 @@ import firebase from "firebase/app";
 import { SettingsRemoteRounded } from "@material-ui/icons";
 import { useUser } from "../../hooks/useUser";
 import * as quesdom from "../../types/quesdom";
+import Votebar from "../../components/Votebar";
 
 const QuestionPage = (props) => {
   const [correct, setCorrect] = useState<boolean | null>(null);
   const [mode, setMode] = useState<"edit" | "view">("view");
   const [question, setQuestion] = useState<quesdom.multipleChoice>(props.data);
-  console.log("[qid].tsx got question", question);
+
   const user = useUser();
 
   if (user && correct === null) {
@@ -61,7 +62,14 @@ const QuestionPage = (props) => {
           </div>
         )}
       </div>
-
+      <Votebar
+        data={question as quesdom.multipleChoice}
+        onEditButtonClicked={() => {
+          setMode("edit");
+        }}
+        qid={props.qid}
+        mode={mode}
+      ></Votebar>
       {mode === "view" && (
         <Question
           onSubmit={onSubmit}
