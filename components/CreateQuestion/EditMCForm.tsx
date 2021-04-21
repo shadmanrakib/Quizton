@@ -41,14 +41,16 @@ async function postData(url = "", data = {}) {
 interface Props {
   qid: string;
   question: Question;
+  onEdit?: (Question: MultipleChoiceRequest) => void;
 }
 
 const CreateMCForm: React.FC<Props> = (props) => {
   const user = useUser();
+  console.log(props.question);
   let defaultValues;
   if (props.question.kind === "multipleChoice") {
     defaultValues = {
-      choices: props.question.answerChoices.map((value) => {
+      answerChoices: props.question.answerChoices.map((value) => {
         //React Hook Form needs default values in the form {value: string}[] since html element's name is "value"
         return { value: value };
       }),
@@ -61,16 +63,12 @@ const CreateMCForm: React.FC<Props> = (props) => {
       }),
     };
   }
-  if (props.question.kind === "shortAnswer") {
-    defaultValues = {
-      //Todo
-    };
-  }
   const methods = useForm({
     defaultValues: defaultValues,
     shouldFocusError: true,
     reValidateMode: "onChange",
   });
+  console.log(methods.getValues());
   const {
     register,
     handleSubmit,
@@ -87,7 +85,7 @@ const CreateMCForm: React.FC<Props> = (props) => {
     if (data.tags === undefined) data.tags = [];
     let postQuestion: MultipleChoiceRequest = {
       kind: "multipleChoice",
-      answerChoices: data.choices.map((value) => {
+      answerChoices: data.answerChoices.map((value) => {
         return value.value;
       }),
       correctAnswer: Number.parseInt(data.answer),
@@ -100,7 +98,9 @@ const CreateMCForm: React.FC<Props> = (props) => {
         : [],
     };
     let postThis: EditRequest = { question: postQuestion, qid: props.qid };
-
+    if (props.onEdit) {
+      props.onEdit(postQuestion);
+    }
     postData("/api/editQuestion", postThis).then((res) => {
       console.log(res);
     });

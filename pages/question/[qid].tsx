@@ -5,26 +5,30 @@ import Question from "../../components/Question";
 import Navbar from "../../components/Navbar/Navbar";
 import EditMCForm from "../../components/CreateQuestion/EditMCForm";
 import firebase from "firebase/app";
+import { SettingsRemoteRounded } from "@material-ui/icons";
+import { useUser } from "../../hooks/useUser";
+import * as quesdom from "../../types/quesdom";
 
 const QuestionPage = (props) => {
   const [correct, setCorrect] = useState<boolean | null>(null);
+  const [mode, setMode] = useState<"edit" | "view">("view");
+  const [question, setQuestion] = useState<quesdom.Question>(props.data);
+  const user = useUser();
 
-  useEffect(() => {
-    if (auth.currentUser) {
-      const { uid } = auth.currentUser;
-      db.collection("users")
-        .doc(uid)
-        .collection("questionsAnswered")
-        .doc(props.qid)
-        .get()
-        .then((doc) => {
-          const data = doc.data();
-          if (data) {
-            setCorrect(data.isCorrect);
-          }
-        });
-    }
-  }, []);
+  if (user && correct === null) {
+    const { uid } = auth.currentUser;
+    db.collection("users")
+      .doc(uid)
+      .collection("questionsAnswered")
+      .doc(props.qid)
+      .get()
+      .then((doc) => {
+        const data = doc.data();
+        if (data) {
+          setCorrect(data.isCorrect);
+        }
+      });
+  }
 
   const onSubmit = (data) => {
     const isCorrect = data.answer == props.data.correctAnswer;
@@ -56,13 +60,38 @@ const QuestionPage = (props) => {
           </div>
         )}
       </div>
-      {}
-      <Question onSubmit={onSubmit} data={props.data} qid={props.qid} />
 
-      {auth.currentUser && auth.currentUser.uid === props.data.author.uid ? (
-        <EditMCForm question={props.data} qid={props.qid}></EditMCForm>
-      ) : (
-        ""
+      {mode === "view" && (
+        <Question
+          onSubmit={onSubmit}
+          data={question as quesdom.multipleChoice}
+          qid={props.qid}
+          onEditButtonClicked={() => {
+            setMode("edit");
+          }}
+        />
+      )}
+
+      {mode === "edit" && (
+        <div className={"max-w-6xl mx-auto"}>
+          <EditMCForm
+            question={question}
+            qid={props.qid}
+            onEdit={(question) => {
+              let newQuestion: quesdom.Question = { ...props.data };
+              newQuestion.explanation = question.explanation;
+              newQuestion.question = question.question;
+              if (newQuestion.kind === "multipleChoice") {
+                newQuestion.answerChoices = question.answerChoices;
+                newQuestion.tags = question.tags;
+                newQuestion.correctAnswer = question.correctAnswer;
+              }
+              console.log("Made QUESTION", newQuestion);
+              setQuestion(newQuestion);
+              setMode("view");
+            }}
+          ></EditMCForm>
+        </div>
       )}
     </div>
   );

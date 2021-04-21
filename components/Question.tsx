@@ -9,9 +9,10 @@ import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 
 interface QuestionComponentProps {
-  onSubmit?: (any) => any;
+  onSubmit?: (any) => void;
   data: quesdom.multipleChoice;
   qid: string;
+  onEditButtonClicked: () => void;
 }
 
 async function postData(url = "", data = {}) {
@@ -128,25 +129,37 @@ const Question = (props: QuestionComponentProps) => {
             } hover:text-red-500 hover:bg-gray-200`}
           />
         </div>
-        <div className="m-3">
-          <p className="text-gray-400 text-sm">
-            DIFFICULTY: <span className="text-red-500">{5}/5</span> |{" "}
-            {props.data.author.username}
-          </p>
-          <div className="flex items-center">
-            Tags:
-            {props.data.tags.map((tag, index) => (
-              <span
-                key={index}
-                className="rounded-full px-3 py-1 m-1 border bg-blue-300"
-              >
-                {tag}
-              </span>
-            ))}
+        <div className="mt-3 ml-3 mr-3 mb-0 flex flex-col justify-between">
+          <div>
+            <p className="text-gray-400 text-sm">
+              DIFFICULTY: <span className="text-red-500">{5}/5</span> |{" "}
+              {props.data.author.username}
+            </p>
+            <div className="flex items-center">
+              Tags:
+              {props.data.tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="rounded-full px-3 py-1 m-1 border bg-blue-300"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="text-gray-400 text-sm">
+            <p
+              className="hover:underline cursor-pointer"
+              onClick={() => {
+                props.onEditButtonClicked();
+              }}
+            >
+              Edit Your Question
+            </p>
           </div>
         </div>
       </div>
-      <div className="flex max-w-6xl my-4 p-6 mx-auto bg-white rounded-md border border-gray-300">
+      <div className="flex max-w-6xl my-3 p-6 mx-auto bg-white rounded-md border border-gray-300">
         <div className="">
           <div>
             <div
