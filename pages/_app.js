@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }) {
         ></link>
         <meta name="msapplication-TileColor" content="#2d89ef"></meta>
         <meta name="theme-color" content="#ffffff"></meta>
-        <!-- Global site tag (gtag.js) - Google Analytics -->
+        {/* <!-- Global site tag (gtag.js) - Google Analytics --> */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-1BY1TYDHMF"></script>
         <script>
           {window.dataLayer = window.dataLayer || [];
