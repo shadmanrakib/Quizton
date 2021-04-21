@@ -46,7 +46,7 @@ interface Props {
 
 const CreateMCForm: React.FC<Props> = (props) => {
   const user = useUser();
-  console.log(props.question);
+  console.log("Recieved Question", props.question);
   let defaultValues;
   if (props.question.kind === "multipleChoice") {
     defaultValues = {
@@ -56,7 +56,7 @@ const CreateMCForm: React.FC<Props> = (props) => {
       }),
       question: props.question.question,
       explanation: props.question.explanation,
-      answer: props.question.correctAnswer + "",
+      correctAnswer: props.question.correctAnswer + "",
       tags: props.question.tags.map((value) => {
         //React Hook Form needs default values in the form {value: string}[] since html element's name is "value"
         return { value: value };
@@ -88,7 +88,7 @@ const CreateMCForm: React.FC<Props> = (props) => {
       answerChoices: data.answerChoices.map((value) => {
         return value.value;
       }),
-      correctAnswer: Number.parseInt(data.answer),
+      correctAnswer: Number.parseInt(data.correctAnswer),
       explanation: data.explanation,
       question: data.question,
       tags: data.tags

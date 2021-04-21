@@ -147,16 +147,18 @@ const Question = (props: QuestionComponentProps) => {
               ))}
             </div>
           </div>
-          <div className="text-gray-400 text-sm">
-            <p
-              className="hover:underline cursor-pointer"
-              onClick={() => {
-                props.onEditButtonClicked();
-              }}
-            >
-              Edit Your Question
-            </p>
-          </div>
+          {user && user.uid === props.data.author.uid && (
+            <div className="text-gray-400 text-sm">
+              <p
+                className="hover:underline cursor-pointer"
+                onClick={() => {
+                  props.onEditButtonClicked();
+                }}
+              >
+                Edit Your Question
+              </p>
+            </div>
+          )}
         </div>
       </div>
       <div className="flex max-w-6xl my-3 p-6 mx-auto bg-white rounded-md border border-gray-300">

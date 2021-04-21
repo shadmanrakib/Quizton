@@ -12,7 +12,8 @@ import * as quesdom from "../../types/quesdom";
 const QuestionPage = (props) => {
   const [correct, setCorrect] = useState<boolean | null>(null);
   const [mode, setMode] = useState<"edit" | "view">("view");
-  const [question, setQuestion] = useState<quesdom.Question>(props.data);
+  const [question, setQuestion] = useState<quesdom.multipleChoice>(props.data);
+  console.log("[qid].tsx got question", question);
   const user = useUser();
 
   if (user && correct === null) {
@@ -31,7 +32,7 @@ const QuestionPage = (props) => {
   }
 
   const onSubmit = (data) => {
-    const isCorrect = data.answer == props.data.correctAnswer;
+    const isCorrect = data.answer == question.correctAnswer;
     setCorrect(isCorrect);
 
     fetch("/api/answerQuestion", {
@@ -40,7 +41,7 @@ const QuestionPage = (props) => {
       body: JSON.stringify({
         qid: props.qid,
         userAnswer: data.answer,
-        correctAnswer: props.data.answer,
+        correctAnswer: question.correctAnswer,
         isCorrect,
       }),
     });
@@ -78,7 +79,7 @@ const QuestionPage = (props) => {
             question={question}
             qid={props.qid}
             onEdit={(question) => {
-              let newQuestion: quesdom.Question = { ...props.data };
+              let newQuestion: quesdom.multipleChoice = { ...props.data };
               newQuestion.explanation = question.explanation;
               newQuestion.question = question.question;
               if (newQuestion.kind === "multipleChoice") {
