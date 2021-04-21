@@ -5,29 +5,35 @@ import Question from "../../components/Question";
 import Navbar from "../../components/Navbar/Navbar";
 import EditMCForm from "../../components/CreateQuestion/EditMCForm";
 import firebase from "firebase/app";
+import { SettingsRemoteRounded } from "@material-ui/icons";
+import { useUser } from "../../hooks/useUser";
+import * as quesdom from "../../types/quesdom";
+import Votebar from "../../components/Votebar";
 
 const QuestionPage = (props) => {
   const [correct, setCorrect] = useState<boolean | null>(null);
+  const [mode, setMode] = useState<"edit" | "view">("view");
+  const [question, setQuestion] = useState<quesdom.multipleChoice>(props.data);
 
-  useEffect(() => {
-    if (auth.currentUser) {
-      const { uid } = auth.currentUser;
-      db.collection("users")
-        .doc(uid)
-        .collection("questionsAnswered")
-        .doc(props.qid)
-        .get()
-        .then((doc) => {
-          const data = doc.data();
-          if (data) {
-            setCorrect(data.isCorrect);
-          }
-        });
-    }
-  }, []);
+  const user = useUser();
+
+  if (user && correct === null) {
+    const { uid } = auth.currentUser;
+    db.collection("users")
+      .doc(uid)
+      .collection("questionsAnswered")
+      .doc(props.qid)
+      .get()
+      .then((doc) => {
+        const data = doc.data();
+        if (data) {
+          setCorrect(data.isCorrect);
+        }
+      });
+  }
 
   const onSubmit = (data) => {
-    const isCorrect = data.answer == props.data.correctAnswer;
+    const isCorrect = data.answer == question.correctAnswer;
     setCorrect(isCorrect);
 
     fetch("/api/answerQuestion", {
@@ -36,7 +42,7 @@ const QuestionPage = (props) => {
       body: JSON.stringify({
         qid: props.qid,
         userAnswer: data.answer,
-        correctAnswer: props.data.answer,
+        correctAnswer: question.correctAnswer,
         isCorrect,
       }),
     });
@@ -56,13 +62,45 @@ const QuestionPage = (props) => {
           </div>
         )}
       </div>
-      {}
-      <Question onSubmit={onSubmit} data={props.data} qid={props.qid} />
+      <Votebar
+        data={question as quesdom.multipleChoice}
+        onEditButtonClicked={() => {
+          setMode("edit");
+        }}
+        qid={props.qid}
+        mode={mode}
+      ></Votebar>
+      {mode === "view" && (
+        <Question
+          onSubmit={onSubmit}
+          data={question as quesdom.multipleChoice}
+          qid={props.qid}
+          onEditButtonClicked={() => {
+            setMode("edit");
+          }}
+        />
+      )}
 
-      {auth.currentUser && auth.currentUser.uid === props.data.author.uid ? (
-        <EditMCForm question={props.data} qid={props.qid}></EditMCForm>
-      ) : (
-        ""
+      {mode === "edit" && (
+        <div className={"max-w-6xl mx-auto"}>
+          <EditMCForm
+            question={question}
+            qid={props.qid}
+            onEdit={(question) => {
+              let newQuestion: quesdom.multipleChoice = { ...props.data };
+              newQuestion.explanation = question.explanation;
+              newQuestion.question = question.question;
+              if (newQuestion.kind === "multipleChoice") {
+                newQuestion.answerChoices = question.answerChoices;
+                newQuestion.tags = question.tags;
+                newQuestion.correctAnswer = question.correctAnswer;
+              }
+              console.log("Made QUESTION", newQuestion);
+              setQuestion(newQuestion);
+              setMode("view");
+            }}
+          ></EditMCForm>
+        </div>
       )}
     </div>
   );
