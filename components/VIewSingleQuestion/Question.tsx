@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import * as quesdom from "../types/quesdom";
+import * as quesdom from "../../types/quesdom";
 import "katex/dist/katex.min.css";
 import { useForm, useFieldArray, useFormState } from "react-hook-form";
 import { useState, useRef } from "react";
-import { db, auth } from "../config/firebaseClient";
-import { useUser } from "../hooks/useUser";
+import { db, auth } from "../../config/firebaseClient";
+import { useUser } from "../../hooks/useUser";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 

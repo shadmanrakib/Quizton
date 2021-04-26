@@ -1,8 +1,12 @@
 import React, { useMemo } from "react";
 import striptags from "striptags";
+import katex from "katex";
+import "katex/dist/katex.min.css";
+if (process.browser && !window.katex) {
+  window.katex = katex;
+}
 
 function RenderQuestion({ question, choices, answer }) {
-
   return (
     <div>
       {/* Ask how to check if question is completed. */}

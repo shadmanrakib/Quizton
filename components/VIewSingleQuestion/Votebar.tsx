@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import * as quesdom from "../types/quesdom";
-import { auth, db } from "../config/firebaseClient";
-import { useUser } from "../hooks/useUser";
+import * as quesdom from "../../types/quesdom";
+import { auth, db } from "../../config/firebaseClient";
+import { useUser } from "../../hooks/useUser";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 interface QuestionComponentProps {

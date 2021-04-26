@@ -11,6 +11,7 @@ export interface EditRequest {
 //Quizzes only support multiple choice for now
 export interface QuizRequest {
   questions: MultipleChoiceRequest[];
+  title: string;
 }
 
 export interface MultipleChoiceRequest {
@@ -33,6 +34,11 @@ export interface questionMetaData {
   upvotes: number;
   downvotes: number;
   date: any;
+}
+
+export interface EditQuizRequest {
+  quiz: QuizRequest;
+  qid: string;
 }
 
 export interface voteDocument {
@@ -61,5 +67,7 @@ export type Question = shortAnswer | multipleChoice;
 
 export type Quiz = {
   questions: Question[];
-  date: Date;
+  author: authorMetaData;
+  title: string;
+  date: string; //String returned by new Date().toString()
 };

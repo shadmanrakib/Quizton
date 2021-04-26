@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { db, auth } from "../../config/firebaseClient";
 import "katex/dist/katex.min.css";
-import Question from "../../components/Question";
+import Question from "../../components/VIewSingleQuestion/Question";
 import Navbar from "../../components/Navbar/Navbar";
 import EditMCForm from "../../components/CreateQuestion/EditMCForm";
 import firebase from "firebase/app";
 import { SettingsRemoteRounded } from "@material-ui/icons";
 import { useUser } from "../../hooks/useUser";
 import * as quesdom from "../../types/quesdom";
-import Votebar from "../../components/Votebar";
+import Votebar from "../../components/VIewSingleQuestion/Votebar";
 
 const QuestionPage = (props) => {
   const [correct, setCorrect] = useState<boolean | null>(null);
