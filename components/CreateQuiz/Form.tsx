@@ -89,7 +89,9 @@ export default function Form(props: props) {
     <div className="flex flex-col max-w-3xl p-4 mx-auto">
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <h1 className="text-2xl mt-4">Create a Quiz</h1>
+          <h1 className="text-2xl mt-4">
+            {props.editQuizProps ? "Edit Your Quiz" : "Create a Quiz"}
+          </h1>
           <div className="p-4 md:p-8 my-4 bg-white rounded-2xl shadow flex flex-col">
             <label htmlFor="title">Quiz Title</label>
             <input

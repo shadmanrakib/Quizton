@@ -55,14 +55,18 @@ function QuizUI({
             {user && user.uid === quiz.author.uid && (
               <p
                 className="hover: underline text-cool-gray-400 cursor-pointer"
-                onClick={() => setMode("edit")}
+                onClick={() => {
+                  mode === "view" ? setMode("edit") : setMode("view");
+                }}
               >
-                Edit your quiz
+                {mode === "view"
+                  ? "Edit your quiz"
+                  : "Forget about editing! Take me back."}
               </p>
             )}
           </div>
         </div>
-        <Quiz quiz={quiz}></Quiz>
+        {mode === "view" && <Quiz quiz={quiz}></Quiz>}
         {mode === "edit" && (
           <Form
             editQuizProps={{
