@@ -97,3 +97,8 @@ export interface QuestionRecentData {
   question: Question;
   author: authorMetaData;
 }
+
+export interface CustomClaims {
+  username: string;
+  registered: boolean;
+}
