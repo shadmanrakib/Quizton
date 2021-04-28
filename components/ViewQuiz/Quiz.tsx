@@ -13,6 +13,7 @@ interface Inputs {
 
 function Quiz({ quiz }: props) {
   const methods = useForm<Inputs>({
+    //User responses. Example: [1, 2, 0, null, 1, 2]. Null is for no response
     defaultValues: {
       userAnswers: quiz.questions.map(() => null),
     },

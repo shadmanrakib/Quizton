@@ -9,13 +9,13 @@ if (process.browser && !window.katex) {
 }
 
 interface props {
-  question: quesdom.multipleChoice;
+  question: string;
   choices: string[];
-  answer: string; //String that is a non-negative integer. Represents the correct choice
+  answer: number; //Non-negative integer. Represents the correct choice
   index: number; //The question number.
 }
 
-function RenderQuestion({ question, choices, answer, index }) {
+function RenderQuestion({ question, choices, answer, index }: props) {
   const questionIndex = index;
   const { register, control } = useFormContext();
   const { onChange } = register(`userAnswers.${questionIndex}`);
@@ -52,7 +52,7 @@ function RenderQuestion({ question, choices, answer, index }) {
                   ></Controller>
                   <label
                     htmlFor={"choice" + index}
-                    dangerouslySetInnerHTML={{ __html: choice.value }}
+                    dangerouslySetInnerHTML={{ __html: choice }}
                     className={
                       "inline-block ml-3 text-lg" +
                       (index == answer ? "" : " text-gray-500")

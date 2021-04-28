@@ -14,6 +14,11 @@ export interface QuizRequest {
   title: string;
 }
 
+export interface AddRecentRequest {
+  qid: string;
+  kind: "quiz" | "question";
+}
+
 export interface MultipleChoiceRequest {
   kind: "multipleChoice";
   answerChoices: string[];
@@ -71,3 +76,24 @@ export type Quiz = {
   title: string;
   date: string; //String returned by new Date().toString()
 };
+
+export interface RecentThingsBatch {
+  date: number; //Milliseconds since unix epoch
+  dataArray: (QuizRecentData | QuestionRecentData)[]; //Milliseconds since unix epoch
+}
+
+export interface QuizRecentData {
+  date: number;
+  qid: string;
+  kind: "quiz";
+  title: string;
+  author: authorMetaData;
+}
+
+export interface QuestionRecentData {
+  date: number;
+  qid: string;
+  kind: "multipleChoice";
+  question: Question;
+  author: authorMetaData;
+}

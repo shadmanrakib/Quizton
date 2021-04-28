@@ -8,6 +8,11 @@ import {
 } from "../../types/quesdom";
 import Questions from "./Questions";
 
+//Documentation:
+//This form is used for both editing existing quizzes, and creating new quizzes.
+//See onSubmit for what the form submits.
+//The presence of the optional params "editQuizProps", implies that the quiz is used for editing.
+
 const defaultMCChoice = {
   answerChoices: [{ value: "" }, { value: "" }, { value: "" }, { value: "" }],
   correctAnswer: "0",
@@ -57,10 +62,21 @@ export default function Form(props: props) {
   let quizQuestions = [{ ...defaultMCChoice }];
   if (props.editQuizProps) {
     quizTitle = props.editQuizProps.defaultQuizValues.title;
-    quizQuestions = (props.editQuizProps.defaultQuizValues
-      .questions as unknown) as NestedValue<QuestionTS[]>;
+    quizQuestions = (props.editQuizProps.defaultQuizValues.questions.map(
+      (val) => {
+        const copy = { ...val } as any;
+        //Need to change from the database schema to the typescript schema
+        copy.answerChoices = copy.answerChoices.map((val) => {
+          return { value: val };
+        });
+        copy.tags = copy.tags.map((val) => {
+          return { value: val };
+        });
+        return copy;
+      }
+    ) as unknown) as NestedValue<QuestionTS[]>;
   }
-
+  console.log(quizQuestions);
   const methods = useForm<QuizTS>({
     defaultValues: { title: quizTitle, questions: quizQuestions },
   });
@@ -70,6 +86,20 @@ export default function Form(props: props) {
     for (let i = 0; i < data.questions.length; i++) {
       data.questions[i].kind = "multipleChoice";
     }
+    //Change each array from {value: something}][] to string[]
+    for (let i = 0; i < data.questions.length; i++) {
+      data.questions[i].answerChoices = data.questions[i].answerChoices.map(
+        (val) => {
+          return ((val as unknown) as { value: string }).value;
+        }
+      );
+    }
+    for (let i = 0; i < data.questions.length; i++) {
+      data.questions[i].tags = data.questions[i].tags.map((val) => {
+        return ((val as unknown) as { value: string }).value;
+      });
+    }
+
     //Existence of editQuizProps implies this form is being used for editing
     // a prexisitng quiz.
     if (props.editQuizProps) {
@@ -82,6 +112,7 @@ export default function Form(props: props) {
       console.log("TESTING", data);
       return;
     }
+    console.log(data);
     postData("/api/createQuiz", data).then((res) => console.log(res));
   };
 
