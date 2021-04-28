@@ -17,7 +17,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       throw { message: "User document does not exist", success: false };
     const userData = userDocument.data() as quesdom.authorMetaData;
     const authorObject: quesdom.authorMetaData = {
-      hasProfilePicture: false,
       uid: user.uid,
       username: userData.username,
     };
