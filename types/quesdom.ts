@@ -1,7 +1,6 @@
 export interface authorMetaData {
   uid: string;
   username: string;
-  hasProfilePicture: boolean;
 }
 export interface EditRequest {
   qid: string;
@@ -16,7 +15,7 @@ export interface QuizRequest {
 
 export interface AddRecentRequest {
   qid: string;
-  kind: "quiz" | "question";
+  kind: "quiz" | "multipleChoice" | "search";
 }
 
 export interface MultipleChoiceRequest {
@@ -78,24 +77,28 @@ export type Quiz = {
 };
 
 export interface RecentThingsBatch {
-  date: number; //Milliseconds since unix epoch
-  dataArray: (QuizRecentData | QuestionRecentData)[]; //Milliseconds since unix epoch
+  timestamp: number; //Milliseconds since unix epoch
+  dataArray: (QuizRecentData | QuestionRecentData | SearchRecentData)[];
+}
+
+export interface SearchRecentData {
+  timestamp: number;
+  query: string;
+  kind: "search";
 }
 
 export interface QuizRecentData {
-  date: number;
+  timestamp: number;
   qid: string;
   kind: "quiz";
-  title: string;
-  author: authorMetaData;
+  quiz: Quiz;
 }
 
 export interface QuestionRecentData {
-  date: number;
+  timestamp: number;
   qid: string;
   kind: "multipleChoice";
   question: Question;
-  author: authorMetaData;
 }
 
 export interface CustomClaims {

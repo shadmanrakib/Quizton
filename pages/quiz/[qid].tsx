@@ -66,7 +66,7 @@ function QuizUI({
             )}
           </div>
         </div>
-        {mode === "view" && <Quiz quiz={quiz}></Quiz>}
+        {mode === "view" && <Quiz quiz={quiz} qid={qid}></Quiz>}
         {mode === "edit" && (
           <Form
             editQuizProps={{

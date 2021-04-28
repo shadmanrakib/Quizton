@@ -48,7 +48,7 @@ const QuestionPage = (props) => {
     });
     postData("/api/addRecent", {
       qid: props.qid,
-      kind: "question",
+      kind: "multipleChoice",
     }).then((res) => console.log(res));
   };
   return (

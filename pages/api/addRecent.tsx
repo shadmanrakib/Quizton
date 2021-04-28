@@ -3,6 +3,14 @@ import { parseCookies } from "nookies";
 import { firebaseAdmin } from "../../config/firebaseAdmin";
 import * as quesdom from "../../types/quesdom";
 
+//User Doc (qid)
+//  - recentQuizzes (collection)
+//    - chunks less than 1mb each containing 0 or more quizzes
+//  - recentQuestions (collection)
+//    - chunks less than 1mb each containing 0 or more questions
+//  - recentSearches (collection)
+//    - chunsk less than 1mb each containing 0 or more strings
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   //Request and Cookies
   const { qid, kind } = JSON.parse(req.body) as quesdom.AddRecentRequest;
@@ -18,78 +26,169 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const token = await firebaseAdmin
       .auth()
       .verifyIdToken(parsedCookies["token"]);
-    const userRecentCollection = userCollection
-      .doc(token.uid)
-      .collection("recent");
+    const userDoc = fs.doc("/users/" + token.uid);
+    const recentQuizzes = userDoc.collection("recentQuizzes");
+    const recentQuestions = userDoc.collection("recentQuestions");
+    const recentSearches = userDoc.collection("recentSearches");
 
-    //Sort by most recent, and get the first document
-    const mostRecentDocArray = await userRecentCollection
-      .orderBy("date", "desc")
-      .limit(1)
-      .get();
-
-    let objectToAppend: quesdom.QuestionRecentData | quesdom.QuizRecentData;
-    if (kind === "question") {
-      const question = (
-        await questionCollection.doc(qid).get()
-      ).data() as quesdom.Question;
-      const data: quesdom.QuestionRecentData = {
-        author: question.author,
-        date: new Date().getTime(),
+    if (kind === "search") {
+      const element: quesdom.SearchRecentData = {
+        timestamp: new Date().getTime(),
+        kind: "search",
+        query: qid,
+      };
+      const latestQuery = await recentSearches
+        .orderBy("timestamp", "desc")
+        .limit(1)
+        .get();
+      if (latestQuery.empty) {
+        const schema: quesdom.RecentThingsBatch = {
+          timestamp: new Date().getTime(),
+          dataArray: [element],
+        };
+        await recentSearches.add(schema);
+        res.status(200).send({
+          message: "Data successfully added to recent",
+          success: true,
+        });
+      }
+      const latestDocSnap = latestQuery.docs[0];
+      const latestDocData = latestDocSnap.data() as quesdom.RecentThingsBatch;
+      if (
+        roughSizeOfObject(latestDocData) + roughSizeOfObject(element) <
+        800 * 1000
+      ) {
+        //Limits to 800kb
+        await latestDocSnap.ref.update({
+          dataArray: firebaseAdmin.firestore.FieldValue.arrayUnion(element),
+        });
+      } else {
+        //Document too big!
+        const schema: quesdom.RecentThingsBatch = {
+          timestamp: new Date().getTime(),
+          dataArray: [element],
+        };
+        await recentSearches.add(schema);
+      }
+    } else if (kind === "multipleChoice") {
+      const questionData = await questionCollection.doc(qid).get();
+      const element: quesdom.QuestionRecentData = {
+        timestamp: new Date().getTime(),
         kind: "multipleChoice",
         qid: qid,
-        question: question,
+        question: questionData.data() as quesdom.multipleChoice,
       };
-      objectToAppend = data;
-    }
-    if (kind === "quiz") {
-      const quiz = (await quizCollection.doc(qid).get()).data() as quesdom.Quiz;
-      const data: quesdom.QuizRecentData = {
-        author: quiz.author,
-        date: new Date().getTime(),
+      const latestQuery = await recentQuestions
+        .orderBy("timestamp", "desc")
+        .limit(1)
+        .get();
+      if (latestQuery.empty) {
+        const schema: quesdom.RecentThingsBatch = {
+          timestamp: new Date().getTime(),
+          dataArray: [element],
+        };
+        await recentQuestions.add(schema);
+        res.status(200).send({
+          message: "Data successfully added to recent",
+          success: true,
+        });
+      }
+      const latestDocSnap = latestQuery.docs[0];
+      const latestDocData = latestDocSnap.data() as quesdom.RecentThingsBatch;
+      if (
+        roughSizeOfObject(latestDocData) + roughSizeOfObject(element) <
+        800 * 1000
+      ) {
+        //Limits to 800kb
+        await latestDocSnap.ref.update({
+          dataArray: firebaseAdmin.firestore.FieldValue.arrayUnion(element),
+        });
+      } else {
+        //Document too big!
+        const schema: quesdom.RecentThingsBatch = {
+          timestamp: new Date().getTime(),
+          dataArray: [element],
+        };
+        await recentQuestions.add(schema);
+      }
+    } else if (kind === "quiz") {
+      const quizData = await quizCollection.doc(qid).get();
+      const element: quesdom.QuizRecentData = {
+        timestamp: new Date().getTime(),
         kind: "quiz",
         qid: qid,
-        title: quiz.title,
+        quiz: quizData.data() as quesdom.Quiz,
       };
-    }
-    if (kind === undefined) throw { message: "Invalid kind", success: false };
-    if (mostRecentDocArray.empty) {
-      //Since it was empty, that means this is the first recentQuestion being added
-      //Create the document and return early
+      const latestQuery = await recentQuizzes
+        .orderBy("timestamp", "desc")
+        .limit(1)
+        .get();
+      console.log(latestQuery.docs);
+      if (latestQuery.empty) {
+        const schema: quesdom.RecentThingsBatch = {
+          timestamp: new Date().getTime(),
+          dataArray: [element],
+        };
+        await recentQuizzes.add(schema);
+        res.status(200).send({
+          message: "Data successfully added to recent",
+          success: true,
+        });
+        return;
+      }
+      const latestDocSnap = latestQuery.docs[0];
+      const latestDocData = latestDocSnap.data() as quesdom.RecentThingsBatch;
 
-      await userRecentCollection.doc().create({
-        date: new Date().getTime(),
-        dataArray: [objectToAppend],
-      });
-      res.status(200).send({
-        message: "Wrote to recent collection successfully",
-        success: true,
-      });
-      return;
-    }
-
-    const mostRecentDocData = mostRecentDocArray.docs[0].data() as quesdom.RecentThingsBatch;
-    //Limit each document dataArray to 15 elements. Create new document with present time if adding would exceed 500
-    if (mostRecentDocData.dataArray.length < 15) {
-      console.log(mostRecentDocData.dataArray.length);
-      await mostRecentDocArray.docs[0].ref.update({
-        dataArray: firebaseAdmin.firestore.FieldValue.arrayUnion(
-          objectToAppend
-        ),
-      });
+      if (
+        roughSizeOfObject(latestDocData) + roughSizeOfObject(element) <
+        800 * 1000
+      ) {
+        //Limits to 800kb
+        await latestDocSnap.ref.update({
+          dataArray: firebaseAdmin.firestore.FieldValue.arrayUnion(element),
+        });
+      } else {
+        //Document too big!
+        const schema: quesdom.RecentThingsBatch = {
+          timestamp: new Date().getTime(),
+          dataArray: [element],
+        };
+        await recentQuizzes.add(schema);
+      }
     } else {
-      await userRecentCollection.doc().create({
-        date: new Date().getTime(),
-        dataArray: [objectToAppend],
-      });
+      throw { message: "'kind' did not match", success: false };
     }
-
-    res.status(200).send({
-      message: "Wrote to recent collection successfully",
-      success: true,
-    });
+    res
+      .status(200)
+      .send({ message: "Data successfully added to recent", success: true });
+    //Sort by most recent, and get the first document
   } catch (e) {
     console.log(e);
     res.status(200).send(e);
   }
 };
+
+function roughSizeOfObject(object) {
+  var objectList = [];
+  var stack = [object];
+  var bytes = 0;
+
+  while (stack.length) {
+    var value = stack.pop();
+
+    if (typeof value === "boolean") {
+      bytes += 4;
+    } else if (typeof value === "string") {
+      bytes += value.length * 2;
+    } else if (typeof value === "number") {
+      bytes += 8;
+    } else if (typeof value === "object" && objectList.indexOf(value) === -1) {
+      objectList.push(value);
+
+      for (var i in value) {
+        stack.push(value[i]);
+      }
+    }
+  }
+  return bytes;
+}

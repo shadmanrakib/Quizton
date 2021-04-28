@@ -1,17 +1,19 @@
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import * as quesdom from "../../types/quesdom";
+import postData from "../../utility/postData";
 import RenderQuestion from "./RenderQuestion";
 
 interface props {
   quiz: quesdom.Quiz;
+  qid: string;
 }
 
 interface Inputs {
   userAnswers: string[];
 }
 
-function Quiz({ quiz }: props) {
+function Quiz({ quiz, qid }: props) {
   const methods = useForm<Inputs>({
     //User responses. Example: [1, 2, 0, null, 1, 2]. Null is for no response
     defaultValues: {
@@ -20,6 +22,7 @@ function Quiz({ quiz }: props) {
   });
   const onSubmit = (data) => {
     console.log(data);
+    postData("/api/addRecent", { qid: qid, kind: "quiz" });
   };
   return (
     <div>
