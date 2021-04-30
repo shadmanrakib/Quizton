@@ -23,7 +23,7 @@ export default function Questions({ defaultMCChoice }) {
   }, [fields.length]);
 
   return (
-    <div className="">
+    <div className="cursor-pointer">
       {fields.map((field, index) => (
         <div
           className={`p-8 bg-white my-4 rounded-2xl hover:shadow-2xl ${

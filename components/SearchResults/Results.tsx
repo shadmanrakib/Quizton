@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import stemmer from "lancaster-stemmer";
 import "katex/dist/katex.min.css";
 import QuestionCard from "./QuestionCard";
+import postData from "../../utility/postData";
+import { AddRecentRequest } from "../../types/quesdom";
 
 const stopwords: Set<string> = new Set([
   "i",
@@ -150,12 +152,14 @@ function extractKeyTokens(string) {
     if (w.length > 1 && !stopwords.has(w)) {
       const processedWord = stemmer(w);
       contains.add(processedWord);
-      if (!freq[processedWord]) { freq[processedWord] = 0}
+      if (!freq[processedWord]) {
+        freq[processedWord] = 0;
+      }
       freq[processedWord] += 1;
       total++;
     }
   });
-  return {contains: contains, freq: freq, total: total};
+  return { contains: contains, freq: freq, total: total };
 }
 
 const Results = () => {
@@ -168,7 +172,13 @@ const Results = () => {
   const [relevanceSorted, setRelevanceSorted] = useState([]);
   const [resultsDict, setResultsDict] = useState({});
   const [loading, setLoading] = useState(false);
-
+  useEffect(() => {
+    if (q !== "" && q !== undefined && q)
+      postData("/api/addRecent", {
+        qid: q,
+        kind: "search",
+      } as AddRecentRequest);
+  }, [q]);
   useEffect(() => {
     if (q) {
       const { contains, freq, total } = extractKeyTokens(q);
@@ -202,8 +212,10 @@ const Results = () => {
               var score = 0;
               contains.forEach((word) => {
                 if (data.index[word]) {
-                  const weight = Math.log( total / freq[word] + 1);
-                  score += weight * Math.log(Math.abs(data.index[word]) / data.totalWords + 1);
+                  const weight = Math.log(total / freq[word] + 1);
+                  score +=
+                    weight *
+                    Math.log(Math.abs(data.index[word]) / data.totalWords + 1);
                 }
               });
               docsDict[doc.id] = { qid: doc.id, score: score, ...data };
