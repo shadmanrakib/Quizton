@@ -42,13 +42,16 @@ export default function AccountDropdown() {
                     {({ active }) => (
                       <button
                         onClick={() => {
-                          auth.signOut();
+                          router.push({
+                            pathname: "/profile",
+                            query: { uid: user.uid },
+                          });
                         }}
                         className={`${
                           active ? "bg-blue-500 text-white" : "text-gray-900"
                         } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
                       >
-                        <span>Sign Out</span>
+                        <span>Profile</span>
                       </button>
                     )}
                   </Menu.Item>
@@ -56,13 +59,13 @@ export default function AccountDropdown() {
                     {({ active }) => (
                       <button
                         onClick={() => {
-                          router.push("/profile");
+                          auth.signOut();
                         }}
                         className={`${
                           active ? "bg-blue-500 text-white" : "text-gray-900"
                         } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
                       >
-                        <span>Profile</span>
+                        <span>Sign Out</span>
                       </button>
                     )}
                   </Menu.Item>

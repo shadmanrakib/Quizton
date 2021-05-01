@@ -51,6 +51,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       .status(200)
       .send({ message: "Quiz edited successfully", success: true });
   } catch (e) {
+    console.log(e);
     res.status(200).send("Failed");
   }
 };

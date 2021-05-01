@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../../config/firebaseClient";
 import { useUser } from "../../hooks/useUser";
-import { RecentThingsBatch } from "../../types/quesdom";
+import { Quiz, RecentThingsBatch, Question } from "../../types/quesdom";
 import { QueryDocumentSnapshot } from "@firebase/firestore-types";
 import { Menu } from "@headlessui/react";
+import { Disclosure } from "@headlessui/react";
+import RecentQuizCard from "./RecentQuizCard";
 import {
   QuizRecentData,
   QuestionRecentData,
@@ -11,30 +13,61 @@ import {
 } from "../../types/quesdom";
 import Dropdown from "./Dropdown";
 import { useRouter } from "next/router";
+import RecentQuestionCard from "./RecentQuestionCard";
 
-function StudySets() {
+import UserQuizCard from "./UserQuizCard";
+import UserQuestionCard from "./UserQuestionCard";
+
+interface props {
+  uid: string;
+}
+
+function StudySets({ uid }: props) {
+  console.log("Study sets recieved the uid: ", uid);
   const user = useUser();
   const router = useRouter();
+  //This is for recentQuestions, recentSearches, and recentQuizzes
   const [latestDocRef, setLatestDocRef] = useState<
     QueryDocumentSnapshot<RecentThingsBatch>[] | null | "empty"
   >(null);
+  //This is for questions and quizzes (the ones that were made by the current user)
+
+  const [userQuestions, setUserQuestions] = useState<
+    QueryDocumentSnapshot<Question>[] | null | "empty"
+  >(null);
+
+  const [userQuizzes, setUserQuizzes] = useState<
+    QueryDocumentSnapshot<Quiz>[] | null | "empty"
+  >(null);
+
   const [mode, setMode] = useState<
     | "recentQuestions"
     | "recentQuizzes"
     | "recentSearches"
     | "quizzes"
     | "questions"
-  >("recentQuestions");
+  >("recentQuizzes");
+  //This takes care of recentQuestions, recentSearches, and recentQuizzes
+  //To do: Pagination. Right now it just shows past few recents
   useEffect(() => {
     if (!user) return;
+    if (
+      !(
+        mode === "recentQuestions" ||
+        mode === "recentQuizzes" ||
+        mode === "recentSearches"
+      )
+    )
+      return;
     let mounted = true;
     db.collection("users")
-      .doc(user.uid)
+      .doc(uid)
       .collection(mode)
       .orderBy("timestamp", "desc")
       .limit(1)
       .get()
       .then((querySnap) => {
+        if (!mounted) return; //It is an error to setState on an unmounted element
         if (querySnap.empty) {
           setLatestDocRef("empty");
           return;
@@ -42,77 +75,102 @@ function StudySets() {
         setLatestDocRef([
           querySnap.docs[0] as QueryDocumentSnapshot<RecentThingsBatch>,
         ]);
-        console.log(querySnap.docs);
       });
     return () => {
       mounted = false;
     };
   }, [mode, user]);
+  //This takes care of quizzes and questions
+  useEffect(() => {
+    if (!user) return;
+    if (!(mode === "questions" || mode === "quizzes")) return;
+    let mounted = true;
+    db.collection(mode)
+      .where("author.uid", "==", uid)
+      .orderBy("date", "desc")
+      .limit(5)
+      .get()
+      .then((querySnap) => {
+        if (!mounted) return;
+        if (querySnap.empty && mode === "questions") setUserQuestions("empty");
+        if (querySnap.empty && mode === "quizzes") setUserQuestions("empty");
+        if (mode === "questions")
+          setUserQuestions(querySnap.docs as QueryDocumentSnapshot<Question>[]);
+        if (mode === "quizzes")
+          setUserQuizzes(querySnap.docs as QueryDocumentSnapshot<Quiz>[]);
+      });
+  }, [mode, user]);
+
   return (
     <div className="">
       <section className="mb-4 mt-4">
         <Dropdown
+          //The dropdown looks different depending on whether its your profile or someone else's
+
           itemClicked={(str) => {
             setMode(str);
             console.log(str);
           }}
+          uid={uid}
         ></Dropdown>
       </section>
-      {latestDocRef === "empty" && <p>No Recent Activity</p>}
-      {latestDocRef !== "empty" &&
+      {(mode === "recentQuizzes" ||
+        mode === "recentQuestions" ||
+        mode === "recentSearches") &&
+        latestDocRef === "empty" && <p>No Recent Activity</p>}
+      {(mode === "recentQuizzes" ||
+        mode === "recentQuestions" ||
+        mode === "recentSearches") &&
+        latestDocRef !== "empty" &&
         latestDocRef !== null &&
         flattenData(latestDocRef)
           .reverse()
           .slice(0, 5)
           .map((val, index) => {
             if (
+              //User wants to view recent multiple choice questions
               val.kind === "multipleChoice" &&
               val.question.kind === "multipleChoice"
             ) {
-              const correctAnswer = val.question.correctAnswer;
               return (
-                <div
-                  key={index}
-                  className="shadow-sm bg-white p-4 my-4 rounded-lg cursor-pointer hover:shadow-lg"
-                  onClick={() => {
-                    router.push("/question/" + val.qid);
-                  }}
-                >
-                  <section
-                    dangerouslySetInnerHTML={{ __html: val.question.question }}
-                    className="overflow-hidden mb-2"
-                  ></section>
-                  {val.question.answerChoices.map((html, key) => {
-                    return (
-                      <>
-                        <div className="flex flex-row items-center">
-                          <input
-                            readOnly={true}
-                            type="radio"
-                            value={key + ""}
-                            checked={correctAnswer === key}
-                            onClick={(e) => {
-                              e.preventDefault();
-                            }}
-                          ></input>
-                          <section
-                            className={`rounded-md px-1 my-2 overflow-hidden inline-block mx-2 ${
-                              correctAnswer === key ? "bg-green-200" : ""
-                            }`}
-                            dangerouslySetInnerHTML={{ __html: html }}
-                          ></section>
-                        </div>
-                      </>
-                    );
-                  })}
-                </div>
+                <RecentQuestionCard val={val} key={index}></RecentQuestionCard>
               );
             } else if (val.kind === "quiz") {
-              return <div key={index}>{val.quiz.title}</div>;
+              return <RecentQuizCard val={val} key={index}></RecentQuizCard>;
             } else if (val.kind === "search") {
               return <div key={index}>{val.query}</div>;
             }
           })}
+      {mode === "questions" && userQuestions && userQuestions === "empty" && (
+        <p>Empty</p>
+      )}
+      {mode === "questions" &&
+        userQuestions &&
+        userQuestions !== "empty" &&
+        userQuestions.map((val, index) => {
+          return (
+            <UserQuestionCard
+              val={val.data()}
+              qid={val.id}
+              key={index}
+            ></UserQuestionCard>
+          );
+        })}
+      {mode === "quizzes" && userQuizzes && userQuizzes === "empty" && (
+        <p>Empty</p>
+      )}
+      {mode === "quizzes" &&
+        userQuizzes &&
+        userQuizzes !== "empty" &&
+        userQuizzes.map((val, index) => {
+          return (
+            <UserQuizCard
+              val={val.data()}
+              qid={val.id}
+              key={index}
+            ></UserQuizCard>
+          );
+        })}
     </div>
   );
 }

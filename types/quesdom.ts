@@ -13,6 +13,15 @@ export interface QuizRequest {
   title: string;
 }
 
+export interface UserInfoRequest {
+  uid: string;
+}
+export interface UserInfoResponse {
+  photoURL: string;
+  username: string;
+  displayName: string;
+}
+
 export interface AddRecentRequest {
   qid: string;
   kind: "quiz" | "multipleChoice" | "search";

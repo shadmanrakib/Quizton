@@ -23,7 +23,7 @@ export default function Questions({ defaultMCChoice }) {
   }, [fields.length]);
 
   return (
-    <div className="cursor-pointer">
+    <div className="">
       {fields.map((field, index) => (
         <div
           className={`p-8 bg-white my-4 rounded-2xl hover:shadow-2xl ${
@@ -40,7 +40,9 @@ export default function Questions({ defaultMCChoice }) {
           </div>
           <div
             key={`render${field.id}`}
-            className={`${focusedQuestion != index ? "block" : "hidden"}`}
+            className={`${
+              focusedQuestion != index ? "block" : "hidden"
+            } cursor-pointer`}
           >
             <RenderQuestion
               question={getValues(`questions.${index}.question`)}

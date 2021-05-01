@@ -1,6 +1,7 @@
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
+import { useUser } from "../../hooks/useUser";
 
 interface props {
   itemClicked: (
@@ -11,10 +12,14 @@ interface props {
       | "questions"
       | "recentSearches"
   ) => void;
+  uid: string;
 }
 
-export default function Example(props: props) {
-  const [title, setTitle] = useState<string>("Recent Questions");
+function Example(props: props) {
+  const [title, setTitle] = useState<string>("Recent Quizzes");
+  const user = useUser();
+  const strangerProfile = user && user.uid !== props.uid;
+
   return (
     <div className="w-56">
       <Menu as="div" className="relative inline-block text-left">
@@ -80,14 +85,16 @@ export default function Example(props: props) {
                     {({ active }) => (
                       <button
                         onClick={() => {
-                          setTitle("My Quizzes");
+                          setTitle(
+                            strangerProfile ? "Their Quizzes" : "Your Quizzes"
+                          );
                           props.itemClicked("quizzes");
                         }}
                         className={`${
                           active ? "bg-blue-500 text-white" : "text-gray-900"
                         } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
                       >
-                        My Quizzes
+                        {strangerProfile ? "Their Quizzes" : "Your Quizzes"}
                       </button>
                     )}
                   </Menu.Item>
@@ -95,14 +102,18 @@ export default function Example(props: props) {
                     {({ active }) => (
                       <button
                         onClick={() => {
-                          setTitle("My Questions");
+                          setTitle(
+                            strangerProfile
+                              ? "Their Questions"
+                              : "Your Questions"
+                          );
                           props.itemClicked("questions");
                         }}
                         className={`${
                           active ? "bg-blue-500 text-white" : "text-gray-900"
                         } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
                       >
-                        My Questions
+                        {strangerProfile ? "Their Questions" : "Your Questions"}
                       </button>
                     )}
                   </Menu.Item>
@@ -132,3 +143,5 @@ export default function Example(props: props) {
     </div>
   );
 }
+
+export default Example;
