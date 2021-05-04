@@ -4,7 +4,6 @@ import { parseCookies } from "nookies"; //, setCookie, destroyCookie
 import type { NextApiRequest, NextApiResponse } from "next";
 import sanitizeHtml from "sanitize-html";
 import * as quesdom from "../../types/quesdom";
-import striptags from "striptags";
 import Timestamp from "firebase/firestore/";
 
 import { Client } from '@elastic/elasticsearch';
@@ -142,8 +141,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         kind: "multipleChoice",
         votes: 0,
         tags: tags,
-        question: striptags(sanitizedQuestion),
-        date: (new Date()).toISOString()
+        question: sanitizedQuestion,
+        date: (new Date()).toISOString(),
+        author: author
       }
     })
 
