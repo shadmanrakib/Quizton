@@ -40,7 +40,9 @@ export default function Questions({ defaultMCChoice }) {
           </div>
           <div
             key={`render${field.id}`}
-            className={`${focusedQuestion != index ? "block" : "hidden"}`}
+            className={`${
+              focusedQuestion != index ? "block" : "hidden"
+            } cursor-pointer`}
           >
             <RenderQuestion
               question={getValues(`questions.${index}.question`)}

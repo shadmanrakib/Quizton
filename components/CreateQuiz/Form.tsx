@@ -128,6 +128,7 @@ export default function Form(props: props) {
             <input
               className="border-gray-400 border-b-2 focus:border-blue-400 focus:outline-none p-4 bg-gray-100  text-xl w-auto"
               type="text"
+              autoComplete="off"
               {...methods.register("title")}
             />
           </div>

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import "katex/dist/katex.min.css";
 import QuestionCard from "./QuestionCard";
+import postData from "../../utility/postData";
+import { AddRecentRequest } from "../../types/quesdom";
 
 async function postData(url = "", data = {}) {
   // Default options are marked with *
@@ -32,7 +34,13 @@ const Results = () => {
   const { q } = router.query;
   const [searchResult, setSearchResult] = useState<ElasticResults | null>(null);
   const [loading, setLoading] = useState(false);
-
+  useEffect(() => {
+    if (q !== "" && q !== undefined && q)
+      postData("/api/addRecent", {
+        qid: q,
+        kind: "search",
+      } as AddRecentRequest);
+  }, [q]);
   useEffect(() => {
     if (q) {
       postData("/api/search", { query: q, type: "questions" }).then(

@@ -5,7 +5,8 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { SearchIcon, ArrowLeftIcon } from "@heroicons/react/outline";
-import { auth } from '../../config/firebaseClient';
+import { auth } from "../../config/firebaseClient";
+import AccountDropdown from "./AccountDropdown";
 
 const Navbar = (props) => {
   const user = useUser();
@@ -47,7 +48,8 @@ const Navbar = (props) => {
                 type="text"
                 className="flex-auto bg-transparent min-w-0 focus:outline-none p-2"
                 defaultValue={q ? q : ""}
-                {...register('query')} />
+                {...register("query")}
+              />
             </form>
           </div>
         </div>
@@ -93,7 +95,8 @@ const Navbar = (props) => {
                 type="text"
                 className="flex-auto bg-transparent min-w-0 focus:outline-none p-2"
                 defaultValue={q ? q : ""}
-                {...register('query')} />
+                {...register("query")}
+              />
             </form>
           </div>
 
@@ -117,7 +120,9 @@ const Navbar = (props) => {
                 </Link>
               </> // Add profile picture
             ) : (
-              <button className="px-2 py-1" onClick={() => auth.signOut()}>Signout</button>
+              <>
+                <AccountDropdown></AccountDropdown>
+              </>
             )}
           </div>
         </div>

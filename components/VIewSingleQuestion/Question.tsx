@@ -34,6 +34,7 @@ async function postData(url = "", data = {}) {
 
 const Question = (props: QuestionComponentProps) => {
   const user = useUser();
+  console.log(user && user.uid);
   const [vote, setVote] = useState<null | "upvote" | "downvote" | "none">(null);
   const { register, handleSubmit, control } = useForm();
   const { errors } = useFormState({ control });
