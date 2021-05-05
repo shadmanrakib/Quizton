@@ -5,49 +5,38 @@ import QuestionCard from "./QuestionCard";
 import postData from "../../utility/postData";
 import { AddRecentRequest } from "../../types/quesdom";
 
-async function postData(url = "", data = {}) {
-  // Default options are marked with *
-  const response = await fetch(url, {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    mode: "no-cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "include", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
+interface ElasticHits {
+  _id: string;
+  _type: string;
+  _index: string;
+  _score: number;
+  _source: any[];
 }
 
 interface ElasticResults {
   total: { value: number; relation: string };
   max_score: number | null;
-  hits: object[];
+  hits: ElasticHits[];
 }
 
 const Results = () => {
   const router = useRouter();
   const { q } = router.query;
   const [searchResult, setSearchResult] = useState<ElasticResults | null>(null);
+  const [searchTotal, setSearchTotal] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    if (q !== "" && q !== undefined && q)
-      postData("/api/addRecent", {
-        qid: q,
-        kind: "search",
-      } as AddRecentRequest);
-  }, [q]);
-  useEffect(() => {
-    if (q) {
+    if (q !== "" && q !== undefined && q) {
       postData("/api/search", { query: q, type: "questions" }).then(
         (response) => {
           setSearchResult(response.message.results);
         }
       );
+      postData("/api/addRecent", {
+        qid: q,
+        kind: "search",
+      } as AddRecentRequest);
     }
   }, [q]);
 
@@ -59,7 +48,10 @@ const Results = () => {
         <div>{"Loading..."}</div>
       ) : (
         <div className="">
-          {JSON.stringify(searchResult.hits)}
+          {searchResult &&
+            searchResult.hits.map((question) => (
+              <QuestionCard key={question._id} question={question._source} />
+            ))}
         </div>
       )}
     </div>
