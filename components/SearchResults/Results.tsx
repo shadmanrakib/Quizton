@@ -28,7 +28,9 @@ const Results = () => {
 
   useEffect(() => {
     if (q !== "" && q !== undefined && q) {
-      postData("/api/search", { query: q, type: "questions" }).then(
+      const type = (router.query.type) ? router.query.type : "questions";
+
+      postData("/api/search", { query: q, type: type }).then(
         (response) => {
           setSearchResult(response.message.results);
         }
@@ -44,14 +46,17 @@ const Results = () => {
 
   return (
     <div className="p-4 w-auto max-w-6xl">
+      {router.query.type === "quizzes" && <>Quizzes</>}
       {loading ? (
         <div>{"Loading..."}</div>
       ) : (
         <div className="">
-          {searchResult &&
+          {(!router.query.type || router.query.type === "questions") && searchResult &&
             searchResult.hits.map((question) => (
               <QuestionCard key={question._id} question={question._source} />
             ))}
+          {(router.query.type === "quizzes") && searchResult &&
+            <>{JSON.stringify(searchResult)}</>}
         </div>
       )}
     </div>

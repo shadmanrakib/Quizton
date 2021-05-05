@@ -78,11 +78,37 @@ export interface multipleChoice extends questionMetaData {
 //Refer to typescript discriminated unions
 export type Question = shortAnswer | multipleChoice;
 
+export interface QuizMultipleChoice {
+  kind: "multipleChoice",
+  answerChoices: string[],
+  correctAnswer: number,
+  author: authorMetaData,
+  date: any,
+  explanation: string,
+  question: string,
+  tags: string[],
+}
+
+export interface QuizShortAnswer{
+  kind: "shortAnswer";
+  answer: string;
+  author: authorMetaData,
+  date: any,
+  explanation: string,
+  question: string,
+  tags: string[],
+}
+
+export type QuizQuestion = QuizShortAnswer | QuizMultipleChoice;
+
 export type Quiz = {
-  questions: Question[];
+  questions: QuizQuestion[];
   author: authorMetaData;
   title: string;
-  date: string; //String returned by new Date().toString()
+  votes: number,
+  upvotes: number,
+  downvotes: number,
+  date: any; //Firebase timestamp for now
 };
 
 export interface RecentThingsBatch {

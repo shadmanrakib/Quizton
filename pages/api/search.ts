@@ -40,7 +40,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     query: {
                         multi_match: {
                             "query": inputs.query,
-                            "fields": ["allQuestions", "allTags"],
+                            "fields": ["allQuestions", "allTags^3", "title^6"],
                             "type": "most_fields",
                             "fuzziness": "AUTO"
                         }
