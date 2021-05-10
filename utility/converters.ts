@@ -3,7 +3,9 @@ import * as quesdom from "../types/quesdom";
 //Multiple choice question to form-friendly MC question
 //Input: quesdom.multipleChoice
 //Output quesdom.multipleChoice but the tags and answerChoice fields are {value: string}[]
-export function convert_mc(question: quesdom.multipleChoice): any {
+export function convert_mc(
+  question: quesdom.multipleChoice | quesdom.QuizMultipleChoice
+): any {
   let returnVal = { ...question } as any;
   returnVal.tags = returnVal.tags.map((val) => {
     return { value: val };
@@ -26,7 +28,9 @@ export function convert_quiz(quiz: quesdom.Quiz): any {
 }
 
 //Form-friendly question to database-friendly question
-export function convert_formQuestion(mc_question: any): quesdom.multipleChoice {
+export function convert_formQuestion(
+  mc_question: any
+): quesdom.QuizMultipleChoice | quesdom.multipleChoice {
   if (mc_question.kind !== "multipleChoice") throw "Not a MC question!";
   let returnVal = { ...mc_question } as any;
   returnVal.tags = returnVal.tags.map((val) => {

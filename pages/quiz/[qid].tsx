@@ -14,13 +14,13 @@ export const getServerSideProps = async (context) => {
     .firestore()
     .doc("/quizzes/" + qid)
     .get();
-  const {
-    author,
-    date,
-    questions,
-    title,
-  } = quizDocument.data() as quesdom.Quiz;
+  const { author, date, questions, title } =
+    quizDocument.data() as quesdom.Quiz;
+  //To do: quiz upvotes/downvotes
   const quiz: quesdom.Quiz = {
+    downvotes: -999,
+    upvotes: -999,
+    votes: -999,
     author: JSON.parse(JSON.stringify(author)),
     date: JSON.parse(JSON.stringify(date)),
     questions: JSON.parse(JSON.stringify(questions)),
