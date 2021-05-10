@@ -23,7 +23,7 @@ export default function ClassDropdown() {
         </div>
       </Menu.Button>
       <Menu.Items
-        className="absolute bg-blue-100 w-screen right-0 outline-none focus:outline-none"
+        className="absolute bg-blue-100 w-screen right-0 outline-none focus:outline-none z-50"
         style={{ marginTop: "13.8px" }}
       >
         <Menu.Item>
