@@ -14,13 +14,13 @@ export const getServerSideProps = async (context) => {
     .firestore()
     .doc("/quizzes/" + qid)
     .get();
-  const { author, date, questions, title } =
+  const { author, date, questions, title, downvotes, upvotes, votes } =
     quizDocument.data() as quesdom.Quiz;
   //To do: quiz upvotes/downvotes
   const quiz: quesdom.Quiz = {
-    downvotes: -999,
-    upvotes: -999,
-    votes: -999,
+    downvotes: downvotes,
+    upvotes: upvotes,
+    votes: votes,
     author: JSON.parse(JSON.stringify(author)),
     date: JSON.parse(JSON.stringify(date)),
     questions: JSON.parse(JSON.stringify(questions)),
@@ -42,6 +42,7 @@ function QuizUI({
   const [quiz, setQuiz] = useState<quesdom.Quiz>(initialQuizData);
   const [mode, setMode] = useState<"view" | "edit">("view");
   if (process.browser && user) console.log(user.uid, quiz.author.uid);
+  console.log(initialQuizData);
   return (
     <>
       <div className="bg-gray-200 min-h-screen overflow-hidden">
@@ -49,9 +50,7 @@ function QuizUI({
         <div className="flex flex-col max-w-3xl p-4 mx-auto">
           <div className="p-4 md:p-8 bg-white rounded-2xl shadow -mb-4">
             <p>{quiz.title}</p>
-            <p>
-              By: {quiz.author.username} | {quiz.date}
-            </p>
+            <p>By: {quiz.author.username}</p>
             {user && user.uid === quiz.author.uid && (
               <p
                 className="hover: underline text-cool-gray-400 cursor-pointer"
@@ -86,7 +85,7 @@ function QuizUI({
                         answerChoices: newQuestion.answerChoices,
                         author: quiz.author,
                         correctAnswer: newQuestion.correctAnswer,
-                        date: new Date().toString(),
+                        date: new Date().toISOString(),
                         downvotes: 0, //Quiz questions do not have upvotes nor downvotes
                         upvotes: 0,
                         explanation: newQuestion.explanation,

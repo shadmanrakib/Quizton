@@ -8,6 +8,7 @@ import { SearchIcon, ArrowLeftIcon } from "@heroicons/react/outline";
 import { auth } from "../../config/firebaseClient";
 import AccountDropdown from "./AccountDropdown";
 import ClassDropdown from "./ClassDropdown";
+import CreateDropdown from "./CreateDropdown";
 
 const Navbar = (props) => {
   const user = useUser();
@@ -123,23 +124,7 @@ const Navbar = (props) => {
             ) : (
               <div className="flex flex-row select-none ">
                 <div className="self-center mx-3 md:ml-2 hidden md:block">
-                  <div className="flex flex-row mb-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 inline-block mx-1"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                      />
-                    </svg>
-                    <p className="hidden md:block">Create</p>
-                  </div>
+                  <CreateDropdown></CreateDropdown>
                 </div>
                 <div className="self-center  ml-2 mr-4 md:ml-3 md:mr-5">
                   <div className="flex flex-row mb-1">

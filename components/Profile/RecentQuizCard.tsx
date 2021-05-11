@@ -25,49 +25,44 @@ function RecentQuestionCard({ val }: props) {
         {() => {
           return (
             <>
-              <Disclosure.Button as="div">
-                <section
-                  className="p-4"
-                  onClick={() => {
-                    router.push("/quiz/" + val.qid);
-                  }}
-                >
-                  <div
-                    className="flex flex-row items-center justify-between"
-                    onClick={() => setOpen(!open)}
-                  >
-                    <p>
-                      {`${val.quiz.questions.length} Questions`} |{" "}
-                      <span
-                        className=" hover:text-yellow-500 font-normal"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          router.push({
-                            pathname: "/profile",
-                            query: { uid: val.quiz.author.uid },
-                          });
-                        }}
-                      >{`${val.quiz.author.username}`}</span>
-                    </p>
+              <section
+                className="p-4"
+                onClick={() => {
+                  router.push("/quiz/" + val.qid);
+                }}
+              >
+                <div className="flex flex-row items-center justify-between">
+                  <p>
+                    {`${val.quiz.questions.length} Questions`} |{" "}
+                    <span
+                      className=" hover:text-yellow-500 font-normal"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push({
+                          pathname: "/profile",
+                          query: { uid: val.quiz.author.uid },
+                        });
+                      }}
+                    >{`${val.quiz.author.username}`}</span>
+                  </p>
 
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
-                    </svg>
-                  </div>
-                  <p className="font-bold text-xl">{val.quiz.title}</p>
-                </section>
-              </Disclosure.Button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </div>
+                <p className="font-bold text-xl">{val.quiz.title}</p>
+              </section>
             </>
           );
         }}

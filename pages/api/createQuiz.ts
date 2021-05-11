@@ -4,11 +4,11 @@ import { firebaseAdmin } from "../../config/firebaseAdmin";
 import * as quesdom from "../../types/quesdom";
 import sanitizeHtml from "sanitize-html";
 
-import { Client } from '@elastic/elasticsearch';
+import { Client } from "@elastic/elasticsearch";
 
 const client = new Client({
-  node: process.env.ELASTIC_URL
-})
+  node: process.env.ELASTIC_URL,
+});
 
 function sanitize(html: string) {
   const tags = sanitizeHtml.defaults.allowedTags.concat([
@@ -72,18 +72,21 @@ function sanitize(html: string) {
   return sanitizeHtml(html, options);
 }
 
-function elasticSearchIndexPreprocessing(questions: quesdom.QuizQuestion[]): { allTags: string[], allQuestions: string[] } {
+function elasticSearchIndexPreprocessing(questions: quesdom.QuizQuestion[]): {
+  allTags: string[];
+  allQuestions: string[];
+} {
   var allTags = new Set<string>();
 
   questions.forEach((val) => {
     for (const tag in val.tags) {
       allTags.add(tag);
     }
-  })
+  });
 
   const allQuestions: string[] = questions.map((val) => {
     return val.question;
-  })
+  });
 
   return { allTags: Array.from(allTags), allQuestions: allQuestions };
 }
@@ -122,7 +125,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           answerChoices: val.answerChoices,
           author: userData,
           correctAnswer: val.correctAnswer,
-          date: new Date(),
+          date: new Date().toISOString(),
           explanation: sanitize(val.explanation),
           question: sanitize(val.question),
           tags: val.tags,
@@ -133,7 +136,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const { id } = await quizCollection.add(newQuizDocument);
 
-    const { allQuestions, allTags } = elasticSearchIndexPreprocessing(newQuizDocument.questions);
+    const { allQuestions, allTags } = elasticSearchIndexPreprocessing(
+      newQuizDocument.questions
+    );
 
     await client.index({
       id: id,
@@ -144,15 +149,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         title: title,
         allTags: allTags,
         allQuestions: allQuestions,
-        date: (new Date()).toISOString()
-      }
-    })
+        date: new Date().toISOString(),
+      },
+    });
 
     res
       .status(200)
       .send({ message: "Quiz created successfully", success: true });
   } catch (e) {
     console.log(e);
-    res.status(200).send({message: e});
+    res.status(200).send({ message: e });
   }
 };
