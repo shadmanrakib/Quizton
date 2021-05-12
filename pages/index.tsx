@@ -10,7 +10,7 @@ const index = () => {
   const router = useRouter();
   const user = useUser();
   return (
-    <div className="min-h-screen w-full bg-cool-gray-200 h-screen">
+    <div className="min-h-screen w-full bg-cool-gray-200 overflow-hidden">
       <Navbar />
 
       <Recommendations></Recommendations>
