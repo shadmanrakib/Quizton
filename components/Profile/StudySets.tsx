@@ -112,6 +112,7 @@ function StudySets({ uid }: props) {
         document.body.offsetHeight
       ) {
         if (mode === "quizzes") {
+          if (userQuizzes === "empty" || userQuizzes === null) return;
           setPaginating(true);
           db.collection(mode)
             .where("author.uid", "==", uid)
@@ -133,6 +134,7 @@ function StudySets({ uid }: props) {
             .catch(() => setPaginating(false));
         }
         if (mode === "questions") {
+          if (userQuestions === "empty" || userQuestions === null) return;
           setPaginating(true);
           db.collection(mode)
             .where("author.uid", "==", uid)
