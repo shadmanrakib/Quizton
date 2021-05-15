@@ -86,7 +86,7 @@ function StudySets({ uid }: props) {
     db.collection(mode)
       .where("author.uid", "==", uid)
       .orderBy("date", "desc")
-      .limit(5)
+      .limit(10)
       .get()
       .then((querySnap) => {
         if (!mounted) return;
@@ -100,7 +100,6 @@ function StudySets({ uid }: props) {
   }, [mode, user]);
 
   useEffect(() => {
-    console.log("Created with currentlyPaginating", paginating);
     if (!user) return;
     function scrollHandler(e) {
       if (paginating) {
