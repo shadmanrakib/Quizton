@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { db } from "../../config/firebaseClient";
 import { useUser } from "../../hooks/useUser";
 import { Quiz, RecentThingsBatch, Question } from "../../types/quesdom";
@@ -23,30 +23,28 @@ interface props {
 }
 
 function StudySets({ uid }: props) {
-  console.log("Study sets recieved the uid: ", uid);
+  const [paginating, setPaginating] = useState<boolean>(false);
   const user = useUser();
   const router = useRouter();
   //This is for recentQuestions, recentSearches, and recentQuizzes
-  const [latestDocRef, setLatestDocRef] = useState<
-    QueryDocumentSnapshot<RecentThingsBatch>[] | null | "empty"
-  >(null);
+  const [latestDocRef, setLatestDocRef] =
+    useState<QueryDocumentSnapshot<RecentThingsBatch>[] | null | "empty">(null);
   //This is for questions and quizzes (the ones that were made by the current user)
 
-  const [userQuestions, setUserQuestions] = useState<
-    QueryDocumentSnapshot<Question>[] | null | "empty"
-  >(null);
+  const [userQuestions, setUserQuestions] =
+    useState<QueryDocumentSnapshot<Question>[] | null | "empty">(null);
 
-  const [userQuizzes, setUserQuizzes] = useState<
-    QueryDocumentSnapshot<Quiz>[] | null | "empty"
-  >(null);
+  const [userQuizzes, setUserQuizzes] =
+    useState<QueryDocumentSnapshot<Quiz>[] | null | "empty">(null);
 
-  const [mode, setMode] = useState<
-    | "recentQuestions"
-    | "recentQuizzes"
-    | "recentSearches"
-    | "quizzes"
-    | "questions"
-  >("recentQuizzes");
+  const [mode, setMode] =
+    useState<
+      | "recentQuestions"
+      | "recentQuizzes"
+      | "recentSearches"
+      | "quizzes"
+      | "questions"
+    >("recentQuizzes");
   //This takes care of recentQuestions, recentSearches, and recentQuizzes
   //To do: Pagination. Right now it just shows past few recents
   useEffect(() => {
@@ -80,7 +78,7 @@ function StudySets({ uid }: props) {
       mounted = false;
     };
   }, [mode, user]);
-  //This takes care of quizzes and questions
+  //This takes care of user created quizzes and questions
   useEffect(() => {
     if (!user) return;
     if (!(mode === "questions" || mode === "quizzes")) return;
@@ -88,7 +86,7 @@ function StudySets({ uid }: props) {
     db.collection(mode)
       .where("author.uid", "==", uid)
       .orderBy("date", "desc")
-      .limit(5)
+      .limit(10)
       .get()
       .then((querySnap) => {
         if (!mounted) return;
@@ -101,6 +99,69 @@ function StudySets({ uid }: props) {
       });
   }, [mode, user]);
 
+  useEffect(() => {
+    if (!user) return;
+    function scrollHandler(e) {
+      if (paginating) {
+        console.log("Locked");
+        return;
+      }
+      if (
+        window.innerHeight + Math.ceil(window.pageYOffset) >=
+        document.body.offsetHeight
+      ) {
+        if (mode === "quizzes") {
+          if (userQuizzes === "empty" || userQuizzes === null) return;
+          setPaginating(true);
+          db.collection(mode)
+            .where("author.uid", "==", uid)
+            .orderBy("date", "desc")
+            .startAfter(userQuizzes[userQuizzes.length - 1])
+            .limit(5)
+            .get()
+            .then((querySnap) => {
+              setUserQuizzes((currentQuizzes) => {
+                if (currentQuizzes === "empty" || querySnap.empty)
+                  return currentQuizzes;
+                setPaginating(false);
+
+                return currentQuizzes.concat(
+                  querySnap.docs as QueryDocumentSnapshot<Quiz>[]
+                );
+              });
+            })
+            .catch(() => setPaginating(false));
+        }
+        if (mode === "questions") {
+          if (userQuestions === "empty" || userQuestions === null) return;
+          setPaginating(true);
+          db.collection(mode)
+            .where("author.uid", "==", uid)
+            .orderBy("date", "desc")
+            .startAfter(userQuestions[userQuestions.length - 1])
+            .limit(5)
+            .get()
+            .then((querySnap) => {
+              setUserQuizzes((currentQuestions) => {
+                if (currentQuestions === "empty" || querySnap.empty)
+                  return currentQuestions;
+                setPaginating(false);
+
+                return currentQuestions.concat(
+                  querySnap.docs as QueryDocumentSnapshot<Quiz>[]
+                );
+              });
+            })
+            .catch(() => setPaginating(false));
+        }
+      }
+    }
+    window.addEventListener("scroll", scrollHandler);
+    return () => {
+      window.removeEventListener("scroll", scrollHandler);
+    };
+  }, [mode, userQuestions, userQuizzes, paginating, user]);
+
   return (
     <div className="">
       <section className="mb-4 mt-4">
@@ -109,7 +170,6 @@ function StudySets({ uid }: props) {
 
           itemClicked={(str) => {
             setMode(str);
-            console.log(str);
           }}
           uid={uid}
         ></Dropdown>
@@ -125,7 +185,7 @@ function StudySets({ uid }: props) {
         latestDocRef !== null &&
         flattenData(latestDocRef)
           .reverse()
-          .slice(0, 5)
+          .slice(0, 10)
           .map((val, index) => {
             if (
               //User wants to view recent multiple choice questions

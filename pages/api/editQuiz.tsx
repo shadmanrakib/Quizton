@@ -25,10 +25,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     };
     //Quizzes currently are only multiple chocie
 
-    const newQuizDocument: quesdom.Quiz = {
+    const newQuizDocument = {
       date: JSON.stringify(new Date()),
       author: authorObject,
       title: title,
+
       questions: questions.map((val) => {
         const MCQuestion: quesdom.Question = {
           kind: "multipleChoice",

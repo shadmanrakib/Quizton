@@ -7,6 +7,8 @@ import { useForm, Controller } from "react-hook-form";
 import { SearchIcon, ArrowLeftIcon } from "@heroicons/react/outline";
 import AccountDropdown from "./AccountDropdown";
 import SearchTypeDropdown from "./SearchTypeDropdown";
+import ClassDropdown from "./ClassDropdown";
+import CreateDropdown from "./CreateDropdown";
 
 const Navbar = (props) => {
   const user = useUser();
@@ -81,17 +83,17 @@ const Navbar = (props) => {
             className="hidden sm:flex border rounded-lg items-center bg-cool-gray-100 hover:shadow-lg h-10 min-w-0 max-w-2xl focus-within:shadow-lg focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-400"
             onSubmit={handleSubmit(onSubmitHandler)}
           >
-              <Controller
-                control={control}
-                name={"type"}
-                defaultValue={"quiz"}
-                render={({ field: { onChange, onBlur, value, ref } }) => (
-                  <SearchTypeDropdown
-                    selectedType={value}
-                    setSelectedType={onChange}
-                  />
-                )}
-              />
+            <Controller
+              control={control}
+              name={"type"}
+              defaultValue={"quiz"}
+              render={({ field: { onChange, onBlur, value, ref } }) => (
+                <SearchTypeDropdown
+                  selectedType={value}
+                  setSelectedType={onChange}
+                />
+              )}
+            />
 
             <input
               type="text"
@@ -107,11 +109,11 @@ const Navbar = (props) => {
             </button>
           </form>
           <button
-              className="sm:hidden float-right rounded-full bg-cool-gray-100 hover:bg-cool-gray-200 border h-10 w-10"
-              onClick={() => setIsUsingMobileSearch(true)}
-            >
-              <SearchIcon className="m-auto h-5 w-5" />
-            </button>
+            className="sm:hidden float-right rounded-full bg-cool-gray-100 hover:bg-cool-gray-200 border h-10 w-10"
+            onClick={() => setIsUsingMobileSearch(true)}
+          >
+            <SearchIcon className="m-auto h-5 w-5" />
+          </button>
         </div>
       </div>
       <div className="flex items-center mx-4">
@@ -125,9 +127,17 @@ const Navbar = (props) => {
             </Link>
           </>
         ) : (
-          <>
+          <div className="flex flex-row select-none ">
+            <div className="self-center mx-3 md:ml-2 hidden md:block">
+              <CreateDropdown></CreateDropdown>
+            </div>
+            <div className="self-center  ml-2 mr-4 md:ml-3 md:mr-5">
+              <div className="flex flex-row mb-1">
+                <ClassDropdown></ClassDropdown>
+              </div>
+            </div>
             <AccountDropdown></AccountDropdown>
-          </>
+          </div>
         )}
       </div>
     </nav>
