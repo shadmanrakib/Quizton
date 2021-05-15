@@ -1,17 +1,12 @@
 import React from "react";
+import * as quesdom from "../../types/quesdom";
 
 interface props {
   recommended?: boolean;
   image: string;
   title: string;
-  left: React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLParagraphElement>,
-    HTMLParagraphElement
-  >[];
-  right: React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLParagraphElement>,
-    HTMLParagraphElement
-  >[];
+  left: string[];
+  right: string[];
 }
 
 function SplitPlane({ recommended, image, title, left, right }: props) {
@@ -34,7 +29,10 @@ function SplitPlane({ recommended, image, title, left, right }: props) {
         <div className="flex flex-col w-1/2">
           {left.map((value) => {
             return (
-              <div className="text-md mb-1 font-sans font-normal hover:underline hover:text-blue-500">
+              <div
+                key={value}
+                className="text-md mb-1 font-sans font-normal hover:underline hover:text-blue-500"
+              >
                 {value}
               </div>
             );
@@ -43,7 +41,10 @@ function SplitPlane({ recommended, image, title, left, right }: props) {
         <div className="flex flex-col w-1/2">
           {right.map((value) => {
             return (
-              <div className="text-md mb-1 font-sans font-normal hover:underline hover:text-blue-500">
+              <div
+                key={value}
+                className="text-md mb-1 font-sans font-normal hover:underline hover:text-blue-500"
+              >
                 {value}
               </div>
             );

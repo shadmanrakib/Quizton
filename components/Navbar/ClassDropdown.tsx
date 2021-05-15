@@ -54,7 +54,7 @@ export default function ClassDropdown() {
                       <Link href="Geometry">Geometry</Link>
                       <Link href="Algebra-2">Algebra 2</Link>
                       <Link href="Precalculus">Precalculus</Link>
-                      <Link href="ap-calculus-ab">AP Calculus AB</Link>
+                      <Link href="/subject/ap-calculus-ab">AP Calculus AB</Link>
                       <Link href="AP-Calculus-BC">AP Calculus BC</Link>
                       <Link href="AP-Statistics">AP Statistics</Link>
                       <Link href="Multivariable-Calculus">
@@ -207,7 +207,9 @@ export default function ClassDropdown() {
                         <Link href="Geometry">Geometry</Link>
                         <Link href="Algebra 2">Algebra 2</Link>
                         <Link href="Precalculus">Precalculus</Link>
-                        <Link href="ap-calculus-ab">AP Calculus AB</Link>
+                        <Link href="/subject/ap-calculus-ab">
+                          AP Calculus AB
+                        </Link>
                         <Link href="AP Calculus BC">AP Calculus BC</Link>
                         <Link href="AP Statistics">AP Statistics</Link>
                         <Link href="Multivariable Calculus">
