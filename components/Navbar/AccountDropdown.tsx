@@ -1,6 +1,5 @@
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useRef, useState } from "react";
-import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useUser } from "../../hooks/useUser";
 import { auth } from "../../config/firebaseClient";
 import { useRouter } from "next/router";
@@ -9,11 +8,11 @@ export default function AccountDropdown() {
   const user = useUser();
   const router = useRouter();
   return (
-    <div className="">
+    <div className="w-10 h-10">
       <Menu as="div" className="relative inline-block text-right">
         {({ open }) => (
           <>
-            <div className="w-12 h-12">
+            <div className="w-9 h-9">
               <Menu.Button as={Fragment}>
                 <img
                   src={user ? user.photoURL : "/public/defaultProfile"}

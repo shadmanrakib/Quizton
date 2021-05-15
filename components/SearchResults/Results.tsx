@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import "katex/dist/katex.min.css";
 import QuestionCard from "./QuestionCard";
+import QuizCard from "./QuizCard";
 import postData from "../../utility/postData";
 import { AddRecentRequest } from "../../types/quesdom";
 
@@ -28,13 +29,11 @@ const Results = () => {
 
   useEffect(() => {
     if (q !== "" && q !== undefined && q) {
-      const type = (router.query.type) ? router.query.type : "questions";
+      const type = router.query.type ? router.query.type : "questions";
 
-      postData("/api/search", { query: q, type: type }).then(
-        (response) => {
-          setSearchResult(response.message.results);
-        }
-      );
+      postData("/api/search", { query: q, type: type }).then((response) => {
+        setSearchResult(response.message.results);
+      });
       postData("/api/addRecent", {
         qid: q,
         kind: "search",
@@ -46,17 +45,20 @@ const Results = () => {
 
   return (
     <div className="p-4 w-auto max-w-6xl">
-      {router.query.type === "quizzes" && <>Quizzes</>}
       {loading ? (
         <div>{"Loading..."}</div>
       ) : (
         <div className="">
-          {(!router.query.type || router.query.type === "questions") && searchResult &&
+          {(!router.query.type || router.query.type === "questions") &&
+            searchResult &&
             searchResult.hits.map((question) => (
               <QuestionCard key={question._id} question={question._source} />
             ))}
-          {(router.query.type === "quizzes") && searchResult &&
-            <>{JSON.stringify(searchResult)}</>}
+          {router.query.type === "quizzes" &&
+            searchResult &&
+            searchResult.hits.map((quiz) => (
+              <QuizCard key={quiz._id} id={quiz._id} quiz={quiz._source} />
+            ))}
         </div>
       )}
     </div>

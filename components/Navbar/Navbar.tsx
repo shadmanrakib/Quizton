@@ -3,15 +3,17 @@ import Image from "next/image";
 import { useUser } from "../../hooks/useUser";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { SearchIcon, ArrowLeftIcon } from "@heroicons/react/outline";
-import { auth } from "../../config/firebaseClient";
 import AccountDropdown from "./AccountDropdown";
+import SearchTypeDropdown from "./SearchTypeDropdown";
 
 const Navbar = (props) => {
   const user = useUser();
   const [isUsingMobileSearch, setIsUsingMobileSearch] = useState(false);
-  const { register, handleSubmit } = useForm();
+  const [selectedType, setSelectedTypes] = useState("quiz");
+
+  const { register, handleSubmit, control, getValues } = useForm();
   const router = useRouter();
   const { q } = router.query;
 
@@ -50,6 +52,16 @@ const Navbar = (props) => {
                 defaultValue={q ? q : ""}
                 {...register("query")}
               />
+              <div className={"flex-none"}>
+              <Controller
+                control={control}
+                name={'type'}
+                defaultValue={'quiz'}
+                render={({ field: { onChange, onBlur, value, ref } }) => (
+                  <SearchTypeDropdown selectedType={value} setSelectedTypes={onChange}/>
+                  )}
+              />
+              </div>
             </form>
           </div>
         </div>
@@ -97,6 +109,16 @@ const Navbar = (props) => {
                 defaultValue={q ? q : ""}
                 {...register("query")}
               />
+              <div className={"flex-none"}>
+              <Controller
+                control={control}
+                name={'type'}
+                defaultValue={"quiz"}
+                render={({ field: { onChange, onBlur, value, ref } }) => (
+                  <SearchTypeDropdown selectedPerson={value} setSelectedPerson={onChange}/>
+                  )}
+              />
+              </div>
             </form>
           </div>
 
