@@ -23,7 +23,7 @@ const index = () => {
 
       <SubjectCarousel />
 
-      <Recommendations />
+      {user && <Recommendations />}
 
       <div className="bg-white w-screen py-6">
         <section className="px-4">
