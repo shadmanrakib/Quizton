@@ -79,35 +79,37 @@ const Navbar = (props) => {
       </div>
       <div className="flex flex-auto items-center overflow-none md:mx-4">
         <div className="flex-auto">
-          <form
-            className="hidden sm:flex border rounded-lg items-center bg-cool-gray-100 hover:shadow-lg h-10 min-w-0 max-w-2xl focus-within:shadow-lg focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-400"
-            onSubmit={handleSubmit(onSubmitHandler)}
-          >
-            <Controller
-              control={control}
-              name={"type"}
-              defaultValue={"quiz"}
-              render={({ field: { onChange, onBlur, value, ref } }) => (
-                <SearchTypeDropdown
-                  selectedType={value}
-                  setSelectedType={onChange}
-                />
-              )}
-            />
-
-            <input
-              type="text"
-              className="flex-auto bg-transparent min-w-0 focus:outline-none px-4 p-2"
-              defaultValue={q ? q : ""}
-              {...register("query")}
-            />
-            <button
-              type="submit"
-              className="rounded-full flex-none h-10 w-10 hover:bg-cool-gray-300 text-gray-600 focus:outline-none"
+          {!isUsingMobileSearch && (
+            <form
+              className="hidden sm:flex border rounded-lg items-center bg-cool-gray-100 hover:shadow-lg h-10 min-w-0 max-w-2xl focus-within:shadow-lg focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-400"
+              onSubmit={handleSubmit(onSubmitHandler)}
             >
-              <SearchIcon className="m-auto h-5 w-5" />
-            </button>
-          </form>
+              <Controller
+                control={control}
+                name={"type"}
+                defaultValue={"quiz"}
+                render={({ field: { onChange, onBlur, value, ref } }) => (
+                  <SearchTypeDropdown
+                    selectedType={value}
+                    setSelectedType={onChange}
+                  />
+                )}
+              />
+
+              <input
+                type="text"
+                className="flex-auto bg-transparent min-w-0 focus:outline-none px-4 p-2"
+                defaultValue={q ? q : ""}
+                {...register("query")}
+              />
+              <button
+                type="submit"
+                className="rounded-full flex-none h-10 w-10 hover:bg-cool-gray-300 text-gray-600 focus:outline-none"
+              >
+                <SearchIcon className="m-auto h-5 w-5" />
+              </button>
+            </form>
+          )}
           <button
             className="sm:hidden float-right rounded-full bg-cool-gray-100 hover:bg-cool-gray-200 border h-10 w-10"
             onClick={() => setIsUsingMobileSearch(true)}

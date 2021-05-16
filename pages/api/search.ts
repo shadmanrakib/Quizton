@@ -18,7 +18,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         const offsetBy = inputs.offsetBy ? inputs.offsetBy : 0;
 
         switch (inputs.type) {
-            case "questions":
+            case "question":
                 index = "index-questions";
                 searchBody = {
                     query: {
@@ -31,10 +31,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     },
                     from: offsetBy
                 }
-
-                break;
-
-            case "quizzes":
+            case "quiz":
                 index = "index-quizzes";
                 searchBody = {
                     query: {
@@ -47,6 +44,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     },
                     from: offsetBy
                 }
+            break;
+
         }
 
         const results = await client.search({

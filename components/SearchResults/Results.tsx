@@ -22,23 +22,23 @@ interface ElasticResults {
 
 const Results = () => {
   const router = useRouter();
-  const { q } = router.query;
+  const { q, type } = router.query;
   const [searchResult, setSearchResult] = useState<ElasticResults | null>(null);
-  const [searchTotal, setSearchTotal] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     if (q !== "" && q !== undefined && q) {
-      const type = router.query.type ? router.query.type : "questions";
-
       postData("/api/search", { query: q, type: type }).then((response) => {
         setSearchResult(response.message.results);
+        console.log(response);
       });
       postData("/api/addRecent", {
         qid: q,
         kind: "search",
       } as AddRecentRequest);
     }
+    setLoading(false);
   }, [q]);
 
   if (!q) return null;
@@ -49,12 +49,12 @@ const Results = () => {
         <div>{"Loading..."}</div>
       ) : (
         <div className="">
-          {(!router.query.type || router.query.type === "questions") &&
+          {(!router.query.type || router.query.type === "question") &&
             searchResult &&
             searchResult.hits.map((question) => (
               <QuestionCard key={question._id} question={question._source} />
             ))}
-          {router.query.type === "quizzes" &&
+          {router.query.type === "quiz" &&
             searchResult &&
             searchResult.hits.map((quiz) => (
               <QuizCard key={quiz._id} id={quiz._id} quiz={quiz._source} />
