@@ -34,7 +34,7 @@ export default function AccountDropdown() {
             >
               <Menu.Items
                 static
-                className="absolute right-0 w-40 mt-2 origin-top-right bg-white divide-y  divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                className="absolute right-0 w-40 mt-2 origin-top-right bg-white divide-y z-50 divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
               >
                 <div className="px-1 py-1 ">
                   <Menu.Item>

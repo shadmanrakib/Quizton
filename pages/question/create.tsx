@@ -3,20 +3,17 @@ import Link from "next/link";
 
 import CreateMCForm from "../../components/CreateQuestion/Form";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import Dropdown from "../../components/CreateQuestion/Dropdown";
 import Navbar from "../../components/Navbar/Navbar";
 
 const Create: React.FC = () => {
-  const [kind, setKind] = useState<"multipleChoice" | "shortAnswer">(
-    "multipleChoice"
-  );
+  const [kind, setKind] =
+    useState<"multipleChoice" | "shortAnswer">("multipleChoice");
   // moves the menu below the select input
   return (
-    <div className="bg-cool-gray-100">
+    <div className="bg-cool-gray-100 min-h-screen">
       <Navbar />
-
       <div className="flex w-full justify-center">
-        <div className="w-full max-w-5xl p-4 box-border">
+        <div className="w-full max-w-5xl box-border">
           <div className="my-5">
             <Link href="/">
               <h1 className="flex items-center text-lg cursor-pointer">
@@ -24,11 +21,7 @@ const Create: React.FC = () => {
               </h1>
             </Link>
           </div>
-          <Dropdown
-            onChange={(kind) => {
-              setKind(kind);
-            }}
-          ></Dropdown>
+
           {kind === "multipleChoice" ? (
             <div>
               <CreateMCForm />

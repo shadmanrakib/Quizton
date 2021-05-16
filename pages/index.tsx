@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar/Navbar";
-import {PlusIcon} from "@heroicons/react/outline";
+import { PlusIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import StudySets from "../components/Profile/StudySets";
 import { useUser } from "../hooks/useUser";
@@ -11,13 +11,16 @@ const index = () => {
   const router = useRouter();
   const user = useUser();
   return (
-    <div className="min-h-screen w-full">
-      <Navbar/>
+    <div className="min-h-screen w-full overflow-hidden">
+      <Navbar />
 
       <SubjectCarousel />
 
-      <button className="bg-blue-500 hover:bg-blue-600 text-white h-16 w-16 rounded-full fixed bottom-4 right-4" onClick={() => router.push("/question/create")}>
-        <PlusIcon className="w-12 h-12 m-auto"/>
+      <button
+        className="bg-blue-500 hover:bg-blue-600 text-white h-16 w-16 rounded-full fixed bottom-4 right-4"
+        onClick={() => router.push("/question/create")}
+      >
+        <PlusIcon className="w-12 h-12 m-auto" />
       </button>
 
       <Recommendations />

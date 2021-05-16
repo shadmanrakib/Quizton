@@ -45,13 +45,13 @@ export default function Tags() {
         </button>
       </div>
       <div className="flex flex-row flex-wrap">
-        {fields.map((field: {id: string, value: string}, index) => {
+        {fields.map((field: { id: string; value: string }, index) => {
           return (
             <Controller
               key={field.id}
               defaultValue={field.value}
               control={control}
-              name={`tags.${index}.value` as 'tags.0.value'}
+              name={`tags.${index}.value` as "tags.0.value"}
               render={({ field: { onChange, onBlur, value, ref } }) => {
                 return (
                   <div className="mx-1 my-1">
