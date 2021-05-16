@@ -32,7 +32,7 @@ const index = () => {
       </div>
 
       <section className="px-4">
-        {user && <StudySets uid={user.uid}></StudySets>}
+        {user ? <StudySets uid={user.uid}></StudySets> : <p>You must log in to view your library</p>}
       </section>
     </div>
   );
