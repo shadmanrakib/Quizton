@@ -14,18 +14,18 @@ export default function Choices() {
   );
   return (
     <>
-      <div className="mt-6">Choices</div>
-      <div className="text-sm">Select the correct answer choice</div>
+      <div className="mt-6 text-lg font-semibold">Choices</div>
+      <div className="text-md mb-2">Select the correct answer choice</div>
       {fields.map((field: { id: string; value: string }, index) => {
         return (
-          <div key={field.id} className="border flex flex-row w-auto">
+          <div key={field.id} className="w-full flex flex-row">
             <input
               type="radio"
               value={index}
-              className="my-auto ml-3 mr-1"
+              className="my-auto w-1/12"
               {...register("correctAnswer")}
             />
-            <div className="flex-auto">
+            <div className="w-10/12 flex-grow-0">
               <Controller
                 control={control}
                 name={`answerChoices.${index}.value` as "answerChoices.0.value"}
@@ -33,6 +33,7 @@ export default function Choices() {
                 rules={{ required: true, minLength: 1 }}
                 render={({ field: { onChange, onBlur, value, ref } }) => (
                   <Editor
+                    className="bg-white max-w-full rounded-md flex-none border my-1"
                     onChange={onChange}
                     theme={"bubble"}
                     editorValue={value}
@@ -40,10 +41,9 @@ export default function Choices() {
                 )}
               />
             </div>
-
             <button
               type="button"
-              className="transition duration-200 bg-white text-black p-2 inline-block hover:text-red-500"
+              className="transition duration-200  text-black p-2 inline-block hover:text-red-500"
               onClick={() => remove(index)}
             >
               <XIcon className="m-auto w-6 h-6" />
@@ -54,7 +54,7 @@ export default function Choices() {
 
       <button
         type="button"
-        className="p-2 bg-blue-400 text-white"
+        className="p-2 bg-blue-400 text-white rounded-md mt-3"
         onClick={() => append({ value: "" })}
       >
         <div className="mx-auto">
