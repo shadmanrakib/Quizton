@@ -4,8 +4,7 @@ import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
-import "swiper/swiper.min.css";
-import "swiper/components/navigation/navigation.min.css"
+import "swiper/swiper.scss";
 
 // import Swiper core and required modules
 import SwiperCore, {
@@ -30,8 +29,8 @@ const subjects: SubjectType[] = subjectsJSON["subjects"];
 
 export default function SubjectCarousel() {
   return (
-    <div>
-    <Swiper navigation={true} grabCursor={true} slidesPerView={"auto"} spaceBetween={30} className="mySwiper h-72" >
+    <div className={`overflow-hidden ${styles.overflowHiddenImportant}`}>
+    <Swiper navigation={true} grabCursor={true} slidesPerView={"auto"} spaceBetween={30} className={`mySwiper h-72 ${styles.overflowHiddenImportant}`} >
         {subjects.map((sub, index) => {
           return <SwiperSlide className={styles.wAutoIMPORTANT}>
             <div className={`p-4 w-96`}>

@@ -1,3 +1,6 @@
 .wAutoIMPORTANT {
     width: auto!important;
 }
+.overflowHiddenImportant {
+    overflow: hidden!important;
+}
