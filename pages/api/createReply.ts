@@ -26,9 +26,6 @@ export default async(req: NextApiRequest, res: NextApiResponse) => {
         parentComment
     }
 
-    console.log(parentComment);
-    console.log(commentDoc);
-
     await adminDB
         .collection('questions')
         .doc(qid)

@@ -20,7 +20,7 @@ const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep
 const Comment: React.FC<CommentProps> = ({ parent, comment, qid, updateReplies }) => {
     const time = comment.timestamp.toDate();
     const month: string = monthNames[time.getMonth()];
-    const day: number = time.getDay();
+    const day: number = time.getDate();
     const year: number = time.getFullYear();
 
     const [replying, setReplying] = useState(false);
