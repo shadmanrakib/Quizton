@@ -140,3 +140,16 @@ export interface CustomClaims {
   username: string;
   registered: boolean;
 }
+
+export interface Comment {
+  uid: string;
+  username: string;
+  comment: string;
+  timestamp: any;
+  hasReply: false;
+  docId?: string;
+}
+
+export interface Reply extends Comment {
+  parentComment: string;
+}

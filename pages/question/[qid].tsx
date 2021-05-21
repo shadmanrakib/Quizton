@@ -9,6 +9,7 @@ import { SettingsRemoteRounded } from "@material-ui/icons";
 import { useUser } from "../../hooks/useUser";
 import * as quesdom from "../../types/quesdom";
 import Votebar from "../../components/VIewSingleQuestion/Votebar";
+import Comments from "../../components/VIewSingleQuestion/Comments/Comments";
 
 const QuestionPage = (props) => {
   const [correct, setCorrect] = useState<boolean | null>(null);
@@ -106,6 +107,7 @@ const QuestionPage = (props) => {
           ></EditMCForm>
         </div>
       )}
+      <Comments qid={props.qid} />
     </div>
   );
 };
