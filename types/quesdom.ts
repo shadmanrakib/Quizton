@@ -79,24 +79,24 @@ export interface multipleChoice extends questionMetaData {
 export type Question = shortAnswer | multipleChoice;
 
 export interface QuizMultipleChoice {
-  kind: "multipleChoice",
-  answerChoices: string[],
-  correctAnswer: number,
-  author: authorMetaData,
-  date: any,
-  explanation: string,
-  question: string,
-  tags: string[],
+  kind: "multipleChoice";
+  answerChoices: string[];
+  correctAnswer: number;
+  author: authorMetaData;
+  date: any;
+  explanation: string;
+  question: string;
+  tags: string[];
 }
 
-export interface QuizShortAnswer{
+export interface QuizShortAnswer {
   kind: "shortAnswer";
   answer: string;
-  author: authorMetaData,
-  date: any,
-  explanation: string,
-  question: string,
-  tags: string[],
+  author: authorMetaData;
+  date: any;
+  explanation: string;
+  question: string;
+  tags: string[];
 }
 
 export type QuizQuestion = QuizShortAnswer | QuizMultipleChoice;
@@ -105,9 +105,9 @@ export type Quiz = {
   questions: QuizQuestion[];
   author: authorMetaData;
   title: string;
-  votes: number,
-  upvotes: number,
-  downvotes: number,
+  votes: number;
+  upvotes: number;
+  downvotes: number;
   date: any; //Firebase timestamp for now
 };
 
@@ -152,4 +152,15 @@ export interface Comment {
 
 export interface Reply extends Comment {
   parentComment: string;
+}
+
+export interface PageData {
+  subject: string;
+  title: string;
+  topics: Topic[];
+}
+
+export interface Topic {
+  title: string;
+  subtopics: string[];
 }

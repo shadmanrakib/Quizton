@@ -1,0 +1,51 @@
+{"subjects" : [
+    {
+        "name": "Biology",
+        "bgColor": "#00cec9",
+        "textColor" : "#232323",
+        "img": "",
+        "link": ""
+    },
+    {
+        "name": "Physics",
+        "bgColor": "#74b9ff",
+        "textColor" : "#232323",
+        "img": "",
+        "link": ""
+    },
+    {
+        "name": "Algebra 1",
+        "bgColor": "#a29bfe",
+        "textColor" : "#232323",
+        "img": "",
+        "link": ""
+    },
+    {
+        "name": "Geometry",
+        "bgColor": "#e84393",
+        "textColor" : "#232323",
+        "img": "",
+        "link": ""
+    },
+    {
+        "name": "Algebra 2",
+        "bgColor": "#ff7675",
+        "textColor" : "#232323",
+        "img": "",
+        "link": ""
+    },
+    {
+        "name": "Precalculus",
+        "bgColor": "#fab1a0",
+        "textColor" : "#232323",
+        "img": "",
+        "link": ""
+    },
+    {
+        "name": "Grammar",
+        "bgColor": "#fdcb6e",
+        "textColor" : "#232323",
+        "img": "",
+        "link": ""
+    }
+]}

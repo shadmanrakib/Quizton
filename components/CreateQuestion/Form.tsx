@@ -1,5 +1,10 @@
 import React from "react";
-import { useForm, FormProvider, Controller, NestedValue } from "react-hook-form";
+import {
+  useForm,
+  FormProvider,
+  Controller,
+  NestedValue,
+} from "react-hook-form";
 import Editor from "../Editor";
 import { Accordion, AccordionSummary } from "@material-ui/core/";
 import ExpandMoreIcon from "@material-ui/icons/ExpandLessOutlined";
@@ -48,55 +53,56 @@ export default function Form() {
   };
 
   return (
-    <div className="flex flex-col max-w-3xl p-4 mx-auto">
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <Controller
-            control={methods.control}
-            name={"question"}
-            defaultValue={methods.getValues("question")}
-            rules={{ required: true, minLength: 1 }}
-            render={({ field: { onChange, onBlur, value, ref } }) => (
-              <Editor onChange={onChange} theme={"snow"} editorValue={value} />
-            )}
-          />
-
-          <Choices />
-
-          <Accordion className={"mt-3"}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <p>Explanation</p>
-            </AccordionSummary>
-
+    <>
+      <div className="flex flex-col max-w-3xl p-4 mx-auto">
+        <p className="text-xl font-semibold mb-5">Create a Question</p>
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)}>
             <Controller
               control={methods.control}
-              name={"explanation"}
-              defaultValue={methods.getValues("explanation")}
+              name={"question"}
+              defaultValue={methods.getValues("question")}
+              rules={{ required: true, minLength: 1 }}
               render={({ field: { onChange, onBlur, value, ref } }) => (
-                <Editor
-                  onChange={onChange}
-                  theme={"snow"}
-                  editorValue={value}
-                />
+                <div className="bg-white">
+                  <Editor
+                    onChange={onChange}
+                    theme={"snow"}
+                    editorValue={value}
+                  />
+                </div>
               )}
             />
-          </Accordion>
 
-          <Tags />
-          <button
-            type="button"
-            className="transition duration-200 bg-white text-black p-2 inline-block hover:text-red-500"
-            onClick={() => methods.reset(defaultMCChoice)}
-          >
-            <div className="mx-auto">
-              <TrashIcon className="inline w-6 h-6" />
-              <span>Delete</span>
-            </div>
-          </button>
+            <Choices />
 
-          <button className="w-auto bg-blue-500 text-white p-3">Submit</button>
-        </form>
-      </FormProvider>
-    </div>
+            <Accordion className={"mt-3"}>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <p>Explanation</p>
+              </AccordionSummary>
+
+              <Controller
+                control={methods.control}
+                name={"explanation"}
+                defaultValue={methods.getValues("explanation")}
+                render={({ field: { onChange, onBlur, value, ref } }) => (
+                  <Editor
+                    onChange={onChange}
+                    theme={"snow"}
+                    editorValue={value}
+                  />
+                )}
+              />
+            </Accordion>
+
+            <Tags />
+
+            <button className="w-auto bg-blue-500 text-white px-4 py-2 rounded-md">
+              Submit
+            </button>
+          </form>
+        </FormProvider>
+      </div>
+    </>
   );
 }

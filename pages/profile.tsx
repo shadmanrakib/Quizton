@@ -70,12 +70,20 @@ function Profile() {
         <div className="flex flex-row mx-auto bg-white h-36 max-w-full px-4 sm:px-12 xl:max-w-7xl">
           <img
             src={userInfo.photoURL}
-            className="rounded-full self-center mr-6"
+            className="rounded-full self-center mr-6 hidden md:block"
             width="70px"
             height="70px"
           ></img>
+          <img
+            src={userInfo.photoURL}
+            className="rounded-full self-center mr-3 md:hidden"
+            width="50px"
+            height="50px"
+          ></img>
           <div className="flex flex-col self-center">
-            <h1 className="text-3xl font-semibold">{userInfo.username}</h1>
+            <h1 className="text-2xl md:text-3xl font-semibold">
+              {userInfo.username}
+            </h1>
             <p className="font-medium text-gray-500">{userInfo.displayName}</p>
           </div>
         </div>
