@@ -3,12 +3,13 @@ import { useEffect, useState } from "react";
 import { useUser } from "../../../hooks/useUser";
 import { db } from "../../../config/firebaseClient";
 import CommentInput from "./CommentInput";
+import Reply from "./Reply";
 import * as quesdom from "../../../types/quesdom";
 
 
 interface CommentProps {
     qid: string;
-    parent?: quesdom.Comment;
+    // parent?: quesdom.Comment;
     comment: quesdom.Comment;
     replyingTo?: string;
     isReply: boolean;
@@ -16,7 +17,7 @@ interface CommentProps {
 
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-const Comment: React.FC<CommentProps> = ({ parent, comment, qid, isReply }) => {
+const ParentComment: React.FC<CommentProps> = ({ comment, qid, isReply }) => {
     const time = comment.timestamp.toDate();
     const month: string = monthNames[time.getMonth()];
     const day: number = time.getDay();
@@ -33,24 +34,21 @@ const Comment: React.FC<CommentProps> = ({ parent, comment, qid, isReply }) => {
             .collection("questions")
             .doc(qid)
             .collection("comments")
-            .doc(parent.docId)
+            .doc(comment.docId)
             .collection("replies")
             .orderBy('timestamp')
             .get();
     }
 
     const updateReplies = async () => {
-        console.log("UPDATING REPLIES");
-        if (!isReply) {
-            const repliesSnapshot = await getReplies();
-            let tmp: quesdom.Reply[] = [];
-            repliesSnapshot.forEach(doc => {
-                let data = doc.data();
-                data.parentComment = parent.docId;
-                tmp.push(data as quesdom.Reply);
-            });
-            setReplies(tmp);
-        }
+        const repliesSnapshot = await getReplies();
+        let tmp: quesdom.Reply[] = [];
+        repliesSnapshot.forEach(doc => {
+            let data = doc.data();
+            data.parentComment = comment.docId;
+            tmp.push(data as quesdom.Reply);
+        });
+        setReplies(tmp);
     }
 
     useEffect(() => {
@@ -73,15 +71,15 @@ const Comment: React.FC<CommentProps> = ({ parent, comment, qid, isReply }) => {
             <div>
                 <p className="font-bold text-blue-500 inline-block cursor-pointer" onClick={() => { setReplying(!replying) }}>Reply</p>
             </div>
-            { replying && <CommentInput type="reply" parentCommentId={parent.docId} qid={qid} updateComments={updateReplies} replyingTo={comment.username} />}
+            { replying && <CommentInput type="reply" parentCommentId={comment.docId} qid={qid} updateComments={updateReplies} replyingTo={comment.username} />}
             { !isReply && <p className="text-gray-500 cursor-pointer" onClick={handleReplyClick}>{showReplies ? "Hide Replies" : "Show Replies"}</p>}
             { replies && showReplies && replies.map((reply, idx) => {
                 return <div className="ml-10">
-                    <Comment parent={parent} comment={ reply } qid={qid} replyingTo={reply.username} isReply={true} />
+                    <Reply parent={comment} comment={reply} qid={qid} replyingTo={reply.username} isReply={true} updateReplies={() => { updateReplies() }} />
                 </div>
             })}
         </div>
     );
 }
 
-export default Comment;
+export default ParentComment;

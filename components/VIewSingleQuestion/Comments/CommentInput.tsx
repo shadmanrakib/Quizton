@@ -6,14 +6,16 @@ interface CommentInputProps {
     parentCommentId?: string;
     qid: string;
     updateComments: () => void;
+    replyingTo?: string;
 }
 
-const CommentInput: React.FC<CommentInputProps> = ({ type, parentCommentId, qid, updateComments }) => {
+const CommentInput: React.FC<CommentInputProps> = ({ type, parentCommentId, qid, updateComments, replyingTo }) => {
 
     const { register, handleSubmit, reset } = useForm();
     const [ submitDisabled, setSubmitDisabled ] = useState(false);
 
     const onSubmit = async (data) => {
+
         data.qid = qid;
 
         let endpoint = "/api/createComment";
@@ -55,6 +57,7 @@ const CommentInput: React.FC<CommentInputProps> = ({ type, parentCommentId, qid,
                 className="w-5/6 my-3 border-b-2 border-gray outline-none focus:border-blue-500"
                 autoComplete="off"
                 placeholder="Add a comment or explanation..."
+                defaultValue={`${replyingTo ? `+${replyingTo} \t` : ""}`}
                 {...register("comment")}
             ></input>
             <button

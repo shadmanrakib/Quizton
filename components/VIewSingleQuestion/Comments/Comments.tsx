@@ -7,6 +7,7 @@ import * as quesdom from "../../../types/quesdom";
 import Button from "../../UI/Button/Button";
 import Comment from "./Comment";
 import CommentInput from "./CommentInput";
+import ParentComment from "./ParentComment";
 
 
 interface CommentsProps {
@@ -75,7 +76,7 @@ const Comments: React.FC<CommentsProps> = ({ qid }) => {
                     <div>
                         {commentsList && commentsList.map((comment, idx) => {
                             return <div key={idx}>
-                                <Comment parent={ comment } qid={ qid }/>
+                                <ParentComment comment={ comment } qid={ qid } isReply={ false }/>
                             </div>
                         })}
                     </div>
