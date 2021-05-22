@@ -6,11 +6,11 @@ import sanitizeHtml from "sanitize-html";
 import * as quesdom from "../../types/quesdom";
 import Timestamp from "firebase/firestore/";
 
-import { Client } from '@elastic/elasticsearch';
+import { Client } from "@elastic/elasticsearch";
 
 const client = new Client({
-  node: process.env.ELASTIC_URL
-})
+  node: process.env.ELASTIC_URL,
+});
 
 function sanitize(html: string) {
   const tags = sanitizeHtml.defaults.allowedTags.concat([
@@ -114,8 +114,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       hasProfilePicture: userData.hasProfilePicture,
     };
 
-
-
     const multipleChoiceQuestion: quesdom.multipleChoice = {
       kind: "multipleChoice",
       answerChoices: sanitizedChoices,
@@ -128,6 +126,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       explanation: sanitizedExplanation,
       date: createDate,
       author: author,
+      organization: {
+        subject: tags[0] === undefined ? null : tags[0],
+        topic: tags[1] === undefined ? null : tags[1],
+        subtopic: tags[2] === undefined ? null : tags[2],
+      },
     };
 
     const { id } = await adminDB
@@ -142,11 +145,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         votes: 0,
         tags: tags,
         question: sanitizedQuestion,
-        date: (new Date()).toISOString(),
-        author: author
-      }
-    })
-
+        date: new Date().toISOString(),
+        author: author,
+      },
+    });
 
     return res.status(200).send({
       success: true,

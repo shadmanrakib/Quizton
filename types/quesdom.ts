@@ -47,6 +47,11 @@ export interface questionMetaData {
   upvotes: number;
   downvotes: number;
   date: any;
+  organization: {
+    subject: string | null;
+    topic: string | null;
+    subtopic: string | null;
+  };
 }
 
 export interface EditQuizRequest {

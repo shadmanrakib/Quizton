@@ -1,14 +1,14 @@
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar/Navbar";
-import SplitPlane from "../../components/Subjects/SplitPlane";
-import { PageData } from "../../types/quesdom";
+import React, { useState, useEffect } from "react";
+import Navbar from "../Navbar/Navbar";
+import SplitPlane from "./SplitPlane";
+import * as quesdom from "../../types/quesdom";
 
-function Subject() {
-  const [page, setPage] = useState<PageData | null>(null);
-  const router = useRouter();
-  const { subject } = router.query;
+interface props {
+  subject: string;
+}
 
+function SubjectPage({ subject }: props) {
+  const [page, setPage] = useState<quesdom.PageData | null>(null);
   useEffect(() => {
     if (!subject) return;
     fetch(`/SubjectPageJSON/${subject}.json`)
@@ -38,6 +38,7 @@ function Subject() {
                 left={left}
                 right={right}
                 key={topic.title}
+                subject={subject}
               />
             );
           })}
@@ -47,4 +48,4 @@ function Subject() {
   );
 }
 
-export default Subject;
+export default SubjectPage;

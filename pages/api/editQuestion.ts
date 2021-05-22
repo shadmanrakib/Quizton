@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nookies from "nookies";
 import { firebaseAdmin } from "../../config/firebaseAdmin";
-import { Question, EditRequest } from "../../types/quesdom";
+import { Question, EditRequest, multipleChoice } from "../../types/quesdom";
 import striptags from "striptags";
 import stemmer from "lancaster-stemmer";
 import thesaurus from "thesaurus";
@@ -300,17 +300,11 @@ export default async function editQuestion(
       question.kind === "multipleChoice" &&
       parsed.question.kind === "multipleChoice"
     ) {
-
       const editDate = firebaseAdmin.firestore.FieldValue.serverTimestamp();
-
-
-    
-
 
       const sanitizedQuestion = sanitize(parsed.question.question);
 
       var choicesString = "";
-
 
       const sanitizedChoices = parsed.question.answerChoices.map((value) => {
         const sanitizedChoice = sanitize(value);
@@ -322,14 +316,13 @@ export default async function editQuestion(
       const sanitizedAnswer = parsed.question.correctAnswer;
       const sanitizedExplanation = sanitize(parsed.question.explanation);
       console.log(sanitizedExplanation);
-   
-
 
       const { index, total, contains } = createIndex(
         striptags(sanitizedQuestion + " " + choicesString),
         parsed.question.tags
       );
 
+      const finalTags = parsed.question.tags;
       const question = {
         kind: "multipleChoice",
         answerChoices: sanitizedChoices,
@@ -341,6 +334,11 @@ export default async function editQuestion(
         totalWords: total,
         explanation: sanitizedExplanation,
         date: editDate,
+        organization: {
+          subject: finalTags[0] === undefined ? null : finalTags[0],
+          topic: finalTags[1] === undefined ? null : finalTags[1],
+          subtopic: finalTags[2] === undefined ? null : finalTags[2],
+        },
       };
 
       await fs.doc("/questions/" + parsed.qid).update(question);

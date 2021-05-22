@@ -43,6 +43,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           explanation: val.explanation,
           question: val.question,
           tags: val.tags,
+          organization: {
+            subject: val.tags[0] === undefined ? null : val.tags[0],
+            topic: val.tags[1] === undefined ? null : val.tags[1],
+            subtopic: val.tags[2] === undefined ? null : val.tags[2],
+          },
         };
         return MCQuestion;
       }),

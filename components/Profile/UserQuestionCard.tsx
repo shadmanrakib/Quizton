@@ -6,15 +6,20 @@ import {
 } from "../../types/quesdom";
 import { Disclosure, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
-
+import katex from "katex";
+import "katex/dist/katex.min.css";
 interface props {
   val: Question;
   qid: string;
 }
 
+if (process.browser && !window.katex) {
+  window.katex = katex;
+}
 export default function UserQuestionCard({ val, qid }: props) {
   const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
+
   if (val.kind !== "multipleChoice" || val.kind !== "multipleChoice")
     throw "An object with kind !== 'multipleChoice' was passed to RecentQuestionCard";
 
