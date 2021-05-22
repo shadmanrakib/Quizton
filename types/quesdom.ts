@@ -47,7 +47,7 @@ export interface questionMetaData {
   upvotes: number;
   downvotes: number;
   date: any;
-  organization: {
+  organization?: {
     subject: string | null;
     topic: string | null;
     subtopic: string | null;
