@@ -5,9 +5,9 @@ import QuestionMini from "./QuestionMini";
 interface props {
   questions: QueryDocumentSnapshot<Question>[];
   questionClicked: (index: number) => void;
+  activeIndex: number;
 }
-function QuestionScroller({ questions, questionClicked }: props) {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
+function QuestionScroller({ questions, questionClicked, activeIndex }: props) {
   return (
     <div>
       {questions.map((value, index) => {
@@ -17,13 +17,12 @@ function QuestionScroller({ questions, questionClicked }: props) {
             <div
               onClick={() => {
                 questionClicked(index);
-                setActiveIndex(index);
               }}
+              key={value.id}
             >
               <QuestionMini
                 qid={value.id}
                 val={question}
-                key={value.id}
                 active={index === activeIndex}
               ></QuestionMini>
             </div>

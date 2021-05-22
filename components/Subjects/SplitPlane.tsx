@@ -46,7 +46,7 @@ function SplitPlane({
         <div className="flex flex-col w-1/2">
           {left.map((value) => {
             return (
-              <div
+              <p
                 onClick={() => {
                   router.push(`/subject/${subject}/${title}/${value}`);
                 }}
@@ -54,22 +54,22 @@ function SplitPlane({
                 className="text-md mb-1 font-sans font-normal hover:underline hover:text-blue-500 cursor-pointer"
               >
                 {value}
-              </div>
+              </p>
             );
           })}
         </div>
         <div className="flex flex-col w-1/2">
           {right.map((value) => {
             return (
-              <div
+              <p
                 onClick={() => {
                   router.push(`/subject/${subject}/${title}/${value}`);
                 }}
                 key={value}
-                className="text-md mb-1 font-sans font-normal hover:underline hover:text-blue-500"
+                className="text-md mb-1 font-sans font-normal hover:underline hover:text-blue-500 cursor-pointer"
               >
                 {value}
-              </div>
+              </p>
             );
           })}
         </div>

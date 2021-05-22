@@ -11,17 +11,36 @@ import QuestionScroller from "./QuestionScroller";
 
 interface props {
   subject: string;
-  topic: string;
+  topic?: string;
   subtopic?: string;
 }
 
+interface VoteData {
+  voteKinds: (undefined | "upvote" | "downvote" | "none")[];
+  voteCounts: number[];
+}
+
+interface Context {
+  activeIndex: number;
+  voteData: VoteData;
+  setVoteData: React.Dispatch<React.SetStateAction<VoteData>>;
+}
+
+export const ReactContext = React.createContext<Context>(null);
+
 function TopicPage({ subject, topic, subtopic }: props) {
+  const user = useUser();
   const [page, setPage] = useState<quesdom.PageData | null>(null);
   const [questions, setQuestions] =
-    useState<QueryDocumentSnapshot<quesdom.Question>[]>(null);
+    useState<QueryDocumentSnapshot<quesdom.Question>[] | null>(null);
+  const [voteData, setVoteData] = useState<VoteData>({
+    voteKinds: [],
+    voteCounts: [],
+  });
   const [presenting, setPresenting] =
     useState<QueryDocumentSnapshot<quesdom.Question> | null>(null);
-  const user = useUser();
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+
   const [correct, setCorrect] = useState<boolean | null>(null);
 
   const onSubmit = (data) => {
@@ -55,7 +74,6 @@ function TopicPage({ subject, topic, subtopic }: props) {
     //First render: Load some questions for the user
     const questions = db.collection("/questions");
     let query = questions.limit(5).where("organization.subject", "==", subject);
-
     if (topic) query = query.where("organization.topic", "==", topic);
     if (subtopic) query = query.where("organization.subtopic", "==", subtopic);
     query.get().then((docSnapArray) => {
@@ -65,7 +83,6 @@ function TopicPage({ subject, topic, subtopic }: props) {
       setPresenting(
         docSnapArray.docs[0] as QueryDocumentSnapshot<quesdom.Question>
       );
-      console.log(docSnapArray.docs);
     });
   }, []);
   return (
@@ -77,8 +94,8 @@ function TopicPage({ subject, topic, subtopic }: props) {
             <div className="flex flex-col">
               <p className="text-gray-200 text-lg">{page.subject}</p>
               <p className="font-bold text-3xl">
-                Practice: {page.title} / {topic} /{" "}
-                {subtopic === undefined ? "" : subtopic}
+                Practice: {page.title} / {topic}{" "}
+                {subtopic === undefined ? "" : " / " + subtopic}
               </p>
             </div>
           </div>
@@ -89,19 +106,26 @@ function TopicPage({ subject, topic, subtopic }: props) {
                   questions={questions}
                   questionClicked={(activeIndex) => {
                     setPresenting(questions[activeIndex]);
+                    setActiveIndex(activeIndex);
                   }}
+                  activeIndex={activeIndex}
                 ></QuestionScroller>
               )}
             </section>
             <section className="order-2 w-7/12 p-10">
               {presenting && (
-                <QuestionPresenter
-                  data={presenting.data() as quesdom.multipleChoice}
-                  onEditButtonClicked={() => {}}
-                  qid={presenting.id}
-                  key={presenting.id}
-                  onSubmit={onSubmit}
-                ></QuestionPresenter>
+                <ReactContext.Provider
+                  value={{ activeIndex, voteData, setVoteData }}
+                >
+                  <>
+                    <QuestionPresenter
+                      data={presenting.data() as quesdom.multipleChoice}
+                      qid={presenting.id}
+                      key={presenting.id}
+                      onSubmit={onSubmit}
+                    ></QuestionPresenter>
+                  </>
+                </ReactContext.Provider>
               )}
             </section>
           </div>

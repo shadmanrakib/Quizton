@@ -7,12 +7,12 @@ import { db, auth } from "../../config/firebaseClient";
 import { useUser } from "../../hooks/useUser";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+import SimpleVotebar from "./SimpleVotebar";
 
 interface QuestionComponentProps {
   onSubmit?: (any) => void;
   data: quesdom.multipleChoice;
   qid: string;
-  onEditButtonClicked: () => void;
 }
 
 async function postData(url = "", data = {}) {
@@ -34,49 +34,54 @@ async function postData(url = "", data = {}) {
 
 const QuestionPresenter = (props: QuestionComponentProps) => {
   const user = useUser();
-  console.log(user && user.uid);
 
   const { register, handleSubmit } = useForm();
 
   return (
-    <div className="bg-cool-gray-100">
-      <div className="flex max-w-6xl my-3 p-6 mx-auto bg-white rounded-md border border-gray-300">
-        <div className="">
-          <div>
-            <div
-              className="my-6 font-serif md:text-lg"
-              dangerouslySetInnerHTML={{ __html: props.data.question }}
-            ></div>
-          </div>
-          <form onSubmit={handleSubmit(props.onSubmit)}>
-            {props.data.answerChoices.map((choice, index) => (
-              <div key={index}>
-                <input
-                  type="radio"
-                  id={"choice" + index}
-                  {...register("answer")}
-                  value={index}
-                ></input>
-                <label
-                  htmlFor={"choice" + index}
-                  dangerouslySetInnerHTML={{ __html: choice }}
-                  className="inline-block ml-3 text-lg font-light"
-                ></label>
-              </div>
-            ))}
-            <div className="flex items-center">
-              <button
-                className="my-6 px-3 py-1.5 rounded-md bg-blue-500 text-white"
-                type="submit"
-              >
-                Check
-              </button>
-              <p className="underline ml-5 cursor-pointer">Show answer</p>
+    <>
+      <SimpleVotebar
+        data={props.data as quesdom.multipleChoice}
+        qid={props.qid}
+      ></SimpleVotebar>
+      <div className="bg-cool-gray-100">
+        <div className="flex max-w-6xl my-3 p-6 mx-auto bg-white rounded-md border border-gray-300">
+          <div className="">
+            <div>
+              <div
+                className="my-6 font-serif md:text-lg"
+                dangerouslySetInnerHTML={{ __html: props.data.question }}
+              ></div>
             </div>
-          </form>
+            <form onSubmit={handleSubmit(props.onSubmit)}>
+              {props.data.answerChoices.map((choice, index) => (
+                <div key={index}>
+                  <input
+                    type="radio"
+                    id={"choice" + index}
+                    {...register("answer")}
+                    value={index}
+                  ></input>
+                  <label
+                    htmlFor={"choice" + index}
+                    dangerouslySetInnerHTML={{ __html: choice }}
+                    className="inline-block ml-3 text-lg font-light"
+                  ></label>
+                </div>
+              ))}
+              <div className="flex items-center">
+                <button
+                  className="my-6 px-3 py-1.5 rounded-md bg-blue-500 text-white"
+                  type="submit"
+                >
+                  Check
+                </button>
+                <p className="underline ml-5 cursor-pointer">Show answer</p>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
