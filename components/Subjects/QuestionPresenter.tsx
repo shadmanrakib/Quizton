@@ -43,7 +43,7 @@ const QuestionPresenter = (props: QuestionComponentProps) => {
         data={props.data as quesdom.multipleChoice}
         qid={props.qid}
       ></SimpleVotebar>
-      <div className="bg-cool-gray-100">
+      <div className="bg-cool-gray-100 rounded-xl">
         <div className="flex max-w-6xl my-3 p-6 mx-auto bg-white rounded-md border border-gray-300">
           <div className="">
             <div>

@@ -6,6 +6,7 @@ import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import postData from "../../utility/postData";
 import { ReactContext } from "./TopicPage";
+import { useRouter } from "next/router";
 interface QuestionComponentProps {
   data: quesdom.multipleChoice;
   qid: string;
@@ -31,6 +32,7 @@ async function getUserVoteKind(
 function Votebar(props: QuestionComponentProps) {
   const user = useUser();
   const context = useContext(ReactContext);
+  const router = useRouter();
   console.log(context.voteData);
 
   const [vote, setVote] = useState<undefined | "upvote" | "downvote" | "none">(
@@ -132,30 +134,25 @@ function Votebar(props: QuestionComponentProps) {
     };
   }, [user]);
   return (
-    <div className=" bg-cool-gray-100">
-      <div className="flex max-w-6xl my-4 p-6 mx-auto">
-        <div className="flex flex-col w-6 mt-3">
+    <div className=" bg-cool-gray-100 rounded-lg">
+      <div className="my-4 p-4">
+        <div className="flex flex-row">
           <ArrowUpwardIcon
             onClick={() => onUpvote()}
-            className={`${
+            className={`mx-2 ${
               vote === "upvote" ? "text-green-500" : ""
             } hover:text-green-500 hover:bg-gray-200`}
           />
           <p className="text-center">{voteCount}</p>
           <ArrowDownwardIcon
             onClick={() => onDownvote()}
-            className={`${
+            className={`mx-2 ${
               vote === "downvote" ? "text-red-500" : ""
             } hover:text-red-500 hover:bg-gray-200`}
           />
-        </div>
-        <div className="mt-3 ml-3 mr-3 mb-0 flex flex-col justify-between">
-          <div>
-            <p className="text-gray-400 text-sm">
-              DIFFICULTY: <span className="text-red-500">{5}/5</span> |{" "}
-              {props.data.author.username}
-            </p>
-          </div>
+          <p className="ml-2 text-gray-400 text-sm hover:underline hover:text-blue-400 cursor-pointer inline-block">
+            Author: {props.data.author.username}
+          </p>
         </div>
       </div>
     </div>

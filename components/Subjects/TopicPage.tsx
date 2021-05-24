@@ -73,7 +73,9 @@ function TopicPage({ subject, topic, subtopic }: props) {
   useEffect(() => {
     //First render: Load some questions for the user
     const questions = db.collection("/questions");
-    let query = questions.limit(5).where("organization.subject", "==", subject);
+    let query = questions
+      .limit(10)
+      .where("organization.subject", "==", subject);
     if (topic) query = query.where("organization.topic", "==", topic);
     if (subtopic) query = query.where("organization.subtopic", "==", subtopic);
     query.get().then((docSnapArray) => {
