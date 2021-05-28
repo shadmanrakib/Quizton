@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import StudySets from "../components/Profile/StudySets";
 import { useUser } from "../hooks/useUser";
 import Recommendations from "../components/Index/RecommendationCarousel/Recommendations";
-import SubjectCarousel from "../components/Index/SubjectCarousel/SubjectCarousel";
 
 const index = () => {
   const router = useRouter();
@@ -20,8 +19,6 @@ const index = () => {
       >
         <PlusIcon className="w-12 h-12 m-auto" />
       </button>
-
-      <SubjectCarousel />
 
       {user && <Recommendations />}
 
