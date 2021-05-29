@@ -90,7 +90,6 @@ const Question = (props: QuestionComponentProps) => {
                 url:
                   "http://www.quizton.com/profile?uid=" + props.data.author.uid,
               },
-              dateCreated: new Date(props.data.date.nanoseconds).toISOString(),
               educationalUse: ["practice question", "practice", "assignment"],
               interactivityType: "active",
               keywords: props.data.tags,

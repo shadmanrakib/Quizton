@@ -71,7 +71,6 @@ function Quiz({ quiz, qid }: props) {
                 url:
                   "http://www.quizton.com/profile?uid=" + quiz.author.uid,
               },
-              dateCreated: new Date(quiz.date.nanoseconds).toISOString(),
               url: "https://www.quizton.com/quiz/" + qid,
             }
           })}
