@@ -3,6 +3,11 @@ import { FormProvider, useForm } from "react-hook-form";
 import * as quesdom from "../../types/quesdom";
 import postData from "../../utility/postData";
 import RenderQuestion from "./RenderQuestion";
+import stripTags from "striptags";
+
+import { Question as QuestionSchema } from "schema-dts";
+import { jsonLdScriptProps } from "react-schemaorg";
+import Head from "next/head";
 
 interface props {
   quiz: quesdom.Quiz;

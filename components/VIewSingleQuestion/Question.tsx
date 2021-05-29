@@ -5,7 +5,7 @@ import { useForm, useFieldArray, useFormState } from "react-hook-form";
 import { useUser } from "../../hooks/useUser";
 import stripTags from "striptags";
 
-import { Question as QuestionSchema } from "schema-dts";
+import { QAPage, Question as QuestionSchema } from "schema-dts";
 import { jsonLdScriptProps } from "react-schemaorg";
 import Head from "next/head";
 
@@ -25,72 +25,74 @@ const Question = (props: QuestionComponentProps) => {
   const strippedQuestion = stripTags(props.data.question);
   return (
     <div className="bg-cool-gray-100">
-
       <Head>
-        <script 
-        {...jsonLdScriptProps<QuestionSchema>({
-          "@context": "https://schema.org",
-          "@type": "Question",
-          name: strippedQuestion,
-          text: strippedQuestion,
-          acceptedAnswer: {
-            "@type": "Answer",
-            name: "answer",
-            text: stripTags(props.data.answerChoices[props.data.correctAnswer]),
-            answerExplanation: {
-              "@type": "WebContent",
-              text: props.data.explanation,
+        <script
+          {...jsonLdScriptProps<QAPage>({
+            "@context": "https://schema.org",
+            "@type": "QAPage",
+            mainEntity: {
+              "@type": "Question",
+              name: strippedQuestion,
+              text: strippedQuestion,
+              acceptedAnswer: {
+                "@type": "Answer",
+                name: "answer",
+                text: stripTags(
+                  props.data.answerChoices[props.data.correctAnswer]
+                ),
+                answerExplanation: {
+                  "@type": "WebContent",
+                  text: props.data.explanation,
+                },
+                author: {
+                  "@type": "Person",
+                  name: props.data.author.username,
+                  givenName: props.data.author.username,
+                  url:
+                    "http://quizton.com/profile?uid=" + props.data.author.uid,
+                },
+                creator: {
+                  "@type": "Person",
+                  name: props.data.author.username,
+                  givenName: props.data.author.username,
+                  url:
+                    "http://quizton.com/profile?uid=" + props.data.author.uid,
+                },
+              },
+              isFamilyFriendly: true,
+              eduQuestionType: "Multiple choice",
+              audience: {
+                "@type": "Audience",
+                audienceType: "students",
+              },
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingCount: props.data.upvotes + props.data.downvotes,
+                ratingValue: props.data.upvotes - props.data.downvotes,
+              },
+              author: {
+                "@type": "Person",
+                name: props.data.author.username,
+                givenName: props.data.author.username,
+                url:
+                  "http://www.quizton.com/profile?uid=" + props.data.author.uid,
+              },
+              creator: {
+                "@type": "Person",
+                name: props.data.author.username,
+                givenName: props.data.author.username,
+                url:
+                  "http://www.quizton.com/profile?uid=" + props.data.author.uid,
+              },
+              dateCreated: new Date(props.data.date.nanoseconds).toISOString(),
+              educationalUse: ["practice question", "practice", "assignment"],
+              interactivityType: "active",
+              keywords: props.data.tags,
+              url: "https://www.quizton.com/question/" + props.qid,
             },
-            author: {
-              "@type": "Person",
-              name: props.data.author.username,
-              givenName: props.data.author.username,
-              url: "http://quizton.com/profile?uid=" + props.data.author.uid,
-            },
-            creator: {
-              "@type": "Person",
-              name: props.data.author.username,
-              givenName: props.data.author.username,
-              url: "http://quizton.com/profile?uid=" + props.data.author.uid,
-            }
-          },
-          isFamilyFriendly: true,
-          eduQuestionType: "Multiple choice",
-          audience: {
-            "@type": "Audience",
-            audienceType: "students"
-          },
-          aggregateRating: {
-            "@type": "AggregateRating",
-            itemReviewed: {
-              "@type": "Thing",
-              name: "question",
-              description: strippedQuestion,
-            },
-            ratingCount: props.data.upvotes + props.data.downvotes,
-            ratingValue: props.data.upvotes - props.data.downvotes,
-          },
-          author: {
-            "@type": "Person",
-            name: props.data.author.username,
-            givenName: props.data.author.username,
-            url: "http://www.quizton.com/profile?uid=" + props.data.author.uid,
-          },
-          creator: {
-            "@type": "Person",
-            name: props.data.author.username,
-            givenName: props.data.author.username,
-            url: "http://www.quizton.com/profile?uid=" + props.data.author.uid,
-          },
-          dateCreated: (new Date(props.data.date.nanoseconds)).toISOString(),
-          educationalUse: ["practice question", "practice", "assignment"],
-          interactivityType: "active",
-          keywords: props.data.tags,
-          url: "https://www.quizton.com/question/" + props.qid,
-        })}
-        />
+          })}
+        ></script>
       </Head>
-
 
       <div className="flex max-w-6xl my-3 p-6 mx-auto bg-white rounded-md border border-gray-300">
         <div className="">
