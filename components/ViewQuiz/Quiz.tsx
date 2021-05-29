@@ -30,43 +30,6 @@ function Quiz({ quiz, qid }: props) {
     postData("/api/addRecent", { qid: qid, kind: "quiz" });
   };
 
-  const quizQuestionsSchema : QuestionSchema[] = quiz.questions.map((question) => {
-    const questionSchema: QuestionSchema = {
-      "@type": "Question",
-      name: question.question,
-      text: question.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        name: "answer",
-        upvoteCount: quiz.upvotes,
-        downvoteCount: quiz.downvotes,
-        dateCreated: new Date(quiz.date.nanoseconds).toISOString(),
-        answerExplanation: {
-          "@type": "WebContent",
-          text: question.explanation,
-        },
-        author: {
-          "@type": "Person",
-          name: quiz.author.username,
-          givenName: quiz.author.username,
-          url:
-            "http://quizton.com/profile?uid=" + quiz.author.uid,
-        },
-        creator: {
-          "@type": "Person",
-          name: quiz.author.username,
-          givenName: quiz.author.username,
-          url:
-            "http://quizton.com/profile?uid=" + quiz.author.uid,
-        },
-      },
-    }
-
-    return (
-      questionSchema
-    );
-  });
-
   return (
     <div>
 
@@ -102,7 +65,6 @@ function Quiz({ quiz, qid }: props) {
               },
               dateCreated: new Date(quiz.date.nanoseconds).toISOString(),
               url: "https://www.quizton.com/question/" + qid,
-              mainEntity: quizQuestionsSchema
             }
           })}
         ></script>
