@@ -5,7 +5,7 @@ import { useForm, useFieldArray, useFormState } from "react-hook-form";
 import { useUser } from "../../hooks/useUser";
 import stripTags from "striptags";
 
-import { Question } from "schema-dts";
+import { Question as QuestionSchema } from "schema-dts";
 import { jsonLdScriptProps } from "react-schemaorg";
 import Head from "next/head";
 
@@ -28,7 +28,7 @@ const Question = (props: QuestionComponentProps) => {
 
       <Head>
         <script 
-        {...jsonLdScriptProps<Question>({
+        {...jsonLdScriptProps<QuestionSchema>({
           "@context": "https://schema.org",
           "@type": "Question",
           name: strippedQuestion,
