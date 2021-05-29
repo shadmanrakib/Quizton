@@ -31,8 +31,8 @@ function Quiz({ quiz, qid }: props) {
   };
 
   const quizQuestionsSchema : QuestionSchema[] = quiz.questions.map((question) => {
-    return (
-      {"@type": "Question",
+    const questionSchema: QuestionSchema = {
+      "@type": "Question",
       name: question.question,
       text: question.question,
       acceptedAnswer: {
@@ -60,6 +60,10 @@ function Quiz({ quiz, qid }: props) {
             "http://quizton.com/profile?uid=" + quiz.author.uid,
         },
       },
+    }
+
+    return (
+      questionSchema
     );
   });
 
