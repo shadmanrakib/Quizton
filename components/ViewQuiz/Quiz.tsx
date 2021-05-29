@@ -38,7 +38,7 @@ function Quiz({ quiz, qid }: props) {
     <meta property="og:description" content={"A collaborative test bank / question library. A website where users can create, share, rate, and do quizzes and questions."} key="ogdesc"/>
     <meta property="og:type" content="website" key="ogtype"/>
     <meta property="og:site_name" content="Quizton" key="ogsitename" />
-    <meta property="og:url" content={"https://www.quizton.com/quiz/" + qid} key="ogurl" />
+    <meta property="og:url" content={"https://quizton.vercel.app/quiz/" + qid} key="ogurl" />
     <meta property="og:image" content="/opengraphImage.png" key="ogimg"/>
     <meta name="twitter:card" content="summary_large_image" key="twcard" />
 
@@ -49,11 +49,11 @@ function Quiz({ quiz, qid }: props) {
             name: quiz.title,
             brand: {
               "@type": "Brand",
-              logo: "https://www.quizton.com/logo.svg",
-              image: "https://www.quizton.com/logo.svg",
+              logo: "https://quizton.vercel.app/logo.svg",
+              image: "https://quizton.vercel.app/logo.svg",
               slogan: "Tons of practice",
               name: "Quizton",
-              url: "https://www.quizton.com",
+              url: "https://quizton.vercel.app",
               description : "A collaborative test bank / question library. A website where users can create, share, rate, and do quizzes and questions." 
             },
             mainEntityOfPage: {
@@ -69,9 +69,9 @@ function Quiz({ quiz, qid }: props) {
                 name: quiz.author.username,
                 givenName: quiz.author.username,
                 url:
-                  "http://www.quizton.com/profile?uid=" + quiz.author.uid,
+                  "http://quizton.vercel.app/profile?uid=" + quiz.author.uid,
               },
-              url: "https://www.quizton.com/quiz/" + qid,
+              url: "https://quizton.vercel.app/quiz/" + qid,
             }
           })}
         ></script>

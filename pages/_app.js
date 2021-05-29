@@ -55,7 +55,7 @@ function MyApp({ Component, pageProps }) {
         <meta property="og:description" content={"A collaborative test bank / question library. A website where users can create, share, rate, and do quizzes and questions."} key="ogdesc"/>
         <meta property="og:type" content="website" key="ogtype"/>
         <meta property="og:site_name" content="Quizton" key="ogsitename" />
-        <meta property="og:url" content={"https://www.quizton.com/"} key="ogurl" />
+        <meta property="og:url" content={"https://quizton.vercel.app/"} key="ogurl" />
         <meta property="og:image" content="/opengraphImage.png" key="ogimg"/>
         <meta name="twitter:card" content="summary_large_image" key="twcard" />
         {/* <!-- Global site tag (gtag.js) - Google Analytics --> */}
