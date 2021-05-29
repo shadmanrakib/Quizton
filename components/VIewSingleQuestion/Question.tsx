@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import * as quesdom from "../../types/quesdom";
 import "katex/dist/katex.min.css";
 import { useForm, useFieldArray, useFormState } from "react-hook-form";
-import { useState, useRef } from "react";
-import { db, auth } from "../../config/firebaseClient";
 import { useUser } from "../../hooks/useUser";
-import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
-import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+import stripTags from "striptags";
+
+import { Question } from "schema-dts";
+import { jsonLdScriptProps } from "react-schemaorg";
+import Head from "next/head";
 
 interface QuestionComponentProps {
   onSubmit?: (any) => void;
@@ -15,35 +16,82 @@ interface QuestionComponentProps {
   onEditButtonClicked: () => void;
 }
 
-async function postData(url = "", data = {}) {
-  const response = await fetch(url, {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    mode: "no-cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "include", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
-}
-
 const Question = (props: QuestionComponentProps) => {
   const user = useUser();
   console.log(user && user.uid);
-  const [vote, setVote] = useState<null | "upvote" | "downvote" | "none">(null);
   const { register, handleSubmit, control } = useForm();
   const { errors } = useFormState({ control });
-  const [voteCount, setVoteCount] = useState(
-    props.data.upvotes - props.data.downvotes
-  );
 
+  const strippedQuestion = stripTags(props.data.question);
   return (
     <div className="bg-cool-gray-100">
+
+      <Head>
+        <script 
+        {...jsonLdScriptProps<Question>({
+          "@context": "https://schema.org",
+          "@type": "Question",
+          name: strippedQuestion,
+          text: strippedQuestion,
+          acceptedAnswer: {
+            "@type": "Answer",
+            name: "answer",
+            text: stripTags(props.data.answerChoices[props.data.correctAnswer]),
+            answerExplanation: {
+              "@type": "WebContent",
+              text: props.data.explanation,
+            },
+            author: {
+              "@type": "Person",
+              name: props.data.author.username,
+              givenName: props.data.author.username,
+              url: "http://quizton.com/profile?uid=" + props.data.author.uid,
+            },
+            creator: {
+              "@type": "Person",
+              name: props.data.author.username,
+              givenName: props.data.author.username,
+              url: "http://quizton.com/profile?uid=" + props.data.author.uid,
+            }
+          },
+          isFamilyFriendly: true,
+          eduQuestionType: "Multiple choice",
+          audience: {
+            "@type": "Audience",
+            audienceType: "students"
+          },
+          aggregateRating: {
+            "@type": "AggregateRating",
+            itemReviewed: {
+              "@type": "Thing",
+              name: "question",
+              description: strippedQuestion,
+            },
+            ratingCount: props.data.upvotes + props.data.downvotes,
+            ratingValue: props.data.upvotes - props.data.downvotes,
+          },
+          author: {
+            "@type": "Person",
+            name: props.data.author.username,
+            givenName: props.data.author.username,
+            url: "http://www.quizton.com/profile?uid=" + props.data.author.uid,
+          },
+          creator: {
+            "@type": "Person",
+            name: props.data.author.username,
+            givenName: props.data.author.username,
+            url: "http://www.quizton.com/profile?uid=" + props.data.author.uid,
+          },
+          dateCreated: (new Date(props.data.date.nanoseconds)).toISOString(),
+          educationalUse: ["practice question", "practice", "assignment"],
+          interactivityType: "active",
+          keywords: props.data.tags,
+          url: "https://www.quizton.com/question/" + props.qid,
+        })}
+        />
+      </Head>
+
+
       <div className="flex max-w-6xl my-3 p-6 mx-auto bg-white rounded-md border border-gray-300">
         <div className="">
           <div>

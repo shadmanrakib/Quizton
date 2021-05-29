@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { db, auth } from "../../config/firebaseClient";
 import "katex/dist/katex.min.css";
 import Question from "../../components/VIewSingleQuestion/Question";
 import Navbar from "../../components/Navbar/Navbar";
 import EditMCForm from "../../components/CreateQuestion/EditMCForm";
 import firebase from "firebase/app";
-import { SettingsRemoteRounded } from "@material-ui/icons";
+import postData from "../../utility/postData";
 import { useUser } from "../../hooks/useUser";
 import * as quesdom from "../../types/quesdom";
 import Votebar from "../../components/VIewSingleQuestion/Votebar";
@@ -136,21 +136,3 @@ export async function getServerSideProps(context) {
 }
 
 export default QuestionPage;
-
-async function postData(url = "", data = {}) {
-  // Default options are marked with *
-  const response = await fetch(url, {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    mode: "no-cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "include", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
-}
