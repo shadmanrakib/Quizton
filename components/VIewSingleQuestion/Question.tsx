@@ -26,13 +26,25 @@ const Question = (props: QuestionComponentProps) => {
   return (
     <div className="bg-cool-gray-100">
       <Head>
-      <meta property="og:title" content={props.data.question} key="ogtitle"/>
-      <meta property="og:description" content={"A collaborative test bank / question library. A website where users can create, share, rate, and do quizzes and questions."} key="ogdesc"/>
-      <meta property="og:type" content="website" key="ogtype"/>
-      <meta property="og:site_name" content="Quizton" key="ogsitename" />
+      <meta name="description" content="A collaborative test bank / question library. A website where users can create, share, rate, and do quizzes and questions." />
+
       <meta property="og:url" content={"https://quizton.vercel.app/question/" + props.qid} key="ogurl" />
-      <meta property="og:image" content="/opengraphImage.png" key="ogimg"/>
-      <meta name="twitter:card" content="summary_large_image" key="twcard" />
+      <meta property="og:site_name" content="Quizton" key="ogsitename" />
+      <meta property="og:type" content="website" key="ogtype" />
+      <meta property="og:title" content={props.data.question} key="ogtitle" />
+      <meta property="og:description" content="A collaborative test bank. A website where users can create, share, rate, and do quizzes and questions." key="ogdesc"/>
+      <meta property="og:image" content="https://quizton.vercel.app/ogImage.png" key="ogimg"/>
+
+      <meta name="twitter:card" content="summary_large_image" key="twcard"/>
+      <meta property="twitter:domain" content="" key="twdomain"/>
+      <meta property="twitter:url" content={"https://quizton.vercel.app/question/" + props.qid} key="twurl"/>
+      <meta name="twitter:title" content={props.data.question} key="twtitle"/>
+      <meta name="twitter:description" content="A collaborative test bank / question library. A website where users can create, share, rate, and do quizzes and questions." key="twdesc"/>
+      <meta name="twitter:image" content="https://quizton.vercel.app/ogImage.png" key="twimg"/>
+
+
+
+
         <script
           {...jsonLdScriptProps<QAPage>({
             "@context": "https://schema.org",

@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Quesdom</title>
+        <title>Quizton</title>
         <link
           rel="apple-touch-icon"
           sizes="180x180"
@@ -51,13 +51,23 @@ function MyApp({ Component, pageProps }) {
         ></link>
         <meta name="msapplication-TileColor" content="#2d89ef"></meta>
         <meta name="theme-color" content="#ffffff"></meta>
-        <meta property="og:title" content="Quizton" key="ogtitle"/>
-        <meta property="og:description" content={"A collaborative test bank / question library. A website where users can create, share, rate, and do quizzes and questions."} key="ogdesc"/>
-        <meta property="og:type" content="website" key="ogtype"/>
-        <meta property="og:site_name" content="Quizton" key="ogsitename" />
-        <meta property="og:url" content={"https://quizton.vercel.app/"} key="ogurl" />
-        <meta property="og:image" content="/opengraphImage.png" key="ogimg"/>
-        <meta name="twitter:card" content="summary_large_image" key="twcard" />
+
+
+        <meta name="description" content="A collaborative test bank / question library. A website where users can create, share, rate, and do quizzes and questions." />
+
+        <meta property="og:url" content="https://quizton.vercel.app/" key="ogurl" />
+        <meta property="og:type" content="website" key="ogtype" />
+        <meta property="og:title" content="Quizton" key="ogtitle" />
+        <meta property="og:description" content="A collaborative test bank. A website where users can create, share, rate, and do quizzes and questions." key="ogdesc"/>
+        <meta property="og:image" content="https://quizton.vercel.app/ogImage.png" key="ogimg"/>
+
+        <meta name="twitter:card" content="summary_large_image" key="twcard"/>
+        <meta property="twitter:domain" content="" key="twdomain"/>
+        <meta property="twitter:url" content="https://quizton.vercel.app/" key="twurl"/>
+        <meta name="twitter:title" content="Quizton" key="twtitle"/>
+        <meta name="twitter:description" content="A collaborative test bank / question library. A website where users can create, share, rate, and do quizzes and questions." key="twdesc"/>
+        <meta name="twitter:image" content="https://quizton.vercel.app/ogImage.png" key="twimg"/>
+
         {/* <!-- Global site tag (gtag.js) - Google Analytics --> */}
         <script
           async
