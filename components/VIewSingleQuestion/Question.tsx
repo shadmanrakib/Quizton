@@ -26,6 +26,13 @@ const Question = (props: QuestionComponentProps) => {
   return (
     <div className="bg-cool-gray-100">
       <Head>
+      <meta property="og:title" content={props.data.question} key="ogtitle"/>
+      <meta property="og:description" content={"A collaborative test bank / question library. A website where users can create, share, rate, and do quizzes and questions."} key="ogdesc"/>
+      <meta property="og:type" content="website" key="ogtype"/>
+      <meta property="og:site_name" content="Quizton" key="ogsitename" />
+      <meta property="og:url" content={"https://www.quizton.com/question/" + props.qid} key="ogurl" />
+      <meta property="og:image" content="/opengraphImage.png" key="ogimg"/>
+      <meta name="twitter:card" content="summary_large_image" key="twcard" />
         <script
           {...jsonLdScriptProps<QAPage>({
             "@context": "https://schema.org",

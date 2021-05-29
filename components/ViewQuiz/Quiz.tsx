@@ -34,6 +34,14 @@ function Quiz({ quiz, qid }: props) {
     <div>
 
   <Head>
+    <meta property="og:title" content={quiz.title} key="ogtitle"/>
+    <meta property="og:description" content={"A collaborative test bank / question library. A website where users can create, share, rate, and do quizzes and questions."} key="ogdesc"/>
+    <meta property="og:type" content="website" key="ogtype"/>
+    <meta property="og:site_name" content="Quizton" key="ogsitename" />
+    <meta property="og:url" content={"https://www.quizton.com/quiz/" + qid} key="ogurl" />
+    <meta property="og:image" content="/opengraphImage.png" key="ogimg"/>
+    <meta name="twitter:card" content="summary_large_image" key="twcard" />
+
         <script
           {...jsonLdScriptProps<Product>({
             "@context": "https://schema.org",
@@ -64,7 +72,7 @@ function Quiz({ quiz, qid }: props) {
                   "http://www.quizton.com/profile?uid=" + quiz.author.uid,
               },
               dateCreated: new Date(quiz.date.nanoseconds).toISOString(),
-              url: "https://www.quizton.com/question/" + qid,
+              url: "https://www.quizton.com/quiz/" + qid,
             }
           })}
         ></script>
