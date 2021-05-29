@@ -40,6 +40,10 @@ const Question = (props: QuestionComponentProps) => {
                 text: stripTags(
                   props.data.answerChoices[props.data.correctAnswer]
                 ),
+                upvoteCount: props.data.upvotes,
+                downvoteCount: props.data.downvotes,
+                url: "https://www.quizton.com/question/" + props.qid,
+                dateCreated: new Date(props.data.date.nanoseconds).toISOString(),
                 answerExplanation: {
                   "@type": "WebContent",
                   text: props.data.explanation,
@@ -65,11 +69,6 @@ const Question = (props: QuestionComponentProps) => {
                 "@type": "Audience",
                 audienceType: "students",
               },
-              aggregateRating: {
-                "@type": "AggregateRating",
-                ratingCount: props.data.upvotes + props.data.downvotes,
-                ratingValue: props.data.upvotes - props.data.downvotes,
-              },
               author: {
                 "@type": "Person",
                 name: props.data.author.username,
@@ -89,6 +88,7 @@ const Question = (props: QuestionComponentProps) => {
               interactivityType: "active",
               keywords: props.data.tags,
               url: "https://www.quizton.com/question/" + props.qid,
+              answerCount: 1,
             },
           })}
         ></script>

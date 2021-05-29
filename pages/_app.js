@@ -55,15 +55,12 @@ function MyApp({ Component, pageProps }) {
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-1BY1TYDHMF"
-        ></script>
+        />
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments)};
-            gtag('js', new Date());
-            gtag('config', 'G-1BY1TYDHMF');`,
+            __html: `window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments)};gtag('js', new Date());gtag('config', 'G-1BY1TYDHMF');`,
           }}
-        ></script>
+        />
       </Head>
       <UserProvider>
         <Component {...pageProps} />
