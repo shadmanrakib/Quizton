@@ -11,6 +11,11 @@ module.exports = {
         emerald: colors.emerald,
         "cool-gray": colors.coolGray,
         "blue-gray": colors.blueGray,
+        "brand-1": "#1A74E2",
+        "brand-2": "#3FA0EF",
+        "brand-3" : "#6BD0FF",
+        "brand-4": "#1F2123",
+        "brand-5": "#101010"
       },
     },
   },

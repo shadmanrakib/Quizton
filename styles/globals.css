@@ -2,6 +2,18 @@
 @tailwind  components;
 @tailwind  utilities;
 
+@layer utilities {
+  @variants responsive {
+    .min-h-screenWtopnavbar {
+      min-height: calc(100vh - 16px);
+    }
+    
+    .min-h-screenWbothnavbars {
+      min-height: calc(100vh - 32px);
+    }
+  }
+}
+
 html {
   font-size: 16px;
 }
