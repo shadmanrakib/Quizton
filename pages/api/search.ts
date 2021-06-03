@@ -17,35 +17,33 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         const offsetBy = inputs.offsetBy ? inputs.offsetBy : 0;
 
-        switch (inputs.type) {
-            case "question":
-                index = "index-questions";
-                searchBody = {
-                    query: {
-                        multi_match: {
-                            "query": inputs.query,
-                            "fields": ["question", "tags"],
-                            "type": "most_fields",
-                            "fuzziness": "AUTO"
-                        }
-                    },
-                    from: offsetBy
-                }
-            case "quiz":
-                index = "index-quizzes";
-                searchBody = {
-                    query: {
-                        multi_match: {
-                            "query": inputs.query,
-                            "fields": ["allQuestions", "allTags^3", "title^6"],
-                            "type": "most_fields",
-                            "fuzziness": "AUTO"
-                        }
-                    },
-                    from: offsetBy
-                }
-            break;
-
+        if (inputs.type === "question") {
+            index = "index-questions";
+            searchBody = {
+                query: {
+                    multi_match: {
+                        "query": inputs.query,
+                        "fields": ["question", "tags"],
+                        "type": "most_fields",
+                        "fuzziness": "AUTO"
+                    }
+                },
+                //from: offsetBy
+            }
+        }
+        if (inputs.type === "quiz") {
+            index = "index-quizzes";
+            searchBody = {
+                query: {
+                    multi_match: {
+                        "query": inputs.query,
+                        "fields": ["allQuestions", "allTags^3", "title^6"],
+                        "type": "most_fields",
+                        "fuzziness": "AUTO"
+                    }
+                },
+                from: offsetBy
+            }
         }
 
         const results = await client.search({

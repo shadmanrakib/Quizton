@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import * as quesdom from "../../types/quesdom";
 import "katex/dist/katex.min.css";
 import { useForm, useFieldArray, useFormState } from "react-hook-form";
-import { useState, useRef } from "react";
-import { db, auth } from "../../config/firebaseClient";
 import { useUser } from "../../hooks/useUser";
-import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
-import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+import stripTags from "striptags";
+
+import { QAPage, Question as QuestionSchema } from "schema-dts";
+import { jsonLdScriptProps } from "react-schemaorg";
+import Head from "next/head";
 
 interface QuestionComponentProps {
   onSubmit?: (any) => void;
@@ -15,35 +16,102 @@ interface QuestionComponentProps {
   onEditButtonClicked: () => void;
 }
 
-async function postData(url = "", data = {}) {
-  const response = await fetch(url, {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    mode: "no-cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "include", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
-}
-
 const Question = (props: QuestionComponentProps) => {
   const user = useUser();
   console.log(user && user.uid);
-  const [vote, setVote] = useState<null | "upvote" | "downvote" | "none">(null);
   const { register, handleSubmit, control } = useForm();
   const { errors } = useFormState({ control });
-  const [voteCount, setVoteCount] = useState(
-    props.data.upvotes - props.data.downvotes
-  );
 
+  const strippedQuestion = stripTags(props.data.question);
   return (
     <div className="bg-cool-gray-100">
+      <Head>
+      <meta name="description" content="A collaborative test bank / question library. A website where users can create, share, rate, and do quizzes and questions." />
+
+      <meta property="og:url" content={"https://quizton.vercel.app/question/" + props.qid} key="ogurl" />
+      <meta property="og:site_name" content="Quizton" key="ogsitename" />
+      <meta property="og:type" content="website" key="ogtype" />
+      <meta property="og:title" content={props.data.question} key="ogtitle" />
+      <meta property="og:description" content="A collaborative test bank. A website where users can create, share, rate, and do quizzes and questions." key="ogdesc"/>
+      <meta property="og:image" content="https://quizton.vercel.app/ogImage.png" key="ogimg"/>
+
+      <meta name="twitter:card" content="summary_large_image" key="twcard"/>
+      <meta property="twitter:domain" content="" key="twdomain"/>
+      <meta property="twitter:url" content={"https://quizton.vercel.app/question/" + props.qid} key="twurl"/>
+      <meta name="twitter:title" content={props.data.question} key="twtitle"/>
+      <meta name="twitter:description" content="A collaborative test bank / question library. A website where users can create, share, rate, and do quizzes and questions." key="twdesc"/>
+      <meta name="twitter:image" content="https://quizton.vercel.app/ogImage.png" key="twimg"/>
+
+
+
+
+        <script
+          {...jsonLdScriptProps<QAPage>({
+            "@context": "https://schema.org",
+            "@type": "QAPage",
+            mainEntity: {
+              "@type": "Question",
+              name: strippedQuestion,
+              text: strippedQuestion,
+              acceptedAnswer: {
+                "@type": "Answer",
+                name: "answer",
+                text: stripTags(
+                  props.data.answerChoices[props.data.correctAnswer]
+                ),
+                upvoteCount: props.data.upvotes,
+                downvoteCount: props.data.downvotes,
+                url: "https://quizton.vercel.app/question/" + props.qid,
+                dateCreated: new Date(props.data.date.nanoseconds).toISOString(),
+                answerExplanation: {
+                  "@type": "WebContent",
+                  text: props.data.explanation,
+                },
+                author: {
+                  "@type": "Person",
+                  name: props.data.author.username,
+                  givenName: props.data.author.username,
+                  url:
+                    "http://quizton.com/profile?uid=" + props.data.author.uid,
+                },
+                creator: {
+                  "@type": "Person",
+                  name: props.data.author.username,
+                  givenName: props.data.author.username,
+                  url:
+                    "http://quizton.com/profile?uid=" + props.data.author.uid,
+                },
+              },
+              isFamilyFriendly: true,
+              eduQuestionType: "Multiple choice",
+              audience: {
+                "@type": "Audience",
+                audienceType: "students",
+              },
+              author: {
+                "@type": "Person",
+                name: props.data.author.username,
+                givenName: props.data.author.username,
+                url:
+                  "http://quizton.vercel.app/profile?uid=" + props.data.author.uid,
+              },
+              creator: {
+                "@type": "Person",
+                name: props.data.author.username,
+                givenName: props.data.author.username,
+                url:
+                  "http://quizton.vercel.app/profile?uid=" + props.data.author.uid,
+              },
+              educationalUse: ["practice question", "practice", "assignment"],
+              interactivityType: "active",
+              keywords: props.data.tags,
+              url: "https://quizton.vercel.app/question/" + props.qid,
+              answerCount: 1,
+            },
+          })}
+        ></script>
+      </Head>
+
       <div className="flex max-w-6xl my-3 p-6 mx-auto bg-white rounded-md border border-gray-300">
         <div className="">
           <div>

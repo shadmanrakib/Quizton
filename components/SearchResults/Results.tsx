@@ -29,7 +29,8 @@ const Results = () => {
   useEffect(() => {
     setLoading(true);
     if (q !== "" && q !== undefined && q) {
-      postData("/api/search", { query: q, type: type }).then((response) => {
+      const t = type && type != "" ? type : "quiz";
+      postData("/api/search", { query: q, type: t }).then((response) => {
         setSearchResult(response.message.results);
         console.log(response);
       });
@@ -38,6 +39,7 @@ const Results = () => {
         kind: "search",
       } as AddRecentRequest);
     }
+    console.log(searchResult);
     setLoading(false);
   }, [q]);
 
@@ -49,13 +51,17 @@ const Results = () => {
         <div>{"Loading..."}</div>
       ) : (
         <div className="">
-          {(!router.query.type || router.query.type === "question") &&
+          {(type === "question") &&
             searchResult &&
+            searchResult.hits &&
             searchResult.hits.map((question) => (
-              <QuestionCard key={question._id} question={question._source} />
-            ))}
-          {router.query.type === "quiz" &&
+              <QuestionCard key={question._id} id={question._id} question={question._source} />
+            
+          ))
+          }
+          {type === "quiz" &&
             searchResult &&
+            searchResult.hits &&
             searchResult.hits.map((quiz) => (
               <QuizCard key={quiz._id} id={quiz._id} quiz={quiz._source} />
             ))}

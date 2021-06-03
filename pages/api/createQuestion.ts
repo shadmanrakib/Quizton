@@ -74,6 +74,7 @@ function sanitize(html: string) {
   return sanitizeHtml(html, options);
 }
 
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const parsedCookies = parseCookies({ req });
   const inputs = JSON.parse(req.body);

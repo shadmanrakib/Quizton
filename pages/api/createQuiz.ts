@@ -79,9 +79,10 @@ function elasticSearchIndexPreprocessing(questions: quesdom.QuizQuestion[]): {
   var allTags = new Set<string>();
 
   questions.forEach((val) => {
-    for (const tag in val.tags) {
+    val.tags.forEach((tag) => {
       allTags.add(tag);
     }
+    )
   });
 
   const allQuestions: string[] = questions.map((val) => {

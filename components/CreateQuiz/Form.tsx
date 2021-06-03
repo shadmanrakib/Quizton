@@ -82,6 +82,13 @@ export default function Form(props: props) {
     defaultValues: { title: quizTitle, questions: quizQuestions },
   });
   const onSubmit = (data: QuizRequest) => {
+    if (data.questions) {
+      data.questions.forEach((question: Object) => {
+        console.log(question);
+        postData("/api/createQuestion", question).then((response) => console.log(response)).catch((err) => console.log(err));
+      });
+    }
+    
     //This is not part of each question, so we need to make each question have this
     // in order for "data" to conform to the "QuizRequest" schema
     for (let i = 0; i < data.questions.length; i++) {
