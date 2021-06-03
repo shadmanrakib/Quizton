@@ -6,7 +6,7 @@ let keynum = 1;
 
 const QuestionCard = ({ question }) => {
   return (
-    <Link href={`/question/${question.qid}`}>
+    <Link href={`/question/${question._id}`}>
       <div className="bg-white p-6 border cursor-pointer">
         {question.tags && question.tags.map((tag) => (
           <Chip label={tag} key={keynum++} />
