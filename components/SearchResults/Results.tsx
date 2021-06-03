@@ -55,7 +55,7 @@ const Results = () => {
             searchResult &&
             searchResult.hits &&
             searchResult.hits.map((question) => (
-              <QuestionCard key={question._id} question={question._source} />
+              <QuestionCard key={question._id} id={question._id} question={question._source} />
             
           ))
           }
