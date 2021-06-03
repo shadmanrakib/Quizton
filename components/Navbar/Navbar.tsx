@@ -27,7 +27,7 @@ const Navbar = (props) => {
   };
 
   return (
-    <nav className="bg-white h-16 w-full flex flex-row px-4 md:px-8">
+    <nav className="bg-white h-16 w-full flex flex-row px-4">
       {isUsingMobileSearch ? (
         <div className="flex flex-auto items-center h-16 bg-white z-50">
           <button
