@@ -140,7 +140,7 @@ export default function ClassDropdown() {
                       <p className="ml-1">Science</p>
                     </section>
                     <section className="flex flex-col pl-6 text-lg text-blue-500">
-                      <Link href="AP Chemistry">AP Chemistry</Link>
+                      <Link href="/subject/ap-biology">AP Biology</Link>
                       <Link href="AP Physics">AP Physics C: E&amp;M</Link>
                       <Link href="AP Physics">AP Physics C: Mechanics</Link>
                       <Link href="AP Physics">AP Physics 1</Link>
@@ -303,7 +303,7 @@ export default function ClassDropdown() {
                     </Disclosure.Button>
                     <Disclosure.Panel className="text-gray-500">
                       <section className="flex flex-col pl-6 text-lg text-blue-500">
-                        <Link href="AP Chemistry">AP Chemistry</Link>
+                        <Link href="/subject/ap-biology">AP Biology</Link>
                         <Link href="AP Physics">AP Physics C: E&amp;M</Link>
                         <Link href="AP Physics">AP Physics C: Mechanics</Link>
                         <Link href="AP Physics">AP Physics 1</Link>

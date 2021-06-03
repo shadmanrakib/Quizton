@@ -1,0 +1,53 @@
+{
+  "subject": "Biology",
+  "title": "AP Biology",
+  "topics": [
+    {
+      "title": "Campbell's Biology Textbook",
+      "subtopics": [
+        "Chapter 1",
+        "Chapter 2",
+        "Chapter 3",
+        "Chapter 4",
+        "Chapter 5",
+        "Chapter 6"
+      ]
+    },
+    {
+      "title": "Biology: Life on Earth with Physiology",
+      "subtopics": [
+        "Chapter 1",
+        "Chapter 2",
+        "Chapter 3",
+        "Chapter 4",
+        "Chapter 5",
+        "Chapter 6",
+        "Chapter 7",
+        "Chapter 8",
+        "Chapter 9"
+      ]
+    },
+    {
+      "title": "AP Baron's Review Book",
+      "subtopics": [
+        "Chapter 1",
+        "Chapter 2",
+        "Chapter 3",
+        "Chapter 4",
+        "Chapter 5",
+        "Chapter 6"
+      ]
+    },
+    {
+      "title": "AP Biology Practice Guide",
+      "subtopics": [
+        "Chapter 1",
+        "Chapter 2",
+        "Chapter 3",
+        "Chapter 4",
+        "Chapter 5",
+        "Chapter 6"
+      ]
+    }
+  ]
+}
