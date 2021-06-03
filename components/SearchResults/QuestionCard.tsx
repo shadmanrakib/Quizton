@@ -4,9 +4,9 @@ import { Chip } from "@material-ui/core";
 
 let keynum = 1;
 
-const QuestionCard = ({ question }) => {
+const QuestionCard = ({ question, id }) => {
   return (
-    <Link href={`/question/${question._id}`}>
+    <Link href={`/question/${id}`}>
       <div className="bg-white p-6 border cursor-pointer">
         {question.tags && question.tags.map((tag) => (
           <Chip label={tag} key={keynum++} />
