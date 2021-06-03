@@ -44,7 +44,7 @@ const Navbar = (props) => {
               <Controller
                 control={control}
                 name={"type"}
-                defaultValue={"quiz"}
+                defaultValue={router.query.type ? router.query.type : "quiz"}
                 render={({ field: { onChange, onBlur, value, ref } }) => (
                   <SearchTypeDropdown
                     selectedType={value}
