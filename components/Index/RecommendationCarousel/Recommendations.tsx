@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import router from "next/router";
+import router, { useRouter } from "next/router";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -68,9 +68,14 @@ export default function SubjectCarousel() {
 }
 
 function RecomendationCard(props) {
+  const router = useRouter();
   return (
-    <div className={`bg-white text-black p-6 h-56 w-96 flex flex-col rounded-2xl`}>
-      <div className="text-xl font-bold flex-initial">{props._source.title}</div>
+    <div
+      className={`bg-white text-black p-6 h-56 w-96 flex flex-col rounded-2xl`}
+    >
+      <div className="text-xl font-bold flex-initial">
+        {props._source.title}
+      </div>
       <div className="mt-2 flex-auto">
         {props._source.allTags.map((tag, index) => (
           <span className="bg-gray-200 rounded-lg px-2 py-1">{tag}</span>
@@ -78,7 +83,14 @@ function RecomendationCard(props) {
       </div>
       <div className="flex flex-row justify-between items-baseline">
         <div>{props._source.author.username}</div>
-        <button className="bg-blue-300 px-4 py-2 rounded-lg">View</button>
+        <button
+          className="bg-blue-300 px-4 py-2 rounded-lg"
+          onClick={() => {
+            router.push(`/quiz/${props._id}`);
+          }}
+        >
+          View
+        </button>
       </div>
     </div>
   );

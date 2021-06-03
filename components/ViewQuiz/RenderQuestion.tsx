@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import striptags from "striptags";
 import katex from "katex";
 import "katex/dist/katex.min.css";
@@ -12,14 +12,22 @@ interface props {
   question: string;
   choices: string[];
   answer: number; //Non-negative integer. Represents the correct choice
-  index: number; //The question number.
+  questionIndex: number; //The question number.
+  check: boolean; //Show correct answer or not
 }
 
-function RenderQuestion({ question, choices, answer, index }: props) {
-  const questionIndex = index;
-  const { register, control } = useFormContext();
+function RenderQuestion({
+  question,
+  choices,
+  answer,
+  questionIndex,
+  check,
+}: props) {
+  const { register, control, getValues } = useFormContext();
   const { onChange } = register(`userAnswers.${questionIndex}`);
-  console.log("Test");
+  const [userAnswer, setUserAnswer] = useState<null | string>(null);
+  console.log(check);
+  console.log(answer);
   return (
     <div>
       {/* Ask how to check if question is completed. */}
@@ -46,16 +54,23 @@ function RenderQuestion({ question, choices, answer, index }: props) {
                         value={index}
                         onChange={(e) => {
                           onChange(e.target.value);
+                          setUserAnswer(e.target.value);
                         }}
                       ></input>
                     )}
                   ></Controller>
+
                   <label
                     htmlFor={"choice" + index}
                     dangerouslySetInnerHTML={{ __html: choice }}
                     className={
-                      "inline-block ml-3 text-lg" +
-                      (index == answer ? "" : " text-gray-500")
+                      "inline-block ml-3 text-lg " +
+                      (answer.toString() === index.toString() && check
+                        ? "bg-green-300 rounded-md"
+                        : "") +
+                      (userAnswer === index.toString() && check
+                        ? "bg-red-300 rounded-md"
+                        : "")
                     }
                   ></label>
                 </div>
@@ -70,4 +85,4 @@ function RenderQuestion({ question, choices, answer, index }: props) {
   );
 }
 
-export default React.memo(RenderQuestion);
+export default RenderQuestion;
