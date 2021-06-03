@@ -119,7 +119,7 @@ const Navbar = (props) => {
               </button>
             </div>
           </div>
-          <div className="flex items-center mx-4">
+          <div className="flex items-center ml-4">
             {!user ? (
               <>
                 <Link href="/auth/signup">
@@ -138,7 +138,7 @@ const Navbar = (props) => {
                 <div className="self-center mx-3 md:ml-2 hidden md:block">
                   <CreateDropdown></CreateDropdown>
                 </div>
-                <div className="self-center  ml-2 mr-4 md:ml-3 md:mr-5">
+                <div className="self-center ml-2 mr-4 md:ml-3 md:mr-5">
                   <div className="flex flex-row mb-1">
                     <ClassDropdown></ClassDropdown>
                   </div>
