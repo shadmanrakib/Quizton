@@ -16,7 +16,7 @@ const Navbar = (props) => {
 
   const { register, handleSubmit, control, getValues } = useForm();
   const router = useRouter();
-  const { q } = router.query;
+  const { q, type } = router.query;
 
   const onSubmitHandler = (data) => {
     console.log(data);
@@ -44,7 +44,7 @@ const Navbar = (props) => {
               <Controller
                 control={control}
                 name={"type"}
-                defaultValue={router.query.type ? router.query.type : "quiz"}
+                defaultValue={type ? type : "quiz"}
                 render={({ field: { onChange, onBlur, value, ref } }) => (
                   <SearchTypeDropdown
                     selectedType={value}
