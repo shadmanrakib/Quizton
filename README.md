@@ -1,5 +1,7 @@
 Google Mentorship Project. Crowd-sourced test bank built to increase accessibility to studying resources.
 
+The search engine is no longer hosted, so the search feature will not work.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
